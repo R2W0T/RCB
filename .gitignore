@@ -1,0 +1,7 @@
+workspaces/docker_ws/install
+workspaces/docker_ws/build
+workspaces/docker_ws/log
+
+workspaces/rpi_ws/install
+workspaces/rpi_ws/build
+workspaces/rpi_ws/log
