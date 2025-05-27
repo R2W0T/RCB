@@ -15,6 +15,7 @@ class state_machine_t {
 
     ~state_machine_t();
 
+    // this should be after rclcpp::init()
     void init();
 
     void change_state(uint8_t state);
@@ -31,7 +32,8 @@ class state_machine_t {
 
   private:
     uint8_t state = SLEEP;
-    // RobotControlNode node;
+    
+    std::shared_ptr<RobotControlNode> node;
 
 
 

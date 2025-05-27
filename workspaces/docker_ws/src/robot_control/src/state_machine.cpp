@@ -1,31 +1,35 @@
 #include "robot_control/state_machine.hpp"
 
 #include <iostream>
+#include <memory>
 
+#include <rclcpp/rclcpp.hpp>
 
 state_machine_t::state_machine_t() {
-
+    // node = std::make_shared<RobotControlNode>();
 }
 
-state_machine_t::~state_machine_t() {
-    
-}
+state_machine_t::~state_machine_t() {}
 
-
+// this should be after rclcpp::init()
 void state_machine_t::init() {
-    
+
+    // this should be after rclcpp::init()
+    node = std::make_shared<RobotControlNode>();
 
 }
 
 
 void state_machine_t::change_state(uint8_t state) {
-    this->state = state;
+    this->state = state; 
 }
 
 void state_machine_t::run() {
+    
+    
     while (1) {
         
-        rclcpp::spin_some(std::make_shared<RobotControlNode>());
+        rclcpp::spin_some(node);
 
         switch(state) {
             case SLEEP:
@@ -48,7 +52,7 @@ void state_machine_t::run() {
 }
 
 void state_machine_t::sleep() {
-    std::make_shared<RobotControlNode>()->publish(0, 0);
+    node->publish(0, 0);
 }
 
 void state_machine_t::go_to_goal() {
@@ -68,11 +72,11 @@ void state_machine_t::go_to_goal() {
         speed[1] = (uint32_t)(0.3 * (g_odometry[2] - r_odometry[2]));
     }
 
-    std::make_shared<RobotControlNode>()->publish(speed[0], speed[1]);
+    node->publish(speed[0], speed[1]);
 
 }
 
 void state_machine_t::joystick() {
-    std::make_shared<RobotControlNode>()->publish(speed[0], speed[1]);
+    node->publish(speed[0], speed[1]);
 }
 

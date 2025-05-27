@@ -8,6 +8,8 @@
 #include "robot_interfaces/msg/command.hpp"
 #include "robot_interfaces/msg/speed.hpp"
 
+#include <memory>
+
 class RobotControlNode : public rclcpp::Node
 {
   public:

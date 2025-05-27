@@ -9,7 +9,9 @@ int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
   
-  // state_machine.init();
+  // this should be after rclcpp::init()
+  state_machine.init();
+  
   state_machine.run();
   std::cout << "Hello, World!\n";
   rclcpp::shutdown();
