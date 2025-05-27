@@ -17,14 +17,23 @@ left_motor_l_pin = 6
 
 frequency = 1000
 # mm
-A = np.array([[40/2, 20/2],[-40/300, 40/300]])
+A = np.array([[40/2, 40/2],[-40/300, 40/300]])
 A = np.linalg.inv(A)
 
 GPIO.setwarnings(False)		
 GPIO.setmode(GPIO.BCM)
 	
-pi_pwm = GPIO.PWM(right_motor_r_pin, 1000)
-pi_pwm.start(0)
+r_r_pwm = GPIO.PWM(right_motor_r_pin, 1000)
+r_r_pwm.start(0)
+
+r_l_pwm = GPIO.PWM(right_motor_l_pin, 1000)
+r_l_pwm.start(0)
+
+l_r_pwm = GPIO.PWM(left_motor_r_pin, 1000)
+l_r_pwm.start(0)
+
+l_l_pwm = GPIO.PWM(left_motor_l_pin, 1000)
+l_l_pwm.start(0)
 
 class MotorControlNode(Node):
 
@@ -39,9 +48,29 @@ class MotorControlNode(Node):
 
     def robot_speed_callback(self, msg):
         speed = np.array([msg.linear_speed, msg.angular_speed])
-        motor_speed = A * speed
+        motor_speed = np.dot(A, speed)
 
-        pi_pwm.ChangeDutyCycle(msg.linear_speed)
+        r_r = 0
+        r_l = 0
+
+        l_r = 0
+        l_l = 0
+
+        if motor_speed[0] < 0:
+            l_l -= motor_speed[0]
+        else:
+            l_r = motor_speed[0]
+
+
+        if motor_speed[1] < 0:
+            r_l -= motor_speed[1]
+        else:
+            r_r = motor_speed[1]
+
+        r_l_pwm.ChangeDutyCycle(r_l)
+        r_r_pwm.ChangeDutyCycle(r_r)
+        l_l_pwm.ChangeDutyCycle(l_l)
+        l_r_pwm.ChangeDutyCycle(l_r)
         
 
 
