@@ -12,8 +12,8 @@ import numpy as np
 
 right_motor_r_pin = 26
 right_motor_l_pin = 19
-left_motor_r_pin = 13
-left_motor_l_pin = 6
+left_motor_r_pin = 6
+left_motor_l_pin = 13
 
 frequency = 1000
 # mm
