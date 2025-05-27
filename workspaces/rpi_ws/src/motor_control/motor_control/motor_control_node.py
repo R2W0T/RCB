@@ -3,7 +3,7 @@ from rclpy.node import Node
 
 from std_msgs.msg import String
 
-from robot_interfaces import Speed
+from robot_interfaces.msg import Speed
 
 import RPi.GPIO as GPIO
 import time
@@ -22,16 +22,20 @@ A = np.linalg.inv(A)
 
 GPIO.setwarnings(False)		
 GPIO.setmode(GPIO.BCM)
-	
+
+GPIO.setup(right_motor_r_pin,GPIO.OUT)
 r_r_pwm = GPIO.PWM(right_motor_r_pin, 1000)
 r_r_pwm.start(0)
 
+GPIO.setup(right_motor_l_pin,GPIO.OUT)
 r_l_pwm = GPIO.PWM(right_motor_l_pin, 1000)
 r_l_pwm.start(0)
 
+GPIO.setup(left_motor_r_pin,GPIO.OUT)
 l_r_pwm = GPIO.PWM(left_motor_r_pin, 1000)
 l_r_pwm.start(0)
 
+GPIO.setup(left_motor_l_pin,GPIO.OUT)
 l_l_pwm = GPIO.PWM(left_motor_l_pin, 1000)
 l_l_pwm.start(0)
 
