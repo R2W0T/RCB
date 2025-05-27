@@ -5,8 +5,8 @@ from std_msgs.msg import String
 
 from robot_interfaces import Speed
 
-import RPI.GPIO as GPIO
-from time import speed
+import RPi.GPIO as GPIO
+import time
 
 import numpy as np
 
