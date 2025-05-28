@@ -5,6 +5,10 @@
 
 #include <rclcpp/rclcpp.hpp>
 
+#include <iostream>
+#include <chrono>
+#include <thread>
+
 state_machine_t::state_machine_t() {
     // node = std::make_shared<RobotControlNode>();
 }
@@ -26,8 +30,10 @@ void state_machine_t::change_state(uint8_t state) {
 
 void state_machine_t::run() {
     
-    
+
     while (1) {
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));    
         
         rclcpp::spin_some(node);
 
