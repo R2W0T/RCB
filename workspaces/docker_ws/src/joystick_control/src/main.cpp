@@ -18,6 +18,7 @@ int main(int argc, char* argv[]) {
     struct axis_state axes[3] = {0};
     size_t axis;
 
+    auto node = std::make_shared<JoystickControlNode>();
 
     while (read_event(js, &event) == 0)
     {
@@ -30,7 +31,7 @@ int main(int argc, char* argv[]) {
                     int32_t y = axes[0].y;
 
 
-                    std::make_shared<JoystickControlNode>()->publish(y, x);   
+                    node->publish(y, x);   
                 }
 
                 break;
