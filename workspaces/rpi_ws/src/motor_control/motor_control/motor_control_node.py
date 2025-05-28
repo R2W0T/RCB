@@ -71,6 +71,11 @@ class MotorControlNode(Node):
         else:
             r_r = motor_speed[1]
 
+        print(f'r_r: {r_r}')
+        print(f'r_l: {r_l}')
+        print(f'l_r: {l_r}')
+        print(f'l_l: {l_l}')
+
         r_l_pwm.ChangeDutyCycle(r_l)
         r_r_pwm.ChangeDutyCycle(r_r)
         l_l_pwm.ChangeDutyCycle(l_l)
