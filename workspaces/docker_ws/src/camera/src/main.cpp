@@ -41,6 +41,8 @@ int main(int argc, char *argv[]) {
     // ros init
     rclcpp::init(argc, argv);
 
+    auto node = std::make_shared<CameraNode>();
+
     while(1) {
         cap.read(img);
         img_proc.image_update(img);
@@ -49,7 +51,7 @@ int main(int argc, char *argv[]) {
         if(img_proc.get_is_robot_detected() && img_proc.get_is_transformed()) {
             ImageProcessor::Marker robot = img_proc.robot_get();
             
-            std::make_shared<CameraNode>()->publish(robot.center.x, robot.center.y, robot.yaw_degree);
+            node->publish(robot.center.x, robot.center.y, robot.yaw_degree);
         }
 
     }
