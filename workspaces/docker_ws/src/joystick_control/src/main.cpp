@@ -28,7 +28,8 @@ int main(int argc, char* argv[]) {
                 axis = get_axis_state(&event, axes);
                 if (axis < 3){
                     int32_t x = axes[0].x;
-                    int32_t y = axes[0].y;
+                    // reverse value
+                    int32_t y = -axes[0].y;
 
 
                     node->publish(y, x);   

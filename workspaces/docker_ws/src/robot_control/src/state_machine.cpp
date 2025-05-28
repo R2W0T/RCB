@@ -60,23 +60,37 @@ void state_machine_t::go_to_goal() {
     // compute motor speeds
     float d_x = g_odometry[0] - r_odometry[0];
     float d_y = g_odometry[1] - r_odometry[1];
-    
 
     if((d_x * d_x) + (d_y * d_y) >= 0.05) {
 
         speed[0] = (uint32_t)(1 * (sqrt(pow(d_x, 2) + pow(d_y, 2))) + 0.5);
-        speed[1] =  (uint32_t)(0.3 * (atan2(d_y, d_x) - r_odometry[2]) + 0.5);
+        speed[1] =  (uint32_t)(2 * ((atan2(d_y, d_x) * 180 / M_PI) - r_odometry[2]) + 0.5);
 
     } else {
         speed[0] = 0;
-        speed[1] = (uint32_t)(0.3 * (g_odometry[2] - r_odometry[2]));
+        speed[1] = (uint32_t)(2 * (g_odometry[2] - r_odometry[2]));
     }
 
-    node->publish(speed[0], speed[1]);
+    // limit linear speed to 1000 and turn it to percentage
+    // speed[0] = (speed[0] > 1000 ? 1000 : speed[0] < -1000 ? -1000 : speed[0]) * 100 / 1000;
+    
+    // limit angular speed to 360 and turn it to percentage
+    // speed[1] = (speed[1] > 360 ? 360 : speed[1] < -360 ? -360 : speed[1]) * 100 / 360;  
+
+    // limit linear speed to 1000 and turn it to percentage
+    // limit angular speed to 360 and turn it to percentage
+    node->publish(  ((speed[0] > 1000 ? 1000 : speed[0] < -1000 ? -1000 : speed[0]) * 100 / 1000), 
+                    (speed[1] > 360 ? 360 : speed[1] < -360 ? -360 : speed[1]) * 100 / 360);
 
 }
 
 void state_machine_t::joystick() {
-    node->publish(speed[0], speed[1]);
+
+    // from input to percentage
+    // speed[0] = (int32_t)(speed[0] * 100 / 32767);
+    // speed[1] = (int32_t)(speed[1] * 100 / 32767);
+    
+    node->publish((speed[0] * 100 / 32767), (speed[1] * 100 / 32767));
+
 }
 

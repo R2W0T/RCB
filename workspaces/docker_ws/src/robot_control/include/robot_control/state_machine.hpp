@@ -28,7 +28,7 @@ class state_machine_t {
 
     float g_odometry[3] = {0.0, 0.0, 0.0}; 
     float r_odometry[3] = {0.0, 0.0, 0.0};
-    uint32_t speed[2] = {0, 0};
+    int32_t speed[2] = {0, 0};
 
   private:
     uint8_t state = SLEEP;
