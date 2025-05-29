@@ -26,19 +26,19 @@ A = np.linalg.inv(A)
 GPIO.setwarnings(False)		
 GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(right_motor_r_pin,GPIO.OUT)
+GPIO.setup(right_motor_forward_pin,GPIO.OUT)
 right_forward_pwm = GPIO.PWM(right_motor_forward_pin, 1000)
 right_forward_pwm.start(0)
 
-GPIO.setup(right_motor_l_pin,GPIO.OUT)
+GPIO.setup(right_motor_reverse_pin,GPIO.OUT)
 right_reverse_pwm = GPIO.PWM(right_motor_reverse_pin, 1000)
 right_reverse_pwm.start(0)
 
-GPIO.setup(left_motor_r_pin,GPIO.OUT)
+GPIO.setup(left_motor_forward_pin,GPIO.OUT)
 left_forward_pwm = GPIO.PWM(left_motor_forward_pin, 1000)
 left_forward_pwm.start(0)
 
-GPIO.setup(left_motor_l_pin,GPIO.OUT)
+GPIO.setup(left_motor_reverse_pin,GPIO.OUT)
 left_reverse_pwm = GPIO.PWM(left_motor_reverse_pin, 1000)
 left_reverse_pwm.start(0)
 
