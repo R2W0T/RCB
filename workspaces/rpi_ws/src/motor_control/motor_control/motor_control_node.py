@@ -12,8 +12,8 @@ import numpy as np
 
 right_motor_forward_pin = 26
 right_motor_reverse_pin = 19
-left_motor_forward_pin = 6
-left_motor_reverse_pin = 13
+left_motor_forward_pin = 13
+left_motor_reverse_pin = 6
 
 frequency = 1000
 # mm
@@ -55,11 +55,22 @@ class MotorControlNode(Node):
 
     def robot_speed_callback(self, msg):
         
-        speed = np.array([[msg.linear_speed], [msg.rotational_speed]])
+        speed = np.array([[msg.linear_speed], [-msg.rotational_speed]])
         
         # round to percentage
-        motor_speed = A * speed 
+        motor_speed = np.dot(A, speed) 
         motor_speed *= 100 / 375
+
+        if motor_speed[0, 0] > 100:
+            motor_speed[0,0] = 100
+        elif motor_speed[0, 0] < -100:
+            motor_speed[0, 0] = -100
+        
+        if motor_speed[1, 0] > 100:
+            motor_speed[1,0] = 100
+        elif motor_speed[1,0] < -100:
+            motor_speed[1,0] = -100
+
 
         right_forward_speed = 0
         right_reverse_speed = 0
@@ -67,21 +78,21 @@ class MotorControlNode(Node):
         left_forward_speed = 0
         left_reverse_speed = 0
 
-        if motor_speed[0] < 0:
-            left_reverse_speed -= motor_speed[0]
+        if motor_speed[0, 0] < 0:
+            left_reverse_speed -= motor_speed[0, 0]
         else:
-            left_forward_speed = motor_speed[0]
+            left_forward_speed = motor_speed[0, 0]
 
 
-        if motor_speed[1] < 0:
-            right_reverse_speed -= motor_speed[1]
+        if motor_speed[1, 0] < 0:
+            right_reverse_speed -= motor_speed[1, 0]
         else:
-            right_forward_speed = motor_speed[1]
+            right_forward_speed = motor_speed[1, 0]
 
-        r_l_pwm.ChangeDutyCycle(right_reverse_speed)
-        r_r_pwm.ChangeDutyCycle(right_forward_speed)
-        l_l_pwm.ChangeDutyCycle(left_reverse_speed)
-        l_r_pwm.ChangeDutyCycle(left_forward_speed)
+        right_reverse_pwm.ChangeDutyCycle(right_reverse_speed)
+        right_forward_pwm.ChangeDutyCycle(right_forward_speed)
+        left_reverse_pwm.ChangeDutyCycle(left_reverse_speed)
+        left_forward_pwm.ChangeDutyCycle(left_forward_speed)
         
         self.get_logger().info(f'Publishing: \n right_forward_speed: {right_forward_speed}, right_reverse_speed: {right_reverse_speed} left_forward_speed: {left_forward_speed}, left_reverse_speed: {left_reverse_speed}')
         
