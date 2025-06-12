@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['damaged_building']
+
+roboflow:
+  workspace: llm2tm
+  project: rcb-n4txr
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/llm2tm/rcb-n4txr/dataset/1
