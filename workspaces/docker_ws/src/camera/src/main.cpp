@@ -92,6 +92,7 @@ int main(int argc, char *argv[]) {
 
         detector.detectMarkers(dst, markerCorners, markerIds);
                    
+        
         cv::imshow("dst", dst);
 
         for(int i = 0; i < markerIds.size(); i++)
@@ -100,13 +101,13 @@ int main(int argc, char *argv[]) {
                                 ((markerCorners[i][0].y + markerCorners[i][2].y) / 2),
                                 std::atan2((markerCorners[i][1].y - markerCorners[i][0].y), (markerCorners[i][1].x - markerCorners[i][0].x)) * 180 / M_PI );
 
-        // cv::waitKey(1);
+//        cv::waitKey(1);
     }
     
     rclcpp::shutdown();
 
     
-    cv::destroyAllWindows();
+//    cv::destroyAllWindows();
     cap.release();
 
 

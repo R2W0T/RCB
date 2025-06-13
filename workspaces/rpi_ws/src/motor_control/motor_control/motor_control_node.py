@@ -89,9 +89,24 @@ class MotorControlNode(Node):
         else:
             right_forward_speed = motor_speed[1, 0]
 
+        if right_reverse_speed < 20 and right_reverse_speed != 0:
+            right_reverse_speed = 20
+
+        if right_forward_speed < 20 and right_forward_speed != 0:
+            right_forward_speed = 20
+
+        if left_reverse_speed < 20 and left_reverse_speed != 0:
+            left_reverse_speed = 20
+
+        if left_forward_speed < 20 and left_forward_speed != 0:
+            left_forward_speed = 20
+
         right_reverse_pwm.ChangeDutyCycle(right_reverse_speed)
+
         right_forward_pwm.ChangeDutyCycle(right_forward_speed)
+
         left_reverse_pwm.ChangeDutyCycle(left_reverse_speed)
+
         left_forward_pwm.ChangeDutyCycle(left_forward_speed)
         
         self.get_logger().info(f'Publishing: \n right_forward_speed: {right_forward_speed}, right_reverse_speed: {right_reverse_speed} left_forward_speed: {left_forward_speed}, left_reverse_speed: {left_reverse_speed}')
