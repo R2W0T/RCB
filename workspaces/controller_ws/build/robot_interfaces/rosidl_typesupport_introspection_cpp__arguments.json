@@ -1,0 +1,23 @@
+{
+  "package_name": "robot_interfaces",
+  "output_dir": "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_typesupport_introspection_cpp/robot_interfaces",
+  "template_dir": "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_typesupport_introspection_cpp/resource",
+  "idl_tuples": [
+    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces:msg/Command.idl",
+    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces:msg/Odometry.idl",
+    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces:msg/Speed.idl"
+  ],
+  "target_dependencies": [
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/lib/rosidl_typesupport_introspection_cpp/rosidl_typesupport_introspection_cpp",
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/lib/python3.12/site-packages/rosidl_typesupport_introspection_cpp/__init__.py",
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_typesupport_introspection_cpp/resource/idl__rosidl_typesupport_introspection_cpp.hpp.em",
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_typesupport_introspection_cpp/resource/idl__type_support.cpp.em",
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_typesupport_introspection_cpp/resource/msg__rosidl_typesupport_introspection_cpp.hpp.em",
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_typesupport_introspection_cpp/resource/msg__type_support.cpp.em",
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_typesupport_introspection_cpp/resource/srv__rosidl_typesupport_introspection_cpp.hpp.em",
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_typesupport_introspection_cpp/resource/srv__type_support.cpp.em",
+    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces/msg/Command.idl",
+    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces/msg/Odometry.idl",
+    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces/msg/Speed.idl"
+  ]
+}

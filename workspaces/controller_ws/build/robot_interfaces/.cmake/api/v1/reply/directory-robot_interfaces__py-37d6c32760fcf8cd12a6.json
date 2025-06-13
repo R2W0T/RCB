@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "robot_interfaces__py",
+		"source" : "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/robot_interfaces__py"
+	}
+}

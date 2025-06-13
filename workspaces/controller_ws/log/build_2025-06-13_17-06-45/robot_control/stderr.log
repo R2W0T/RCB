@@ -1,0 +1,26 @@
+make[2]: *** [CMakeFiles/robot_control_node.dir/build.make:107: CMakeFiles/robot_control_node.dir/src/robot_control_node.cpp.o] Interrupt
+make[1]: *** [CMakeFiles/Makefile2:153: CMakeFiles/robot_control_node.dir/all] Interrupt
+make: *** [Makefile:146: all] Interrupt
+Traceback (most recent call last):
+  File "/nix/store/8jljd7zhwwcpqmfj3cz18nbr9x4dilf1-python3.12-cmake-3.31.5/bin/.cmake-wrapped", line 9, in <module>
+    sys.exit(cmake())
+             ^^^^^^^
+  File "/nix/store/8jljd7zhwwcpqmfj3cz18nbr9x4dilf1-python3.12-cmake-3.31.5/lib/python3.12/site-packages/cmake/__init__.py", line 13, in cmake
+    raise SystemExit(_program('cmake', sys.argv[1:]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/8jljd7zhwwcpqmfj3cz18nbr9x4dilf1-python3.12-cmake-3.31.5/lib/python3.12/site-packages/cmake/__init__.py", line 10, in _program
+    return subprocess.call([os.path.join(CMAKE_BIN_DIR, name)] + args, close_fds=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/f2krmq3iv5nibcvn4rw7nrnrciqprdkh-python3-3.12.9/lib/python3.12/subprocess.py", line 393, in call
+    return p.wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/f2krmq3iv5nibcvn4rw7nrnrciqprdkh-python3-3.12.9/lib/python3.12/subprocess.py", line 1266, in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/f2krmq3iv5nibcvn4rw7nrnrciqprdkh-python3-3.12.9/lib/python3.12/subprocess.py", line 2061, in _wait
+    (pid, sts) = self._try_wait(0)
+                 ^^^^^^^^^^^^^^^^^
+  File "/nix/store/f2krmq3iv5nibcvn4rw7nrnrciqprdkh-python3-3.12.9/lib/python3.12/subprocess.py", line 2019, in _try_wait
+    (pid, sts) = os.waitpid(self.pid, wait_flags)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

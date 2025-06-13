@@ -1,0 +1,22 @@
+[ 25%] [32mBuilding CXX object CMakeFiles/robot_control_node.dir/src/state_machine.cpp.o[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/robot_control_node.dir/src/robot_control_node.cpp.o[0m
+[ 75%] [32m[1mLinking CXX executable robot_control_node[0m
+[100%] Built target robot_control_node
+-- Install configuration: ""
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/lib/robot_control/robot_control_node
+-- Set non-toolchain portion of runtime path of "/home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/lib/robot_control/robot_control_node" to ""
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/ament_index/resource_index/package_run_dependencies/robot_control
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/ament_index/resource_index/parent_prefix_path/robot_control
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/robot_control/environment/ament_prefix_path.sh
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/robot_control/environment/ament_prefix_path.dsv
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/robot_control/environment/path.sh
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/robot_control/environment/path.dsv
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/robot_control/local_setup.bash
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/robot_control/local_setup.sh
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/robot_control/local_setup.zsh
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/robot_control/local_setup.dsv
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/robot_control/package.dsv
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/ament_index/resource_index/packages/robot_control
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/robot_control/cmake/robot_controlConfig.cmake
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/robot_control/cmake/robot_controlConfig-version.cmake
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control/share/robot_control/package.xml

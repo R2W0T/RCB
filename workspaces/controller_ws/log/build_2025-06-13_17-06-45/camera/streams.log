@@ -1,0 +1,88 @@
+[0.030s] Invoking command in '/home/r2w0t/dev/RCB/workspaces/controller_ws/build/camera': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env _=/nix/store/yh6qg1nsi5h2xblcr67030pz58fsaxx3-coreutils-9.6/bin/env buildPhase={ echo "------------------------------------------------------------";
+  echo " WARNING: the existence of this path is not guaranteed.";
+  echo " It is an internal implementation detail for pkgs.mkShell.";
+  echo "------------------------------------------------------------";
+  echo;
+  # Record all build inputs as runtime dependencies
+  export;
+} >> "$out" shellHook=# Setup ROS 2 shell completion. Doing it in direnv is useless.
+if [[ ! $DIRENV_IN_ENVRC ]]; then
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete ros2)"
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete colcon)"
+fi /nix/store/8jljd7zhwwcpqmfj3cz18nbr9x4dilf1-python3.12-cmake-3.31.5/bin/cmake /home/r2w0t/dev/RCB/workspaces/controller_ws/src/camera -DCMAKE_INSTALL_PREFIX=/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera
+[0.460s] -- The C compiler identification is GNU 14.2.1
+[0.885s] -- The CXX compiler identification is GNU 14.2.1
+[0.929s] -- Detecting C compiler ABI info
+[1.349s] -- Detecting C compiler ABI info - done
+[1.644s] -- Check for working C compiler: /nix/store/8v6k283dpbc0qkdq81nb6mrxrgcb10i1-gcc-wrapper-14-20241116/bin/gcc - skipped
+[1.647s] -- Detecting C compile features
+[1.648s] -- Detecting C compile features - done
+[2.054s] -- Detecting CXX compiler ABI info
+[2.616s] -- Detecting CXX compiler ABI info - done
+[2.880s] -- Check for working CXX compiler: /nix/store/8v6k283dpbc0qkdq81nb6mrxrgcb10i1-gcc-wrapper-14-20241116/bin/g++ - skipped
+[2.882s] -- Detecting CXX compile features
+[2.884s] -- Detecting CXX compile features - done
+[3.042s] -- Found ament_cmake: 2.5.3 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/ament_cmake/cmake)
+[3.353s] -- Found Python3: /nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/bin/python3 (found version "3.12.9") found components: Interpreter
+[3.577s] -- Found rclcpp: 28.1.6 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rclcpp/cmake)
+[3.644s] -- Found rosidl_generator_c: 4.6.5 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_generator_c/cmake)
+[3.667s] -- Found rosidl_generator_cpp: 4.6.5 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_generator_cpp/cmake)
+[3.693s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[3.725s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[3.920s] -- Found rmw_implementation_cmake: 7.3.1 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rmw_implementation_cmake/cmake)
+[3.927s] -- Found rmw_fastrtps_cpp: 8.4.1 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rmw_fastrtps_cpp/cmake)
+[4.255s] -- Found OpenSSL: /nix/store/954l60hahqvr0hbs7ww6lmgkxvk8akdf-openssl-3.4.1/lib/libcrypto.so (found version "3.4.1")
+[4.310s] -- Found FastRTPS: /nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/include (Required is at least version "2.13")
+[4.365s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[4.616s] -- Found std_msgs: 5.3.5 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/std_msgs/cmake)
+[4.656s] -- Found robot_interfaces: 0.0.0 (/home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_interfaces/share/robot_interfaces/cmake)
+[4.710s] -- Found OpenCV: / (found version "4.11.0")
+[4.910s] -- Configuring done (4.8s)
+[4.946s] -- Generating done (0.0s)
+[4.951s] -- Build files have been written to: /home/r2w0t/dev/RCB/workspaces/controller_ws/build/camera
+[4.970s] Invoked command in '/home/r2w0t/dev/RCB/workspaces/controller_ws/build/camera' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env _=/nix/store/yh6qg1nsi5h2xblcr67030pz58fsaxx3-coreutils-9.6/bin/env buildPhase={ echo "------------------------------------------------------------";
+  echo " WARNING: the existence of this path is not guaranteed.";
+  echo " It is an internal implementation detail for pkgs.mkShell.";
+  echo "------------------------------------------------------------";
+  echo;
+  # Record all build inputs as runtime dependencies
+  export;
+} >> "$out" shellHook=# Setup ROS 2 shell completion. Doing it in direnv is useless.
+if [[ ! $DIRENV_IN_ENVRC ]]; then
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete ros2)"
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete colcon)"
+fi /nix/store/8jljd7zhwwcpqmfj3cz18nbr9x4dilf1-python3.12-cmake-3.31.5/bin/cmake /home/r2w0t/dev/RCB/workspaces/controller_ws/src/camera -DCMAKE_INSTALL_PREFIX=/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera
+[4.974s] Invoking command in '/home/r2w0t/dev/RCB/workspaces/controller_ws/build/camera': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env _=/nix/store/yh6qg1nsi5h2xblcr67030pz58fsaxx3-coreutils-9.6/bin/env buildPhase={ echo "------------------------------------------------------------";
+  echo " WARNING: the existence of this path is not guaranteed.";
+  echo " It is an internal implementation detail for pkgs.mkShell.";
+  echo "------------------------------------------------------------";
+  echo;
+  # Record all build inputs as runtime dependencies
+  export;
+} >> "$out" shellHook=# Setup ROS 2 shell completion. Doing it in direnv is useless.
+if [[ ! $DIRENV_IN_ENVRC ]]; then
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete ros2)"
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete colcon)"
+fi /nix/store/8jljd7zhwwcpqmfj3cz18nbr9x4dilf1-python3.12-cmake-3.31.5/bin/cmake --build /home/r2w0t/dev/RCB/workspaces/controller_ws/build/camera -- -j4 -l4
+[5.206s] [ 33%] [32mBuilding CXX object CMakeFiles/camera_node.dir/src/main.cpp.o[0m
+[5.206s] [ 66%] [32mBuilding CXX object CMakeFiles/camera_node.dir/src/camera_node.cpp.o[0m
+[15.386s] [01m[K/home/r2w0t/dev/RCB/workspaces/controller_ws/src/camera/src/main.cpp:[m[K In function ‘[01m[Kint[01;32m[K main[m[K(int, char**)[m[K’:
+[15.387s] [01m[K/home/r2w0t/dev/RCB/workspaces/controller_ws/src/camera/src/main.cpp:27:52:[m[K [01;31m[Kerror: [m[Ktoo many initializers for ‘[01m[Kconst int [5][m[K’
+[15.387s]    27 |     const int markers_cw_ids[5] = {0, 1, 2, 3, 4, 5[01;31m[K}[m[K;
+[15.387s]       |                                                    [01;31m[K^[m[K
+[19.053s] make[2]: *** [CMakeFiles/camera_node.dir/build.make:79: CMakeFiles/camera_node.dir/src/main.cpp.o] Error 1
+[19.053s] make[2]: *** Waiting for unfinished jobs....
+[20.792s] make[1]: *** [CMakeFiles/Makefile2:153: CMakeFiles/camera_node.dir/all] Error 2
+[20.792s] make: *** [Makefile:146: all] Error 2
+[20.802s] Invoked command in '/home/r2w0t/dev/RCB/workspaces/controller_ws/build/camera' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env _=/nix/store/yh6qg1nsi5h2xblcr67030pz58fsaxx3-coreutils-9.6/bin/env buildPhase={ echo "------------------------------------------------------------";
+  echo " WARNING: the existence of this path is not guaranteed.";
+  echo " It is an internal implementation detail for pkgs.mkShell.";
+  echo "------------------------------------------------------------";
+  echo;
+  # Record all build inputs as runtime dependencies
+  export;
+} >> "$out" shellHook=# Setup ROS 2 shell completion. Doing it in direnv is useless.
+if [[ ! $DIRENV_IN_ENVRC ]]; then
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete ros2)"
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete colcon)"
+fi /nix/store/8jljd7zhwwcpqmfj3cz18nbr9x4dilf1-python3.12-cmake-3.31.5/bin/cmake --build /home/r2w0t/dev/RCB/workspaces/controller_ws/build/camera -- -j4 -l4

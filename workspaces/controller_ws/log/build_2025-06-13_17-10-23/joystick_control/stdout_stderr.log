@@ -1,0 +1,19 @@
+[100%] Built target joystick_control_node
+-- Install configuration: ""
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/lib/joystick_control/joystick_control_node
+-- Set non-toolchain portion of runtime path of "/home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/lib/joystick_control/joystick_control_node" to ""
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/ament_index/resource_index/package_run_dependencies/joystick_control
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/ament_index/resource_index/parent_prefix_path/joystick_control
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/joystick_control/environment/ament_prefix_path.sh
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/joystick_control/environment/ament_prefix_path.dsv
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/joystick_control/environment/path.sh
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/joystick_control/environment/path.dsv
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/joystick_control/local_setup.bash
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/joystick_control/local_setup.sh
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/joystick_control/local_setup.zsh
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/joystick_control/local_setup.dsv
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/joystick_control/package.dsv
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/ament_index/resource_index/packages/joystick_control
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/joystick_control/cmake/joystick_controlConfig.cmake
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/joystick_control/cmake/joystick_controlConfig-version.cmake
+-- Installing: /home/r2w0t/dev/RCB/workspaces/controller_ws/install/joystick_control/share/joystick_control/package.xml

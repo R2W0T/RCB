@@ -1,0 +1,21 @@
+{
+  "package_name": "robot_interfaces",
+  "output_dir": "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_typesupport_c/robot_interfaces",
+  "template_dir": "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_typesupport_c/resource",
+  "idl_tuples": [
+    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces:msg/Command.idl",
+    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces:msg/Odometry.idl",
+    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces:msg/Speed.idl"
+  ],
+  "target_dependencies": [
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/lib/rosidl_typesupport_c/rosidl_typesupport_c",
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/lib/python3.12/site-packages/rosidl_typesupport_c/__init__.py",
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_typesupport_c/resource/action__type_support.c.em",
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_typesupport_c/resource/idl__type_support.cpp.em",
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_typesupport_c/resource/msg__type_support.cpp.em",
+    "/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_typesupport_c/resource/srv__type_support.cpp.em",
+    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces/msg/Command.idl",
+    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces/msg/Odometry.idl",
+    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces/msg/Speed.idl"
+  ]
+}

@@ -1,0 +1,16 @@
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/lib/camera/camera_node
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/ament_index/resource_index/package_run_dependencies/camera
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/ament_index/resource_index/parent_prefix_path/camera
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/camera/environment/ament_prefix_path.sh
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/camera/environment/ament_prefix_path.dsv
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/camera/environment/path.sh
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/camera/environment/path.dsv
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/camera/local_setup.bash
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/camera/local_setup.sh
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/camera/local_setup.zsh
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/camera/local_setup.dsv
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/camera/package.dsv
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/ament_index/resource_index/packages/camera
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/camera/cmake/cameraConfig.cmake
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/camera/cmake/cameraConfig-version.cmake
+/home/r2w0t/dev/RCB/workspaces/controller_ws/install/camera/share/camera/package.xml

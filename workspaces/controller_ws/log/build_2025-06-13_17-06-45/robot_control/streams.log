@@ -1,0 +1,93 @@
+[0.031s] Invoking command in '/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_control': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env _=/nix/store/yh6qg1nsi5h2xblcr67030pz58fsaxx3-coreutils-9.6/bin/env buildPhase={ echo "------------------------------------------------------------";
+  echo " WARNING: the existence of this path is not guaranteed.";
+  echo " It is an internal implementation detail for pkgs.mkShell.";
+  echo "------------------------------------------------------------";
+  echo;
+  # Record all build inputs as runtime dependencies
+  export;
+} >> "$out" shellHook=# Setup ROS 2 shell completion. Doing it in direnv is useless.
+if [[ ! $DIRENV_IN_ENVRC ]]; then
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete ros2)"
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete colcon)"
+fi /nix/store/8jljd7zhwwcpqmfj3cz18nbr9x4dilf1-python3.12-cmake-3.31.5/bin/cmake /home/r2w0t/dev/RCB/workspaces/controller_ws/src/robot_control -DCMAKE_INSTALL_PREFIX=/home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control
+[0.445s] -- The C compiler identification is GNU 14.2.1
+[0.870s] -- The CXX compiler identification is GNU 14.2.1
+[0.914s] -- Detecting C compiler ABI info
+[1.330s] -- Detecting C compiler ABI info - done
+[1.623s] -- Check for working C compiler: /nix/store/8v6k283dpbc0qkdq81nb6mrxrgcb10i1-gcc-wrapper-14-20241116/bin/gcc - skipped
+[1.624s] -- Detecting C compile features
+[1.625s] -- Detecting C compile features - done
+[2.033s] -- Detecting CXX compiler ABI info
+[2.546s] -- Detecting CXX compiler ABI info - done
+[2.849s] -- Check for working CXX compiler: /nix/store/8v6k283dpbc0qkdq81nb6mrxrgcb10i1-gcc-wrapper-14-20241116/bin/g++ - skipped
+[2.850s] -- Detecting CXX compile features
+[2.850s] -- Detecting CXX compile features - done
+[3.096s] -- Found ament_cmake: 2.5.3 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/ament_cmake/cmake)
+[3.537s] -- Found Python3: /nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/bin/python3 (found version "3.12.9") found components: Interpreter
+[3.889s] -- Found rclcpp: 28.1.6 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rclcpp/cmake)
+[3.983s] -- Found rosidl_generator_c: 4.6.5 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_generator_c/cmake)
+[4.021s] -- Found rosidl_generator_cpp: 4.6.5 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rosidl_generator_cpp/cmake)
+[4.064s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[4.114s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[4.291s] -- Found rmw_implementation_cmake: 7.3.1 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rmw_implementation_cmake/cmake)
+[4.298s] -- Found rmw_fastrtps_cpp: 8.4.1 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/rmw_fastrtps_cpp/cmake)
+[4.606s] -- Found OpenSSL: /nix/store/954l60hahqvr0hbs7ww6lmgkxvk8akdf-openssl-3.4.1/lib/libcrypto.so (found version "3.4.1")
+[4.668s] -- Found FastRTPS: /nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/include (Required is at least version "2.13")
+[4.747s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[4.988s] -- Found std_msgs: 5.3.5 (/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env/share/std_msgs/cmake)
+[5.036s] -- Found robot_interfaces: 0.0.0 (/home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_interfaces/share/robot_interfaces/cmake)
+[5.340s] -- Configuring done (5.2s)
+[5.385s] -- Generating done (0.0s)
+[5.388s] -- Build files have been written to: /home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_control
+[5.416s] Invoked command in '/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_control' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env _=/nix/store/yh6qg1nsi5h2xblcr67030pz58fsaxx3-coreutils-9.6/bin/env buildPhase={ echo "------------------------------------------------------------";
+  echo " WARNING: the existence of this path is not guaranteed.";
+  echo " It is an internal implementation detail for pkgs.mkShell.";
+  echo "------------------------------------------------------------";
+  echo;
+  # Record all build inputs as runtime dependencies
+  export;
+} >> "$out" shellHook=# Setup ROS 2 shell completion. Doing it in direnv is useless.
+if [[ ! $DIRENV_IN_ENVRC ]]; then
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete ros2)"
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete colcon)"
+fi /nix/store/8jljd7zhwwcpqmfj3cz18nbr9x4dilf1-python3.12-cmake-3.31.5/bin/cmake /home/r2w0t/dev/RCB/workspaces/controller_ws/src/robot_control -DCMAKE_INSTALL_PREFIX=/home/r2w0t/dev/RCB/workspaces/controller_ws/install/robot_control
+[5.420s] Invoking command in '/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_control': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/nix/store/vhz65fc3cs10c5sxbwh7c5iz2pwzyx4b-ros-env _=/nix/store/yh6qg1nsi5h2xblcr67030pz58fsaxx3-coreutils-9.6/bin/env buildPhase={ echo "------------------------------------------------------------";
+  echo " WARNING: the existence of this path is not guaranteed.";
+  echo " It is an internal implementation detail for pkgs.mkShell.";
+  echo "------------------------------------------------------------";
+  echo;
+  # Record all build inputs as runtime dependencies
+  export;
+} >> "$out" shellHook=# Setup ROS 2 shell completion. Doing it in direnv is useless.
+if [[ ! $DIRENV_IN_ENVRC ]]; then
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete ros2)"
+    eval "$(/nix/store/dds9yi6lc5zh41n5k4qnijq4xjk7069v-python3.12-argcomplete-3.5.3/bin/register-python-argcomplete colcon)"
+fi /nix/store/8jljd7zhwwcpqmfj3cz18nbr9x4dilf1-python3.12-cmake-3.31.5/bin/cmake --build /home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_control -- -j4 -l4
+[5.658s] [ 25%] [32mBuilding CXX object CMakeFiles/robot_control_node.dir/src/main.cpp.o[0m
+[15.512s] [ 50%] [32mBuilding CXX object CMakeFiles/robot_control_node.dir/src/robot_control_node.cpp.o[0m
+[30.494s] make[2]: *** [CMakeFiles/robot_control_node.dir/build.make:107: CMakeFiles/robot_control_node.dir/src/robot_control_node.cpp.o] Interrupt
+[30.494s] make[1]: *** [CMakeFiles/Makefile2:153: CMakeFiles/robot_control_node.dir/all] Interrupt
+[30.495s] make: *** [Makefile:146: all] Interrupt
+[30.495s] Traceback (most recent call last):
+[30.495s]   File "/nix/store/8jljd7zhwwcpqmfj3cz18nbr9x4dilf1-python3.12-cmake-3.31.5/bin/.cmake-wrapped", line 9, in <module>
+[30.495s]     sys.exit(cmake())
+[30.495s]              ^^^^^^^
+[30.496s]   File "/nix/store/8jljd7zhwwcpqmfj3cz18nbr9x4dilf1-python3.12-cmake-3.31.5/lib/python3.12/site-packages/cmake/__init__.py", line 13, in cmake
+[30.496s]     raise SystemExit(_program('cmake', sys.argv[1:]))
+[30.496s]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[30.496s]   File "/nix/store/8jljd7zhwwcpqmfj3cz18nbr9x4dilf1-python3.12-cmake-3.31.5/lib/python3.12/site-packages/cmake/__init__.py", line 10, in _program
+[30.496s]     return subprocess.call([os.path.join(CMAKE_BIN_DIR, name)] + args, close_fds=False)
+[30.496s]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[30.497s]   File "/nix/store/f2krmq3iv5nibcvn4rw7nrnrciqprdkh-python3-3.12.9/lib/python3.12/subprocess.py", line 393, in call
+[30.497s]     return p.wait(timeout=timeout)
+[30.497s]            ^^^^^^^^^^^^^^^^^^^^^^^
+[30.497s]   File "/nix/store/f2krmq3iv5nibcvn4rw7nrnrciqprdkh-python3-3.12.9/lib/python3.12/subprocess.py", line 1266, in wait
+[30.498s]     return self._wait(timeout=timeout)
+[30.498s]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[30.498s]   File "/nix/store/f2krmq3iv5nibcvn4rw7nrnrciqprdkh-python3-3.12.9/lib/python3.12/subprocess.py", line 2061, in _wait
+[30.498s]     (pid, sts) = self._try_wait(0)
+[30.498s]                  ^^^^^^^^^^^^^^^^^
+[30.499s]   File "/nix/store/f2krmq3iv5nibcvn4rw7nrnrciqprdkh-python3-3.12.9/lib/python3.12/subprocess.py", line 2019, in _try_wait
+[30.500s]     (pid, sts) = os.waitpid(self.pid, wait_flags)
+[30.500s]                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[30.500s] KeyboardInterrupt
