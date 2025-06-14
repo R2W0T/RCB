@@ -1,8 +1,0 @@
-{
-  "package_name": "robot_interfaces",
-  "non_idl_tuples": [
-    "/home/r2w0t/dev/RCB/workspaces/controller_ws/src/robot_interfaces:msg/Command.msg",
-    "/home/r2w0t/dev/RCB/workspaces/controller_ws/src/robot_interfaces:msg/Odometry.msg",
-    "/home/r2w0t/dev/RCB/workspaces/controller_ws/src/robot_interfaces:msg/Speed.msg"
-  ]
-}

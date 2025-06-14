@@ -1,9 +1,0 @@
-{
-  "package_name": "robot_interfaces",
-  "output_dir": "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_generator_type_description/robot_interfaces",
-  "idl_tuples": [
-    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces:msg/Command.idl",
-    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces:msg/Odometry.idl",
-    "/home/r2w0t/dev/RCB/workspaces/controller_ws/build/robot_interfaces/rosidl_adapter/robot_interfaces:msg/Speed.idl"
-  ]
-}
