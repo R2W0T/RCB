@@ -4,7 +4,7 @@
   <name>launch_all</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="watertunner@gmail.com">r2w0t</maintainer>
+  <maintainer email="ros@todo.todo">ros</maintainer>
   <license>TODO: License declaration</license>
 
   <test_depend>ament_copyright</test_depend>
