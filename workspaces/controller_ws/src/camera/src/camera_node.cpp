@@ -3,7 +3,7 @@
 
 using std::placeholders::_1;
 
-CameraNode::CameraNode() : Node("joystick_control_node")
+CameraNode::CameraNode() : Node("camera_control_node")
 {
 
     ////////////////////////////////////////////////////////////////////////////////////
