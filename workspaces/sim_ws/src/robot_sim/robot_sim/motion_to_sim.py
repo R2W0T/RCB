@@ -21,8 +21,8 @@ class MotionToSimNode(Node):
 
     def listener_callback(self, msg):
         twist_msg = Twist()
-        twist_msg.linear.x = float(msg.linear_speed) / 50 
-        twist_msg.angular.z = -float(msg.rotational_speed) / 50
+        twist_msg.linear.x = float(msg.linear_speed) / 25 
+        twist_msg.angular.z = -float(msg.rotational_speed) / 25
         
         self.publisher_.publish(twist_msg)
 

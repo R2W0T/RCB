@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.28)
 project(image_processor)
 
 ####################################################################################################..
@@ -25,7 +25,7 @@ install(TARGETS
 ###############################################################################################################
 
 ###############################################################################################################
-find_package( OpenCV REQUIRED )
+find_package( OpenCV 4.11.0 REQUIRED )
 
 include_directories( ${OpenCV_INCLUDE_DIRS} ./include)
 

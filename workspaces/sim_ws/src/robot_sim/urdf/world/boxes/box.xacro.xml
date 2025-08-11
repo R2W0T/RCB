@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="wheeled_robot">
+
+  <xacro:property name="pi_const" value="3.14159265" />
+
+  <xacro:property name="length" value="0.3" />
+  <xacro:property name="width" value="0.3" />
+  <xacro:property name="height" value="0.5" />
+  
+  <xacro:property name="center_to_ground_z" value="${height / 2}" />
+
+  <xacro:property name="d1" value="2718.0" />
+
+  <xacro:property name="m1" value="${d1 * width * height * length}" />
+
+  <xacro:property name="Ix_body" value="${(1 / 12) * m1 * (height * height + width * width)}" />
+  <xacro:property name="Iy_body" value="${(1 / 12) * m1 * (length * length + height * height)}" />
+  <xacro:property name="Iz_body" value="${(1 / 12) * m1 * (length * length + width * width)}" />
+
+  <material name="black" >
+    <color rgba="0 0 0 1" />
+  </material>
+
+  <material name="white" >
+    <color rgba="1 1 1 1" />
+  </material>
+  
+  <material name="cyan" >
+    <color rgba="0 0.4 0.5 1" />
+  </material>
+  
+  <material name="blue" >
+    <color rgba="0 0 0.5 1" />
+  </material>
+
+  <link name="base_footprint_link" />
+  
+  <link name="base_link">
+
+    <visual>
+
+      <geometry>
+        <box size="${width} ${length} ${height}" />
+      </geometry>
+      <material name="black" />
+      <origin xyz="0 0 ${height/2}" rpy="0 0 0" />
+
+    </visual>
+
+    <collision>
+     
+      <geometry>
+        <box size="${width} ${length} ${height}" />       
+      </geometry>
+      <origin xyz="0 0 ${height/2}" rpy="0 0 0" />
+
+    </collision>
+
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 ${center_to_ground_z}" />
+      <mass value="${m1}" />
+      <inertia ixx="${Ix_body}" ixy="0.0" ixz="0.0" iyy="${Iy_body}" iyz="0.0" izz="${Iz_body}" />
+    </inertial>
+  </link>
+  
+
+  <joint name="base_footprint_base_joint" type="fixed" >
+    <parent link="base_footprint_link" />
+    <child link="base_link" />
+    <origin xyz="0 0 0.2" rpy="0 0 0" />
+  </joint>
+
+
+  <xacro:include filename="$(find robot_sim)/urdf/world/boxes/box.gazebo" />
+
+
+
+</robot>
+

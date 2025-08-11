@@ -7,25 +7,49 @@
     <include>
       <name>tag0</name>
       <uri>src/robot_sim/urdf/world/markers/tag0/model.sdf</uri>
-      <pose>1 1 0.02 0 0 3.14159</pose>
+      <pose>1 1 0.02 0 0 1.5708</pose>
     </include>
 
     <include>
       <name>tag1</name>
       <uri>src/robot_sim/urdf/world/markers/tag1/model.sdf</uri>
-      <pose>1 -1 0.02 0 0 1.5708</pose>
+      <pose>1 -1 0.02 0 0 0</pose>
     </include>
 
     <include>
       <name>tag2</name>
       <uri>src/robot_sim/urdf/world/markers/tag2/model.sdf</uri>
-      <pose>-1 1 0.02 0 0 -1.5708</pose>
+      <pose>-1 1 0.02 0 0 3.14159</pose>
     </include>
 
     <include>
       <name>tag3</name>
       <uri>src/robot_sim/urdf/world/markers/tag3/model.sdf</uri>
-      <pose>-1 -1 0.02 0 0 0</pose>
+      <pose>-1 -1 0.02 0 0 -1.5708</pose>
+    </include>
+
+    <include>
+      <name>box1</name>
+      <uri>src/robot_sim/urdf/world/boxes/box.sdf</uri>
+      <pose>0.5 -0.5 0.02 0 0 0</pose>
+    </include>
+    <!--
+    <include>
+      <name>box2</name>
+      <uri>src/robot_sim/urdf/world/boxes/box.sdf</uri>
+      <pose>-0.5 -0.5 0.02 0 0 0</pose>
+    </include>
+
+    <include>
+      <name>box3</name>
+      <uri>src/robot_sim/urdf/world/boxes/box.sdf</uri>
+      <pose>0.5 0.5 0.02 0 0 0</pose>
+    </include>
+    --> 
+    <include>
+      <name>box4</name>
+      <uri>src/robot_sim/urdf/world/boxes/box.sdf</uri>
+      <pose>-0.5 0.5 0.02 0 0 0</pose>
     </include>
 
     <physics name="1ms" type="ignored">
@@ -48,9 +72,9 @@
       filename="gz-sim-contact-system"
       name="gz::sim::systems::Contact">
     </plugin>
-
-    <light type="directional" name="sun">
-      <cast_shadows>true</cast_shadows>
+    
+    <light type="directional" name="sun0">
+      <cast_shadows>false</cast_shadows>
       <pose>0 0 10 0 0 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
       <specular>0.2 0.2 0.2 1</specular>
@@ -62,7 +86,63 @@
       </attenuation>
       <direction>-0.5 0.1 -0.9</direction>
     </light>
+    <!--
+    <light type="directional" name="sun1">
+      <cast_shadows>true</cast_shadows>
+      <pose>2 2 10 0 0 1</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
 
+    <light type="directional" name="sun2">
+      <cast_shadows>true</cast_shadows>
+      <pose>-2 -2 10 0 1 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <light type="directional" name="sun3">
+      <cast_shadows>true</cast_shadows>
+      <pose>-2 2 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <light type="directional" name="sun4">
+      <cast_shadows>true</cast_shadows>
+      <pose>2 -2 10 1 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+    -->
     <model name="ground_plane">
       <static>true</static>
       <link name="link">

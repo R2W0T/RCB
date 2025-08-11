@@ -20,8 +20,14 @@ ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
 
   robot_position_publisher = this->create_publisher<robot_interfaces::msg::Odometry>("robot_position", 10);
   ////////////////////////////////////////////////////////////////////////////////////
-  image_publisher = this->create_publisher<sensor_msgs::msg::Image>("processed_image", 10);
-  image_subscriber = this->create_subscription<sensor_msgs::msg::Image>("image", 10, std::bind(&ImageProcessorNode::process_image_callback, this, _1));
+  
+  rclcpp::QoS video_qos_profile(1); // Queue depth of 1 for the latest frame
+  video_qos_profile.reliability(RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT);
+  video_qos_profile.durability(RMW_QOS_POLICY_DURABILITY_VOLATILE);
+  video_qos_profile.history(RMW_QOS_POLICY_HISTORY_KEEP_LAST);
+
+  image_publisher = this->create_publisher<sensor_msgs::msg::Image>("processed_image", video_qos_profile);
+  image_subscriber = this->create_subscription<sensor_msgs::msg::Image>("image", video_qos_profile, std::bind(&ImageProcessorNode::process_image_callback, this, _1));
 
 }
 
@@ -56,9 +62,6 @@ void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::Image::S
   std::vector<int> markerIds;
   std::vector<std::vector<cv::Point2f>> markerCorners;
 
-
-
-
   cv::Mat img, dst, p_matrix;
 
   cv_bridge::CvImagePtr cv_ptr;
@@ -70,13 +73,16 @@ void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::Image::S
   }
 
   img = cv_ptr->image;
-
+//  cv::imshow("img", img);
+//  cv::waitKey(2);
+  //
   // initialize transformation points
   cv::Point2f src_pts[4];
   const cv::Point2f dst_pts[4] = {cv::Point2f(0, 0), cv::Point2f(width, 0), cv::Point2f(0, height), cv::Point2f(width, height)};
 
         
   detector.detectMarkers(img, markerCorners, markerIds);
+//  cv::aruco::drawDetectedMarkers(img, markerCorners, markerIds);
         
   // check if all markers are detected
   if(markerIds.size() < 5)
@@ -85,8 +91,8 @@ void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::Image::S
 
   // get markers positions
   for(int i = 0; i < markerIds.size(); i++) 
-    if(markerIds[i] < 4)
-      src_pts[markerIds[i]] = markerCorners[i][0];
+    if(markerIds[i] < 9) // 4
+      src_pts[markerIds[i] - 5] = markerCorners[i][0]; // no -5
 
   // get transformation matrix     
   p_matrix = cv::getPerspectiveTransform(src_pts, dst_pts);
@@ -96,13 +102,19 @@ void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::Image::S
   detector.detectMarkers(dst, markerCorners, markerIds);
         
   cv::imshow("dst", dst);
+  cv::waitKey(1);
 
   for(int i = 0; i < markerIds.size(); i++)
-    if(markerIds[i] == robot_marker_id)
-      this->publish_position(  ((markerCorners[i][0].x + markerCorners[i][2].x) / 2), 
+    if(markerIds[i] == robot_marker_id) {
+      float theta = std::atan2((markerCorners[i][1].y - markerCorners[i][0].y), (markerCorners[i][1].x - markerCorners[i][0].x));
+      theta *=  180 / M_PI;
+      theta = theta >= 0 ? theta : 360 + theta;
+      this->publish_position(((markerCorners[i][0].x + markerCorners[i][2].x) / 2), 
                       ((markerCorners[i][0].y + markerCorners[i][2].y) / 2),
-                      std::atan2((markerCorners[i][1].y - markerCorners[i][0].y), (markerCorners[i][1].x - markerCorners[i][0].x)) * 180 / M_PI );
- 
-  this->publish_processed_image(img);
+                      theta);
+      break;
+    }
+
+  this->publish_processed_image(dst);
 
 }

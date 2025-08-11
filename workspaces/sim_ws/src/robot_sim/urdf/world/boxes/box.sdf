@@ -1,0 +1,47 @@
+<sdf version='1.11'>
+  <model name='wheeled_robot'>
+    <link name='base_footprint_link'>
+      <inertial>
+        <pose>0 0 0.45000000000000001 0 0 0</pose>
+        <mass>122.31</mass>
+        <inertia>
+          <ixx>3.465449999999997</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>3.465449999999997</iyy>
+          <iyz>0</iyz>
+          <izz>1.8346499999999999</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_footprint_link_fixed_joint_lump__base_link_collision'>
+        <pose>0 0 0.45000000000000001 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.29999999999999999 0.29999999999999999 0.5</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='base_footprint_link_fixed_joint_lump__base_link_visual'>
+        <pose>0 0 0.45000000000000001 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.29999999999999999 0.29999999999999999 0.5</size>
+          </box>
+        </geometry>
+        <material>
+          <diffuse>0 0 0 1</diffuse>
+          <ambient>0 0 0 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <plugin name='gz::sim::systems::JointStatePublisher' filename='gz-sim-joint-state-publisher-system'>
+      <topic>joint_states</topic>
+    </plugin>
+    <frame name='base_footprint_base_joint' attached_to='base_footprint_link'>
+      <pose>0 0 0.20000000000000001 0 0 0</pose>
+    </frame>
+    <frame name='base_link' attached_to='base_footprint_base_joint'>
+      <pose>0 0 0 0 0 0</pose>
+    </frame>
+  </model>
+</sdf>

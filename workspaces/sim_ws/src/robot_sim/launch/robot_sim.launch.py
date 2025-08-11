@@ -41,7 +41,7 @@ def generate_launch_description():
 
     node_robot_state_publisher = Node(package='robot_state_publisher', executable='robot_state_publisher', output='screen', parameters=[{'robot_description': robot_description, 'use_sim_time': True}])
     
-    node_camera_state_publisher = Node(package='robot_state_publisher', executable='robot_state_publisher', output='screen', remappings=[ ('robot_description', 'camera_description'), ] ,parameters=[{'robot_description': camera_description, 'use_sim_time': True}])
+    node_camera_state_publisher = Node(package='robot_state_publisher', executable='robot_state_publisher', output='screen', remappings=[ ('robot_description', 'camera_description'), ('robot_state_publisher', 'camera_state_publisher')] ,parameters=[{'robot_description': camera_description, 'use_sim_time': True}])
 
     bridge_params = os.path.join(get_package_share_directory(name_package), 'params', 'bridge_params.yaml')
 

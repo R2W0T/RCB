@@ -18,9 +18,9 @@
 
 //////////////////////////////////////////////////////////////////////////////////
 volatile const int dict = cv::aruco::DICT_APRILTAG_25h9;
-volatile const int robot_marker_id = 4;
-volatile const int markers_cw_ids[4] = {0, 1, 2, 3};
-volatile const uint32_t width = 480, height = 480;
+volatile const int robot_marker_id = 9; // 4
+volatile const int markers_cw_ids[4] = {5, 6, 7, 8};//{0, 1, 2, 3};
+volatile const uint32_t width = 800, height = 800;
 
 // initialize markers dictionary
 cv::aruco::Dictionary dictionary = cv::aruco::getPredefinedDictionary(dict);
@@ -47,11 +47,11 @@ int main(int argc, char *argv[]) {
 
     rclcpp::spin(std::make_shared<ImageProcessorNode>());
 
+    cv::destroyAllWindows();
     
     rclcpp::shutdown();
 
     
-    cv::destroyAllWindows();
 
 
     return 0;

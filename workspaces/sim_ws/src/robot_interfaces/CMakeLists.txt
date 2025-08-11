@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.28)
 project(robot_interfaces)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -17,11 +17,14 @@ set(msg_files
   "msg/Command.msg"
   "msg/Odometry.msg"
   "msg/Speed.msg"
-
 )
 
+set(action_files
+  "action/Planner.action"
+)
 rosidl_generate_interfaces(${PROJECT_NAME}
   ${msg_files}
+  ${action_files}
 )
 
 ament_export_dependencies(rosidl_default_runtime)

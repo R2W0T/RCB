@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.31)
-project(camera)
+cmake_minimum_required(VERSION 3.28)
+project(camera_driver)
 
 ####################################################################################################..
 
@@ -8,27 +8,29 @@ include_directories( include )
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 find_package(robot_interfaces REQUIRED)                       
+find_package(cv_bridge REQUIRED)                       
 
-add_executable(camera_node src/main.cpp 
-                            src/camera_node.cpp)
+add_executable(camera_driver_node src/main.cpp 
+                            src/camera_driver_node.cpp)
 
-ament_target_dependencies(camera_node rclcpp std_msgs robot_interfaces )      
+ament_target_dependencies(camera_driver_node cv_bridge rclcpp std_msgs sensor_msgs robot_interfaces )      
 
 
 install(TARGETS
-  camera_node
+  camera_driver_node
   DESTINATION lib/${PROJECT_NAME})
 
 ###############################################################################################################
 
 ###############################################################################################################
-find_package( OpenCV REQUIRED )
+find_package( OpenCV 4.11.0 REQUIRED )
 
 include_directories( ${OpenCV_INCLUDE_DIRS} ./include)
 
 
-target_link_libraries( camera_node ${OpenCV_LIBS} )
+target_link_libraries( camera_driver_node ${OpenCV_LIBS} )
 ###############################################################################################################
 
 

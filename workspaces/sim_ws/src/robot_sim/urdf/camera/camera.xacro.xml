@@ -61,7 +61,7 @@
     <always_on>1</always_on>
     <pose>0 0 2 0 1.5708 0</pose>
     <sensor type="camera" name="camera">
-      <update_rate>10.0</update_rate>
+      <update_rate>60.0</update_rate>
       <topic>camera</topic>
       <ignition_frame_is>"camera_link"</ignition_frame_is>
       <always_on>1</always_on>
