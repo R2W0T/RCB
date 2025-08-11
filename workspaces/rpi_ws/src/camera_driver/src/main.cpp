@@ -38,10 +38,12 @@ int main(int argc, char *argv[]) {
 
     auto node = std::make_shared<CameraDriverNode>();
 
-    while(cv::pollKey() == -1) {
+    while(true) { //cv::pollKey() == -1) {
         
+      std::this_thread::sleep_for(std::chrono::milliseconds(10));    
+      
       cap.read(img);
-      cv::imshow("img", img);
+      //cv::imshow("img", img);
         
       // check if all markers are detected
       node->publish(img);     
