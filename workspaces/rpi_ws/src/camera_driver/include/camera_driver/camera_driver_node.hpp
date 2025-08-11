@@ -11,6 +11,7 @@
 
 #include <opencv2/opencv.hpp>
 #include <sensor_msgs/msg/image.hpp>
+#include <sensor_msgs/msg/compressed_image.hpp>
 
 class CameraDriverNode : public rclcpp::Node
 {
@@ -22,7 +23,7 @@ class CameraDriverNode : public rclcpp::Node
   private:
     
     //////////////////////////////////////////////////////////////////////////////////////
-    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_publisher;
+    rclcpp::Publisher<sensor_msgs::msg::CompressedImage>::SharedPtr image_publisher;
     
 };
 

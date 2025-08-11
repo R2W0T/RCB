@@ -10,7 +10,7 @@ CameraDriverNode::CameraDriverNode() : Node("camera_driver_node") {
     video_qos_profile.history(RMW_QOS_POLICY_HISTORY_KEEP_LAST);
 
     ////////////////////////////////////////////////////////////////////////////////////
-    image_publisher = this->create_publisher<sensor_msgs::msg::Image>("image", video_qos_profile);
+    image_publisher = this->create_publisher<sensor_msgs::msg::CompressedImage>("image", video_qos_profile);
 
         
 }
@@ -27,8 +27,8 @@ void CameraDriverNode::publish(cv::Mat &img) {
     
     cv_image.image = gray_img;
     
-    auto message = sensor_msgs::msg::Image();
-    cv_image.toImageMsg(message); 
+    auto message = sensor_msgs::msg::CompressedImage();
+    cv_image.toCompressedImageMsg(message); 
     
     image_publisher->publish(message);
 }

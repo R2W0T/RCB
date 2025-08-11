@@ -27,7 +27,7 @@ ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
   video_qos_profile.history(RMW_QOS_POLICY_HISTORY_KEEP_LAST);
 
   image_publisher = this->create_publisher<sensor_msgs::msg::Image>("processed_image", video_qos_profile);
-  image_subscriber = this->create_subscription<sensor_msgs::msg::Image>("image", video_qos_profile, std::bind(&ImageProcessorNode::process_image_callback, this, _1));
+  image_subscriber = this->create_subscription<sensor_msgs::msg::CompressedImage>("compressed_image", video_qos_profile, std::bind(&ImageProcessorNode::process_image_callback, this, _1));
 
 }
 
@@ -56,7 +56,7 @@ void ImageProcessorNode::publish_position(float x, float y, float theta) const {
     robot_position_publisher->publish(message);
 }
 
-void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::Image::SharedPtr msg) const {
+void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::CompressedImage::SharedPtr msg) const {
 
     
   std::vector<int> markerIds;
@@ -73,9 +73,9 @@ void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::Image::S
   }
 
   img = cv_ptr->image;
-//  cv::imshow("img", img);
-//  cv::waitKey(2);
-  //
+  cv::imshow("img", img);
+  cv::waitKey(2);
+/*  //
   // initialize transformation points
   cv::Point2f src_pts[4];
   const cv::Point2f dst_pts[4] = {cv::Point2f(0, 0), cv::Point2f(width, 0), cv::Point2f(0, height), cv::Point2f(width, height)};
@@ -116,5 +116,5 @@ void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::Image::S
     }
 
   this->publish_processed_image(dst);
-
+*/
 }

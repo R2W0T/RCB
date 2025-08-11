@@ -6,6 +6,7 @@
 
 #include <opencv2/opencv.hpp>
 
+#include "sensor_msgs/msg/compressed_image.hpp"
 #include "sensor_msgs/msg/image.hpp"
 
 #include "robot_interfaces/msg/odometry.hpp"
@@ -18,7 +19,7 @@ class ImageProcessorNode : public rclcpp::Node
     ImageProcessorNode();
    
     void publish_processed_image(cv::Mat &img) const;
-    void process_image_callback(const sensor_msgs::msg::Image::SharedPtr msg) const;
+    void process_image_callback(const sensor_msgs::msg::CompressedImage::SharedPtr msg) const;
     void publish_position(float x, float y, float theta) const;
 
   private:
@@ -26,7 +27,7 @@ class ImageProcessorNode : public rclcpp::Node
     rclcpp::Publisher<robot_interfaces::msg::Odometry>::SharedPtr robot_position_publisher;
     //////////////////////////////////////////////////////////////////////////////////////
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_publisher;
-    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscriber;
+    rclcpp::Subscription<sensor_msgs::msg::CompressedImage>::SharedPtr image_subscriber;
     
 };
 
