@@ -18,10 +18,14 @@ CameraDriverNode::CameraDriverNode() : Node("camera_driver_node") {
 void CameraDriverNode::publish(cv::Mat &img) {
     
     cv_bridge::CvImage cv_image;
-    cv_image.encoding = "bgr8";
+    cv_image.encoding = "mono8";
     cv_image.header.stamp = rclcpp::Clock().now();
     cv_image.header.frame_id = "camera_frame";
-    cv_image.image = img;
+    
+    cv::Mat gray_img;
+    cv::cvtColor(img, gray_img, cv::COLOR_BGR2GRAY);
+    
+    cv_image.image = gray_img;
     
     auto message = sensor_msgs::msg::Image();
     cv_image.toImageMsg(message); 
