@@ -26,7 +26,7 @@ ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
   video_qos_profile.durability(RMW_QOS_POLICY_DURABILITY_VOLATILE);
   video_qos_profile.history(RMW_QOS_POLICY_HISTORY_KEEP_LAST);
 
-  image_publisher = this->create_publisher<sensor_msgs::msg::Image>("processed_image", video_qos_profile);
+  image_publisher = this->create_publisher<sensor_msgs::msg::CompressedImage>("compressed_processed_image", video_qos_profile);
   image_subscriber = this->create_subscription<sensor_msgs::msg::CompressedImage>("compressed_image", video_qos_profile, std::bind(&ImageProcessorNode::process_image_callback, this, _1));
 
 }
@@ -34,7 +34,7 @@ ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
 void ImageProcessorNode::publish_processed_image(cv::Mat &img) const {
 
   cv_bridge::CvImage cv_image;
-  cv_image.encoding = "bgr8";
+  cv_image.encoding = "mono8";
   cv_image.header.stamp = rclcpp::Clock().now();
   cv_image.header.frame_id = "camera_frame";
   cv_image.image = img;
@@ -66,7 +66,7 @@ void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::Compress
 
   cv_bridge::CvImagePtr cv_ptr;
   try {
-    cv_ptr = cv_bridge::toCvCopy(msg, msg->encoding);
+    cv_ptr = cv_bridge::toCvCopy(msg, "mono8");
   } catch(cv_bridge::Exception& e) {
     RCLCPP_ERROR(this->get_logger(), "cv_bridge exception %s", e.what());
     return;

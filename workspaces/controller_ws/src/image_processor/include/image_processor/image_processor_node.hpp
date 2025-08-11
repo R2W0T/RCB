@@ -26,7 +26,7 @@ class ImageProcessorNode : public rclcpp::Node
     
     rclcpp::Publisher<robot_interfaces::msg::Odometry>::SharedPtr robot_position_publisher;
     //////////////////////////////////////////////////////////////////////////////////////
-    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_publisher;
+    rclcpp::Publisher<sensor_msgs::msg::CompressedImage>::SharedPtr image_publisher;
     rclcpp::Subscription<sensor_msgs::msg::CompressedImage>::SharedPtr image_subscriber;
     
 };
