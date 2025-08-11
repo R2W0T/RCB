@@ -39,8 +39,8 @@ void ImageProcessorNode::publish_processed_image(cv::Mat &img) const {
   cv_image.header.frame_id = "camera_frame";
   cv_image.image = img;
   
-  auto message = sensor_msgs::msg::Image();
-  cv_image.toImageMsg(message); 
+  auto message = sensor_msgs::msg::CompressedImage();
+  cv_image.toCompressedImageMsg(message); 
     
   image_publisher->publish(message);
 }
