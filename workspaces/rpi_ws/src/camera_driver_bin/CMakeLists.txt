@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(camera_driver)
+project(camera_driver_bin)
 
 ####################################################################################################..
 
@@ -12,14 +12,14 @@ find_package(sensor_msgs REQUIRED)
 find_package(robot_interfaces REQUIRED)                       
 find_package(cv_bridge REQUIRED)                       
 
-add_executable(camera_driver_node src/main.cpp 
-                            src/camera_driver_node.cpp)
+add_executable(camera_driver_bin_node src/main.cpp 
+                            src/camera_driver_bin_node.cpp)
 
-ament_target_dependencies(camera_driver_node cv_bridge rclcpp std_msgs sensor_msgs robot_interfaces )      
+ament_target_dependencies(camera_driver_bin_node cv_bridge rclcpp std_msgs sensor_msgs robot_interfaces )      
 
 
 install(TARGETS
-  camera_driver_node
+  camera_driver_bin_node
   DESTINATION lib/${PROJECT_NAME})
 
 ###############################################################################################################
@@ -30,7 +30,7 @@ find_package( OpenCV REQUIRED )
 include_directories( ${OpenCV_INCLUDE_DIRS} ./include)
 
 
-target_link_libraries( camera_driver_node ${OpenCV_LIBS} )
+target_link_libraries( camera_driver_bin_node ${OpenCV_LIBS} )
 ###############################################################################################################
 
 

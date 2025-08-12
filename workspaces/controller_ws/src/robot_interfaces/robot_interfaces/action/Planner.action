@@ -1,0 +1,5 @@
+robot_interfaces/Odometry goal
+---
+robot_interfaces/Odometry pose
+---
+robot_interfaces/Odometry current_pose

@@ -1,29 +1,29 @@
 #pragma once
 
 #include <inttypes.h>
+#include <vector>
 
-#include <cv_bridge/cv_bridge.hpp>
 #include "rclcpp/rclcpp.hpp"
 
 #include "robot_interfaces/msg/odometry.hpp"
 #include "robot_interfaces/msg/command.hpp"
 #include "robot_interfaces/msg/speed.hpp"
+#include "robot_interfaces/msg/bin_img.hpp"
 
 #include <opencv2/opencv.hpp>
-#include <sensor_msgs/msg/image.hpp>
-#include <sensor_msgs/msg/compressed_image.hpp>
 
-class CameraDriverNode : public rclcpp::Node
+class CameraDriverBinNode : public rclcpp::Node
 {
   public:
-    CameraDriverNode();
+    CameraDriverBinNode();
    
     void publish(cv::Mat &img);
+    void encode_img(const cv::Mat &binary_img, std::vector<uint8_t> &encoded_img);
 
   private:
     
     //////////////////////////////////////////////////////////////////////////////////////
-    rclcpp::Publisher<sensor_msgs::msg::CompressedImage>::SharedPtr image_publisher;
+    rclcpp::Publisher<robot_interfaces::msg::BinImg>::SharedPtr bin_image_publisher;
     
 };
 

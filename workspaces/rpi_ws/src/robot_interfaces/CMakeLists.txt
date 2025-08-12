@@ -17,6 +17,7 @@ set(msg_files
   "msg/Command.msg"
   "msg/Odometry.msg"
   "msg/Speed.msg"
+  "msg/BinImg.msg"
 )
 
 set(action_files

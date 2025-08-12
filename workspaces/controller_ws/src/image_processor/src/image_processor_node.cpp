@@ -28,6 +28,7 @@ ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
 
   image_publisher = this->create_publisher<sensor_msgs::msg::CompressedImage>("compressed_processed_image", video_qos_profile);
   image_subscriber = this->create_subscription<sensor_msgs::msg::CompressedImage>("compressed_image", video_qos_profile, std::bind(&ImageProcessorNode::process_image_callback, this, _1));
+  bin_image_subscriber = this->create_subscription<robot_interfaces::msg::BinImg>("bin_image", video_qos_profile, std::bind(&ImageProcessorNode::process_bin_image_callback, this, _1));
 
 }
 
@@ -56,6 +57,23 @@ void ImageProcessorNode::publish_position(float x, float y, float theta) const {
     robot_position_publisher->publish(message);
 }
 
+void ImageProcessorNode::decode_img(const std::vector<uint8_t> &encoded_img, cv::Mat &binary_img) const {
+    uint8_t *data_ptr = binary_img.data;
+    for(uint32_t i = 0; i < encoded_img.size(); i++) {
+        for(uint8_t j = 0; j < 8; j++) {
+            data_ptr[(i * 8) + j] = ((encoded_img[i] >> (7 - j)) & 0x01) * 255;
+	}
+    }
+}
+
+void ImageProcessorNode::process_bin_image_callback(const robot_interfaces::msg::BinImg::SharedPtr msg) const {
+      cv::Mat decoded_bin_img(msg->image_rows, msg->image_cols, CV_8UC1);
+      this->decode_img(msg->data, decoded_bin_img);
+      cv::imshow("Bin image", decoded_bin_img);
+      cv::waitKey(2);
+
+}
+
 void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::CompressedImage::SharedPtr msg) const {
 
     
@@ -74,6 +92,7 @@ void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::Compress
 
   img = cv_ptr->image;
   cv::imshow("img", img);
+  RCLCPP_INFO(this->get_logger(), "recieved image");
   cv::waitKey(2);
 /*  //
   // initialize transformation points

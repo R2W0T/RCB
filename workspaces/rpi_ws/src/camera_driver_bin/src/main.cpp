@@ -1,4 +1,4 @@
-#include "camera_driver/camera_driver_node.hpp"
+#include "camera_driver_bin/camera_driver_bin_node.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -31,12 +31,11 @@ int main(int argc, char *argv[]) {
         std::cerr << "failed to open vid capture dvice\n";
         return -1;
     }
-
-
+    
     // ros init
     rclcpp::init(argc, argv);
 
-    auto node = std::make_shared<CameraDriverNode>();
+    auto node = std::make_shared<CameraDriverBinNode>();
 
     while(true) { //cv::pollKey() == -1) {
         
