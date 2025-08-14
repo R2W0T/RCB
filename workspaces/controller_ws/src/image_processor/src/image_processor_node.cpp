@@ -151,7 +151,7 @@ void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::Compress
   const cv::Point2f dst_pts[4] = {cv::Point2f(0, 0), cv::Point2f(width, 0), cv::Point2f(0, height), cv::Point2f(width, height)};
 
         
-  detector.detectMarkers(img, markerCorners, markerIds);
+  detector.detectMarkers(binary_img, markerCorners, markerIds);
   //cv::aruco::drawDetectedMarkers(img, markerCorners, markerIds);
 
   // check if all markers are detected
@@ -167,7 +167,7 @@ void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::Compress
   // get transformation matrix     
   p_matrix = cv::getPerspectiveTransform(src_pts, dst_pts);
 
-  cv::warpPerspective(img, dst, p_matrix, cv::Size(width, height));
+  cv::warpPerspective(binary_img, dst, p_matrix, cv::Size(width, height));
 
   detector.detectMarkers(dst, markerCorners, markerIds);
         

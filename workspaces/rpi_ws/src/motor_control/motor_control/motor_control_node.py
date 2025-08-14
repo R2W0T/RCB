@@ -10,10 +10,10 @@ import time
 
 import numpy as np
 
-left_motor_forward_pin = 17
-left_motor_reverse_pin = 4
-right_motor_forward_pin = 23
-right_motor_reverse_pin = 25
+left_motor_forward_pin = 4
+left_motor_reverse_pin = 17
+right_motor_forward_pin = 25
+right_motor_reverse_pin = 23
 
 frequency = 1000
 # mm

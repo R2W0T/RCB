@@ -20,6 +20,7 @@ void state_machine_t::init() {
 
     // this should be after rclcpp::init()
     node = std::make_shared<RobotControlNode>();
+    this->state = JOYSTICK; 
 
 }
 

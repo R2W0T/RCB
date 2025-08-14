@@ -1,5 +1,6 @@
 import math
 import numpy as np
+import time
 
 import cv2
 
@@ -153,6 +154,7 @@ class PathPlanningActionServer(Node):
 
         goal_handle.succeed()
              
+        '''
         for point in path_a_star:
             if point is None:
                 break
@@ -167,6 +169,7 @@ class PathPlanningActionServer(Node):
 
                 self.publish_speed(self.motion_controller.get_speed())
          
+                time.sleep(0.01)
                 rclpy.spin_once(self, timeout_sec=0.1)
         
         '''
@@ -181,7 +184,7 @@ class PathPlanningActionServer(Node):
             rclpy.spin_once(self, timeout_sec=0.1)
         
         self.get_logger().info('Arrived at goal...')
-        '''     
+             
         succeed = Planner.Result()
 
         return succeed
