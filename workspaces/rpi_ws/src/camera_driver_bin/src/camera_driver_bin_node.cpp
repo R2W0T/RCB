@@ -30,7 +30,7 @@ void CameraDriverBinNode::publish(cv::Mat &img) {
     cv::Mat gray_img, binary_img;
 
     cv::cvtColor(img, gray_img, cv::COLOR_BGR2GRAY);
-    cv::threshold(gray_img, binary_img, 127, 1, cv::THRESH_BINARY);
+    cv::threshold(gray_img, binary_img, 70, 1, cv::THRESH_BINARY);
     
     std::vector<uint8_t> encoded_img((int)(binary_img.rows * binary_img.cols / 8));
     this->encode_img(binary_img, encoded_img);   
