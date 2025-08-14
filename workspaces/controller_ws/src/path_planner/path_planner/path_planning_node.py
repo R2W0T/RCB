@@ -3,6 +3,7 @@ import numpy as np
 
 import cv2
 
+from rclpy.qos import QoSProfile, HistoryPolicy, ReliabilityPolicy, DurabilityPolicy
 
 import rclpy
 from rclpy.action import ActionServer
@@ -37,11 +38,18 @@ class PathPlanningActionServer(Node):
 
         self.pose = Odometry()
 
+        video_qos_profile = QoSProfile(
+                history=HistoryPolicy.KEEP_LAST, 
+                reliability=ReliabilityPolicy.BEST_EFFORT, 
+                durability=DurabilityPolicy.VOLATILE, 
+                depth=1
+        )
+
         self.image_subscription = self.create_subscription(
             Image,
             'processed_image',
             self.image_callback,
-            10)
+            video_qos_profile)
         self.image_subscription  # prevent unused variable warning
 
         self.br = CvBridge()
@@ -62,7 +70,7 @@ class PathPlanningActionServer(Node):
 
     def image_callback(self, msg):
         try:
-            self.map_generator.set_img(self.br.imgmsg_to_cv2(msg, desired_encoding='bgr8'))
+            self.map_generator.set_img(self.br.imgmsg_to_cv2(msg, desired_encoding='mono8'))
 
             
         except Exception as e:
@@ -144,54 +152,36 @@ class PathPlanningActionServer(Node):
         self.publish_speed(Speed(linear_speed=0, rotational_speed=0))
 
         goal_handle.succeed()
-                
-        #for point in path_a_star:
-        #    if point is None:
-        #        break
-        #    #point.print() 
-        #    self.motion_controller.set_goal(Odometry(x=point.pose.x, y=point.pose.y, theta=point.pose.theta))
+             
+        for point in path_a_star:
+            if point is None:
+                break
+            #point.print() 
+            self.motion_controller.set_goal(Odometry(x=point.pose.x, y=point.pose.y, theta=point.pose.theta))
 
-       #
-       #     while not self.motion_controller.get_state():
-       #        # TODO after planner is done better goal setter
+       
+            while not self.motion_controller.get_state():
+                # TODO after planner is done better goal setter
 
-       #         self.motion_controller.set_speed(self.pose)
+                self.motion_controller.set_speed(self.pose)
 
-       #         self.publish_speed(self.motion_controller.get_speed())
+                self.publish_speed(self.motion_controller.get_speed())
          
-       #         rclpy.spin_once(self, timeout_sec=0.1)
-
-        #self.motion_controller.set_goal(Odometry(x=goal.x, y=goal.y, theta=goal.theta))
-
+                rclpy.spin_once(self, timeout_sec=0.1)
         
-        #kl = 0.8
-        #ka = 6
-        #speed = Speed(linear_speed = 0, rotational_speed = 0)
-        #while True:
-        ## TODO after planner is done better goal setter
+        '''
+        self.motion_controller.set_goal(Odometry(x=goal.x, y=goal.y, theta=goal.theta))
+        while not self.motion_controller.get_state():
+            # TODO after planner is done better goal setter
 
-        #    dist = math.sqrt((goal.x - self.pose.x) ** 2 + (goal.y - self.pose.y) ** 2)
-        #    d_theta = math.atan2((goal.x - self.pose.x), (goal.y - self.pose.y))
+            self.motion_controller.set_speed(self.pose)
 
-        #    speed.linear_speed = int(kl * dist)
-        #    #speed.linear_speed = int(max(-1000, min(speed.linear_speed, 1000)) * 100 / 1000)
-
-        #    speed.rotational_speed = int(ka * d_theta)
-            #speed.rotational_speed = int(max(-360, min(speed.linear_speed, 360)) * 100 / 360)
-            
-        #    self.publish_speed(speed)
-            
-        #    if dist < 3:
-        #        speed.linear_speed = 0
-        #        speed.rotational_speed = 0
-        #        self.publish_speed(speed)
-        #        rclpy.spin_once(self, timeout_sec=0.1)
-        #        break
-
-        #    rclpy.spin_once(self, timeout_sec=0.1)
+            self.publish_speed(self.motion_controller.get_speed())
+         
+            rclpy.spin_once(self, timeout_sec=0.1)
         
         self.get_logger().info('Arrived at goal...')
-        
+        '''     
         succeed = Planner.Result()
 
         return succeed

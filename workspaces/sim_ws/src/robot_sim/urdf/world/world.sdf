@@ -7,25 +7,25 @@
     <include>
       <name>tag0</name>
       <uri>src/robot_sim/urdf/world/markers/tag0/model.sdf</uri>
-      <pose>1 1 0.02 0 0 1.5708</pose>
+      <pose>1 1 0.01 0 0 1.5708</pose>
     </include>
 
     <include>
       <name>tag1</name>
       <uri>src/robot_sim/urdf/world/markers/tag1/model.sdf</uri>
-      <pose>1 -1 0.02 0 0 0</pose>
+      <pose>1 -1 0.01 0 0 0</pose>
     </include>
 
     <include>
       <name>tag2</name>
       <uri>src/robot_sim/urdf/world/markers/tag2/model.sdf</uri>
-      <pose>-1 1 0.02 0 0 3.14159</pose>
+      <pose>-1 1 0.01 0 0 3.14159</pose>
     </include>
 
     <include>
       <name>tag3</name>
       <uri>src/robot_sim/urdf/world/markers/tag3/model.sdf</uri>
-      <pose>-1 -1 0.02 0 0 -1.5708</pose>
+      <pose>-1 -1 0.01 0 0 -1.5708</pose>
     </include>
 
     <include>

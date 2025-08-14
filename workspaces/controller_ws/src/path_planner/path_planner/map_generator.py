@@ -16,22 +16,22 @@ class MapGenerator():
         return self.grid_map
 
     def generate_map(self, pose):
+        
+        #gray_img = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)  
 
-        gray_img = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)  
-
-        _, binary_img = cv2.threshold(gray_img, 127, 255, cv2.THRESH_BINARY)
+        binary_img = self.img #cv2.threshold(gray_img, 127, 255, cv2.THRESH_BINARY)
         grid_rows = binary_img.shape[0]
         grid_cols = binary_img.shape[1]
         
         # Initialize occupancy grid
-        cv2.imshow("binary image", binary_img)
+        #cv2.imshow("binary image", binary_img)
 
         #invert image
         inverted_binary_img = cv2.bitwise_not(binary_img)
-        cv2.imshow("inverted binary image", inverted_binary_img)
+        #cv2.imshow("inverted binary image", inverted_binary_img)
         
         inverted_binary_img_no_robot = self.remove_rectangle_from_matrix(inverted_binary_img, (pose.x, pose.y), 450, 300, pose.theta)
-        cv2.imshow("inverted binary image no robot", inverted_binary_img_no_robot)
+        #cv2.imshow("inverted binary image no robot", inverted_binary_img_no_robot)
 
         #find contours
         contours, _ = cv2.findContours(inverted_binary_img_no_robot, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -49,9 +49,9 @@ class MapGenerator():
             w += 2 * padding
             h += 2 * padding
             # draw rectangle to original image
-            cv2.rectangle(img_copy,(x,y),(x+w,y+h),255,2)
+            cv2.rectangle(img_copy,(x,y),(x+w,y+h),255,-1)
         
-        cv2.imshow("image with contours", img_copy)
+        #cv2.imshow("image with contours", img_copy)
         # Define border type and color (e.g., BORDER_CONSTANT with black color)
         border_type = cv2.BORDER_CONSTANT
         border_color = [0, 0, 0] # Black in BGR
@@ -59,13 +59,18 @@ class MapGenerator():
         # Apply the border
         self.grid_map = img_copy.copy()#cv2.copyMakeBorder(img_copy, padding, padding, padding, padding, border_type, value=255)
 
-        cv2.line(self.grid_map, (padding, 0), (padding, self.grid_map.shape[0]), 255, 2)
-        cv2.line(self.grid_map, (self.grid_map.shape[1] - padding, 0), (self.grid_map.shape[1] - padding, self.grid_map.shape[0]), 255, 2)
-        cv2.line(self.grid_map, (0, padding), (self.grid_map.shape[1], padding), 255, 2)
-        cv2.line(self.grid_map, (0, self.grid_map.shape[0] - padding), (self.grid_map.shape[1], self.grid_map.shape[0] - padding), 255, 2)
-        cv2.imshow("grid", self.grid_map)
+        cv2.rectangle(self.grid_map,(0,0),(padding,grid_cols),255,-1)
+        cv2.rectangle(self.grid_map,(grid_rows - padding,0),(grid_rows,grid_cols),255,-1)
+        cv2.rectangle(self.grid_map,(0,0),(grid_rows, padding),255,-1)
+        cv2.rectangle(self.grid_map,(0,grid_cols - padding),(grid_rows, grid_cols),255,-1)
+
+        #cv2.line(self.grid_map, (padding, 0), (padding, self.grid_map.shape[0]), 255, 2)
+        #cv2.line(self.grid_map, (self.grid_map.shape[1] - padding, 0), (self.grid_map.shape[1] - padding, self.grid_map.shape[0]), 255, 2)
+        #cv2.line(self.grid_map, (0, padding), (self.grid_map.shape[1], padding), 255, 2)
+        #cv2.line(self.grid_map, (0, self.grid_map.shape[0] - padding), (self.grid_map.shape[1], self.grid_map.shape[0] - padding), 255, 2)
+        #cv2.imshow("grid", self.grid_map)
     
-        cv2.waitKey(2)
+        #cv2.waitKey(2)
 
     
     def remove_rectangle_from_matrix(self, matrix, center, width, height, angle_degrees):

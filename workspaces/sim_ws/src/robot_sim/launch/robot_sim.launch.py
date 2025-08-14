@@ -48,6 +48,7 @@ def generate_launch_description():
     start_gazebo_ros_bridge_cmd = Node(package='ros_gz_bridge', executable='parameter_bridge', arguments=['--ros-args', '-p', f'config_file:={bridge_params}',], output='screen')
 
     motion_to_sim = Node(package="robot_sim", executable="motion_to_sim")
+    sim_camera_to_bin = Node(package="sim_camera_driver_bin", executable="sim_camera_driver_bin_node")
 
     launch_description_object = LaunchDescription()
 
@@ -62,6 +63,7 @@ def generate_launch_description():
     launch_description_object.add_action(start_gazebo_ros_bridge_cmd)
 
     launch_description_object.add_action(motion_to_sim)
+    launch_description_object.add_action(sim_camera_to_bin)
  
     return launch_description_object
 

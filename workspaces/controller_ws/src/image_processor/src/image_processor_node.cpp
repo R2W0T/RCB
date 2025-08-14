@@ -26,7 +26,7 @@ ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
   video_qos_profile.durability(RMW_QOS_POLICY_DURABILITY_VOLATILE);
   video_qos_profile.history(RMW_QOS_POLICY_HISTORY_KEEP_LAST);
 
-  image_publisher = this->create_publisher<sensor_msgs::msg::CompressedImage>("compressed_processed_image", video_qos_profile);
+  image_publisher = this->create_publisher<sensor_msgs::msg::Image>("processed_image", video_qos_profile);
   image_subscriber = this->create_subscription<sensor_msgs::msg::CompressedImage>("compressed_image", video_qos_profile, std::bind(&ImageProcessorNode::process_image_callback, this, _1));
   bin_image_subscriber = this->create_subscription<robot_interfaces::msg::BinImg>("bin_image", video_qos_profile, std::bind(&ImageProcessorNode::process_bin_image_callback, this, _1));
 
@@ -40,8 +40,8 @@ void ImageProcessorNode::publish_processed_image(cv::Mat &img) const {
   cv_image.header.frame_id = "camera_frame";
   cv_image.image = img;
   
-  auto message = sensor_msgs::msg::CompressedImage();
-  cv_image.toCompressedImageMsg(message); 
+  auto message = sensor_msgs::msg::Image();
+  cv_image.toImageMsg(message); 
     
   image_publisher->publish(message);
 }
@@ -67,10 +67,56 @@ void ImageProcessorNode::decode_img(const std::vector<uint8_t> &encoded_img, cv:
 }
 
 void ImageProcessorNode::process_bin_image_callback(const robot_interfaces::msg::BinImg::SharedPtr msg) const {
-      cv::Mat decoded_bin_img(msg->image_rows, msg->image_cols, CV_8UC1);
-      this->decode_img(msg->data, decoded_bin_img);
-      cv::imshow("Bin image", decoded_bin_img);
-      cv::waitKey(2);
+
+  std::vector<int> markerIds;
+  std::vector<std::vector<cv::Point2f>> markerCorners;
+
+  cv::Mat dst, p_matrix;
+
+  cv::Mat img(msg->image_rows, msg->image_cols, CV_8UC1);
+
+  this->decode_img(msg->data, img);
+
+  // initialize transformation points
+  cv::Point2f src_pts[4];
+  const cv::Point2f dst_pts[4] = {cv::Point2f(0, 0), cv::Point2f(width, 0), cv::Point2f(0, height), cv::Point2f(width, height)};
+
+        
+  detector.detectMarkers(img, markerCorners, markerIds);
+  //cv::aruco::drawDetectedMarkers(img, markerCorners, markerIds);
+
+  // check if all markers are detected
+  if(markerIds.size() < 5)
+    return; 
+
+
+  // get markers positions
+  for(int i = 0; i < markerIds.size(); i++) 
+    if(markerIds[i] < 4)//9) // 4
+      src_pts[markerIds[i]]/* - 5]*/ = markerCorners[i][0]; // no -5
+
+  // get transformation matrix     
+  p_matrix = cv::getPerspectiveTransform(src_pts, dst_pts);
+
+  cv::warpPerspective(img, dst, p_matrix, cv::Size(width, height));
+
+  detector.detectMarkers(dst, markerCorners, markerIds);
+        
+  cv::imshow("dst", dst);
+  cv::waitKey(1);
+
+  for(int i = 0; i < markerIds.size(); i++)
+    if(markerIds[i] == robot_marker_id) {
+      float theta = std::atan2((markerCorners[i][0].y - markerCorners[i][1].y), (markerCorners[i][1].x - markerCorners[i][0].x));
+      theta *=  180 / M_PI;
+      theta = theta >= 0 ?  theta : 360 + theta;
+      this->publish_position(((markerCorners[i][0].x + markerCorners[i][2].x) / 2), 
+                      ((markerCorners[i][0].y + markerCorners[i][2].y) / 2),
+                      theta);
+      break;
+    }
+
+  this->publish_processed_image(dst);
 
 }
 

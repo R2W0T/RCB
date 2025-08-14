@@ -388,8 +388,8 @@ class AStar:
         while node is not None:
             stack.append(node)
             if node.parent is not None:
-                theta = math.atan2(node.pose.y - node.parent.pose.y, node.pose.x - node.parent.pose.x) 
-                theta = theta + 180 if theta < 0 else theta
+                theta = math.atan2(node.parent.pose.y - node.pose.y, node.pose.x - node.parent.pose.x) * 180 / math.pi
+                theta = theta + 360 if theta < 0 else theta
                 node.parent.pose.theta = theta
             node = node.parent
 
