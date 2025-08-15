@@ -1,1 +1,1 @@
-Still in alpha testing neede
+Going to beta
