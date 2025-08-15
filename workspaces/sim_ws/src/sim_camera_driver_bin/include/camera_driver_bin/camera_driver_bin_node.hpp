@@ -9,7 +9,7 @@
 
 #include "robot_interfaces/msg/odometry.hpp"
 #include "robot_interfaces/msg/command.hpp"
-#include "robot_interfaces/msg/speed.hpp"
+#include "robot_interfaces/msg/velocity.hpp"
 #include "robot_interfaces/msg/bin_img.hpp"
 
 #include <opencv2/opencv.hpp>

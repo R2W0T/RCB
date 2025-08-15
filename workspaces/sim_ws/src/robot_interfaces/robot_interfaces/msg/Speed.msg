@@ -1,2 +1,0 @@
-int32 linear_speed
-int32 rotational_speed

@@ -18,8 +18,8 @@
 
 //////////////////////////////////////////////////////////////////////////////////
 volatile const int dict = cv::aruco::DICT_APRILTAG_25h9;
-volatile const int robot_marker_id = 9; // 4
-volatile const int markers_cw_ids[4] = {5, 6, 7, 8};//{0, 1, 2, 3};
+volatile const int robot_marker_id = 4;//9; // 4
+volatile const int markers_cw_ids[4] = /*{5, 6, 7, 8};*/{0, 1, 2, 3};
 volatile const uint32_t width = 800, height = 800;
 
 // initialize markers dictionary
@@ -32,16 +32,6 @@ volatile const cv::aruco::ArucoDetector detector(dictionary, detectorParams);
 
 int main(int argc, char *argv[]) {
 
-
-
-    // initialize markers dictionary
-//    const cv::aruco::Dictionary dictionary = cv::aruco::getPredefinedDictionary(dict);
-
-    
-    // initialize marker detector
-  //  const cv::aruco::DetectorParameters detectorParams = cv::aruco::DetectorParameters();
-    //const cv::aruco::ArucoDetector detector(dictionary, detectorParams);
-
     // ros init
     rclcpp::init(argc, argv);
 
@@ -50,9 +40,6 @@ int main(int argc, char *argv[]) {
     cv::destroyAllWindows();
     
     rclcpp::shutdown();
-
-    
-
 
     return 0;
 }

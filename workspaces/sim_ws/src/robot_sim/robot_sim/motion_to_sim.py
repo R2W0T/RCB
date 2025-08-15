@@ -3,7 +3,7 @@ from rclpy.node import Node
 
 from geometry_msgs.msg import Twist 
 
-from robot_interfaces.msg import Speed
+from robot_interfaces.msg import Velocity
 
 class MotionToSimNode(Node):
 
@@ -13,16 +13,16 @@ class MotionToSimNode(Node):
         self.publisher_ = self.create_publisher(Twist, 'cmd_vel', 10)
 
         self.subscription = self.create_subscription(
-            Speed,
-            'robot_speed',
+            Velocity,
+            'robot_velocity',
             self.listener_callback,
             10)
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
         twist_msg = Twist()
-        twist_msg.linear.x = float(msg.linear_speed) / 25 
-        twist_msg.angular.z = -float(msg.rotational_speed) / 25
+        twist_msg.linear.x = float(msg.linear_velocity) / 25 
+        twist_msg.angular.z = -float(msg.angular_velocity) / 25
         
         self.publisher_.publish(twist_msg)
 

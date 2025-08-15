@@ -94,8 +94,8 @@ void ImageProcessorNode::process_bin_image_callback(const robot_interfaces::msg:
 
   // get markers positions
   for(int i = 0; i < markerIds.size(); i++) 
-    if(markerIds[i] < 9) // 4
-      src_pts[markerIds[i] - 5] = markerCorners[i][0]; // no -5
+    if(markerIds[i] < 4)//9) // 4
+      src_pts[markerIds[i]]/* - 5]*/ = markerCorners[i][0]; // no -5
 
   // get transformation matrix     
   p_matrix = cv::getPerspectiveTransform(src_pts, dst_pts);

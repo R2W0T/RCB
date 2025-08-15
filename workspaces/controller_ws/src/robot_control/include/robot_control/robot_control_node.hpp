@@ -6,7 +6,7 @@
 
 #include "robot_interfaces/msg/odometry.hpp"
 #include "robot_interfaces/msg/command.hpp"
-#include "robot_interfaces/msg/speed.hpp"
+#include "robot_interfaces/msg/velocity.hpp"
 
 #include <memory>
 
@@ -15,7 +15,7 @@ class RobotControlNode : public rclcpp::Node
   public:
     RobotControlNode();
    
-    void publish(int32_t linear_speed, int32_t rotational_speed);
+    void publish(int32_t linear_velocity, int32_t angular_velocity);
 
   private:
     
@@ -23,16 +23,16 @@ class RobotControlNode : public rclcpp::Node
     
     void command_topic_callback(const robot_interfaces::msg::Command::SharedPtr msg) const;
     
-    void joystick_topic_callback(const robot_interfaces::msg::Speed::SharedPtr msg) const;
+    void joystick_topic_callback(const robot_interfaces::msg::Velocity::SharedPtr msg) const;
     
     rclcpp::Subscription<robot_interfaces::msg::Odometry>::SharedPtr position_subscription;
     
     rclcpp::Subscription<robot_interfaces::msg::Command>::SharedPtr command_subscription;
     
-    rclcpp::Subscription<robot_interfaces::msg::Speed>::SharedPtr joystick_subscription;
+    rclcpp::Subscription<robot_interfaces::msg::Velocity>::SharedPtr joystick_subscription;
     
     //////////////////////////////////////////////////////////////////////////////////////
-    rclcpp::Publisher<robot_interfaces::msg::Speed>::SharedPtr speed_publisher;
+    rclcpp::Publisher<robot_interfaces::msg::Velocity>::SharedPtr velocity_publisher;
     
 };
 

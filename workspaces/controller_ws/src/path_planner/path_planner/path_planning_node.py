@@ -16,13 +16,13 @@ from sensor_msgs.msg import Image
 
 
 from robot_interfaces.action import Planner
-from robot_interfaces.msg import Odometry
-from robot_interfaces.msg import Speed 
+from robot_interfaces.msg import Odometry, Velocity 
 
 
 from path_planner import PathPlanner, RRT, RRTStar, AStar, Pose
 from map_generator import MapGenerator
-from motion_controller import MotionController
+from motion_controller import MotionController, PurePursuitMotionController
+
 
 class PathPlanningActionServer(Node):
     def __init__(self):
@@ -56,11 +56,11 @@ class PathPlanningActionServer(Node):
         self.br = CvBridge()
     
 
-        self.speed_publisher = self.create_publisher(
-            Speed,
-            'robot_speed',
+        self.velocity_publisher = self.create_publisher(
+            Velocity,
+            'robot_velocity',
             10)
-        self.speed_publisher  # prevent unused variable warning
+        self.vellocity_publisher  # prevent unused variable warning
 
         self.map_generator = MapGenerator()
         self.path_planner = PathPlanner()
@@ -77,8 +77,8 @@ class PathPlanningActionServer(Node):
         except Exception as e:
             self.get_logger().error(f"Error converting image: {e}")
 
-    def publish_speed(self, msg):
-        self.speed_publisher.publish(msg) 
+    def publish_velocity(self, msg):
+        self.velocity_publisher.publish(msg) 
 
     def execute_callback(self, goal_handle):
         #cv2.destroyAllWindows()
@@ -150,7 +150,7 @@ class PathPlanningActionServer(Node):
 
         self.get_logger().info('Navigating to goal...')
 
-        self.publish_speed(Speed(linear_speed=0, rotational_speed=0))
+        self.publish_velocity(Velocity(linear_velocity=0, angular_velocity=0))
 
         goal_handle.succeed()
              
@@ -173,6 +173,7 @@ class PathPlanningActionServer(Node):
                 rclpy.spin_once(self, timeout_sec=0.1)
         
         '''
+        '''
         self.motion_controller.set_goal(Odometry(x=goal.x, y=goal.y, theta=goal.theta))
         while not self.motion_controller.get_state():
             # TODO after planner is done better goal setter
@@ -188,6 +189,27 @@ class PathPlanningActionServer(Node):
         succeed = Planner.Result()
 
         return succeed
+        '''
+        controller = PurePursuitMotionController(10)
+        path = []
+        for point in path_a_star:
+            path.append([point.pose.x, point.pose.y, point.pose.theta])
+
+        controller.set_path(path)
+        while not controller.get_state():
+            controller.set_speed([self.pose.x, self.pose.y, self.pose.theta])
+
+            self.publish_velocity(controller.get_velocity())
+         
+            time.sleep(0.01)
+            rclpy.spin_once(self, timeout_sec=0.1)
+
+        self.get_logger().info('Arrived at goal...')
+             
+        succeed = Planner.Result()
+
+        return succeed
+        
 
 def draw_line(mat, start, end, value):
     d_y = end.pose.y - start.pose.y

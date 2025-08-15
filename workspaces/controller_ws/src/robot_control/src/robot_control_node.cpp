@@ -18,24 +18,24 @@ RobotControlNode::RobotControlNode() : Node("robot_control_node")
 
 
         
-    joystick_subscription = this->create_subscription<robot_interfaces::msg::Speed>(
+    joystick_subscription = this->create_subscription<robot_interfaces::msg::Velocity>(
         "joystick", 10, std::bind(&RobotControlNode::joystick_topic_callback, this, _1));
 
 
     ////////////////////////////////////////////////////////////////////////////////////
-    speed_publisher = this->create_publisher<robot_interfaces::msg::Speed>("robot_speed", 10);
+    velocity_publisher = this->create_publisher<robot_interfaces::msg::Velocity>("robot_velocity", 10);
 
         
 }
 
-void RobotControlNode::publish(int32_t linear_speed, int32_t rotational_speed) {
-    auto message = robot_interfaces::msg::Speed();
-    message.linear_speed = linear_speed;
-    message.rotational_speed = rotational_speed;
+void RobotControlNode::publish(int32_t linear_velocity, int32_t angular_velocity) {
+    auto message = robot_interfaces::msg::Velocity();
+    message.linear_velocity = linear_velocity;
+    message.angular_velocity = angular_velocity;
 
-    RCLCPP_INFO(this->get_logger(), "Publishing:\n Linear speed: '%d', Rotational speed: '%d'", message.linear_speed, message.rotational_speed);
+    RCLCPP_INFO(this->get_logger(), "Publishing:\n Linear velocity: '%d', Rotational velocity: '%d'", message.linear_velocity, message.angular_velocity);
 
-    speed_publisher->publish(message);
+    velocity_publisher->publish(message);
 }
 
 void RobotControlNode::position_topic_callback(const robot_interfaces::msg::Odometry::SharedPtr msg) const {
@@ -56,9 +56,9 @@ void RobotControlNode::command_topic_callback(const robot_interfaces::msg::Comma
 
 }
 
-void RobotControlNode::joystick_topic_callback(const robot_interfaces::msg::Speed::SharedPtr msg) const {
+void RobotControlNode::joystick_topic_callback(const robot_interfaces::msg::Velocity::SharedPtr msg) const {
 
-    state_machine.speed[0] = msg->linear_speed;
-    state_machine.speed[1] = msg->rotational_speed;
+    state_machine.velocity[0] = msg->linear_velocity;
+    state_machine.velocity[1] = msg->angular_velocity;
 
 }

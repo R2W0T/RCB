@@ -3,7 +3,7 @@ from rclpy.node import Node
 
 from std_msgs.msg import String
 
-from robot_interfaces.msg import Speed
+from robot_interfaces.msg import Velocity
 
 import RPi.GPIO as GPIO
 import time
@@ -47,69 +47,69 @@ class MotorControlNode(Node):
     def __init__(self):
         super().__init__('motor_control_node')
         self.subscription = self.create_subscription(
-            Speed,
-            'robot_speed',
-            self.robot_speed_callback,
+            Velocity,
+            'robot_velocity',
+            self.robot_velocity_callback,
             10)
         self.subscription  # prevent unused variable warning
 
-    def robot_speed_callback(self, msg):
+    def robot_velocity_callback(self, msg):
         
-        speed = np.array([[msg.linear_speed], [-msg.rotational_speed]])
+        velocity = np.array([[msg.linear_velocity], [-msg.angular_velocity]])
         
         # round to percentage
-        motor_speed = np.dot(A, speed) 
-        motor_speed *= 100 / 375
+        motor_velocity = np.dot(A, velocity) 
+        motor_velocity *= 100 / 375
 
-        if motor_speed[0, 0] > 100:
-            motor_speed[0,0] = 100
-        elif motor_speed[0, 0] < -100:
-            motor_speed[0, 0] = -100
+        if motor_velocity[0, 0] > 100:
+            motor_velocity[0,0] = 100
+        elif motor_velocity[0, 0] < -100:
+            motor_velocity[0, 0] = -100
         
-        if motor_speed[1, 0] > 100:
-            motor_speed[1,0] = 100
-        elif motor_speed[1,0] < -100:
-            motor_speed[1,0] = -100
+        if motor_velocity[1, 0] > 100:
+            motor_velocity[1,0] = 100
+        elif motor_velocity[1,0] < -100:
+            motor_velocity[1,0] = -100
 
 
-        right_forward_speed = 0
-        right_reverse_speed = 0
+        right_forward_velocity = 0
+        right_reverse_velocity = 0
 
-        left_forward_speed = 0
-        left_reverse_speed = 0
+        left_forward_velocity = 0
+        left_reverse_velocity = 0
 
-        if motor_speed[0, 0] < 0:
-            left_reverse_speed -= motor_speed[0, 0]
+        if motor_velocity[0, 0] < 0:
+            left_reverse_velocity -= motor_velocity[0, 0]
         else:
-            left_forward_speed = motor_speed[0, 0]
+            left_forward_velocity = motor_velocity[0, 0]
 
 
-        if motor_speed[1, 0] < 0:
-            right_reverse_speed -= motor_speed[1, 0]
+        if motor_velocity[1, 0] < 0:
+            right_reverse_velocity -= motor_velocity[1, 0]
         else:
-            right_forward_speed = motor_speed[1, 0]
+            right_forward_velocity = motor_velocity[1, 0]
 
-        if right_reverse_speed < 20 and right_reverse_speed != 0:
-            right_reverse_speed = 20
+        if right_reverse_velocity < 20 and right_reverse_velocity != 0:
+            right_reverse_velocity = 20
 
-        if right_forward_speed < 20 and right_forward_speed != 0:
-            right_forward_speed = 20
+        if right_forward_velocity < 20 and right_forward_velocity != 0:
+            right_forward_velocity = 20
 
-        if left_reverse_speed < 20 and left_reverse_speed != 0:
-            left_reverse_speed = 20
+        if left_reverse_velocity < 20 and left_reverse_velocity != 0:
+            left_reverse_velocity = 20
 
-        if left_forward_speed < 20 and left_forward_speed != 0:
-            left_forward_speed = 20
+        if left_forward_velocity < 20 and left_forward_velocity != 0:
+            left_forward_velocity = 20
 
-        right_reverse_pwm.ChangeDutyCycle(right_reverse_speed)
+        right_reverse_pwm.ChangeDutyCycle(right_reverse_velocity)
 
-        right_forward_pwm.ChangeDutyCycle(right_forward_speed)
+        right_forward_pwm.ChangeDutyCycle(right_forward_velocity)
 
-        left_reverse_pwm.ChangeDutyCycle(left_reverse_speed)
+        left_reverse_pwm.ChangeDutyCycle(left_reverse_velocity)
 
-        left_forward_pwm.ChangeDutyCycle(left_forward_speed)
+        left_forward_pwm.ChangeDutyCycle(left_forward_velocity)
         
-        self.get_logger().info(f'Publishing: \n right_forward_speed: {right_forward_speed}, right_reverse_speed: {right_reverse_speed} left_forward_speed: {left_forward_speed}, left_reverse_speed: {left_reverse_speed}')
+        self.get_logger().info(f'Publishing: \n right_forward_velocity: {right_forward_velocity}, right_reverse_velocity: {right_reverse_velocity} left_forward_velocity: {left_forward_velocity}, left_reverse_velocity: {left_reverse_velocity}')
         
         
 

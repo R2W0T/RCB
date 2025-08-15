@@ -13,7 +13,6 @@ int main(int argc, char * argv[])
   state_machine.init();
   
   state_machine.run();
-  std::cout << "Hello, World!\n";
   rclcpp::shutdown();
 
   return 0;

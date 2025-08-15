@@ -1,3 +1,6 @@
+#include <thread>
+#include <chrono>
+
 #include "joystick_control/joystick_control_node.hpp"
 #include "joystick_control/joystick.hpp"
 
@@ -42,6 +45,8 @@ int main(int argc, char* argv[]) {
         }
         
         fflush(stdout);
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
     close(js);
