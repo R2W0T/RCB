@@ -44,12 +44,16 @@ class MapGenerator():
             cnt=contours[index]
             # find coordinates
             x,y,w,h = cv2.boundingRect(cnt)
-            x -= padding
-            y -= padding
-            w += 2 * padding
-            h += 2 * padding
-            # draw rectangle to original image
-            cv2.rectangle(img_copy,(x,y),(x+w,y+h),255,-1)
+            # if object is rubble
+            if w < 10 and h < 10:
+                cv2.rectangle(img_copy,(x,y),(x+w,y+h),0,-1)
+            else:
+                x -= padding
+                y -= padding
+                w += 2 * padding
+                h += 2 * padding
+                # draw rectangle to original image
+                cv2.rectangle(img_copy,(x,y),(x+w,y+h),255,-1)
         
         #cv2.imshow("image with contours", img_copy)
         # Define border type and color (e.g., BORDER_CONSTANT with black color)
