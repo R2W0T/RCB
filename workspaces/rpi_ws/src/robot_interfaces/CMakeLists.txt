@@ -17,7 +17,7 @@ set(msg_files
   "msg/Angle.msg"
   "msg/Command.msg"
   "msg/Odometry.msg"
-  "msg/Speed.msg"
+  "msg/Velocity.msg"
   "msg/BinImg.msg"
 )
 
