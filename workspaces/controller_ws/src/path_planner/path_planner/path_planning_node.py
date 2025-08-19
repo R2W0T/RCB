@@ -19,9 +19,9 @@ from robot_interfaces.action import Planner
 from robot_interfaces.msg import Odometry, Velocity 
 
 
-from path_planner import PathPlanner, RRT, RRTStar, AStar, Pose
+from path_planner import  AStar, Pose
 from map_generator import MapGenerator
-from motion_controller import MotionController, PurePursuitMotionController
+from motion_controller import PurePursuitMotionController
 
 
 class PathPlanningActionServer(Node):
@@ -60,11 +60,11 @@ class PathPlanningActionServer(Node):
             Velocity,
             'robot_velocity',
             10)
-        self.vellocity_publisher  # prevent unused variable warning
+        self.velocity_publisher  # prevent unused variable warning
 
         self.map_generator = MapGenerator()
-        self.path_planner = PathPlanner()
-        self.motion_controller = MotionController()
+        #self.path_planner = PathPlanner()
+        #self.motion_controller = MotionController()
 
     def pose_callback(self, msg):
         self.pose = msg
@@ -81,7 +81,6 @@ class PathPlanningActionServer(Node):
         self.velocity_publisher.publish(msg) 
 
     def execute_callback(self, goal_handle):
-        #cv2.destroyAllWindows()
 
         goal = goal_handle.request.goal
 
@@ -93,33 +92,18 @@ class PathPlanningActionServer(Node):
         self.map_generator.generate_map(Odometry(x=self.pose.x, y=self.pose.y, theta=self.pose.theta))
         self.get_logger().info('Map generated...')
         grid = self.map_generator.get_grid_map()
+        #cv2.imshow("grid", grid)
+        #cv2.waitKey(0)
 
         #done in one step
         #self.get_logger().info('Inflating map...')
         #self.get_logger().info('Map inflated...')
         
         self.get_logger().info('Path planning...')
-        #TODO
 
-        rrt = RRT(grid, Pose(self.pose.x, self.pose.y), Pose(goal.x, goal.y), max_step=20)
-        rrt_star = RRTStar(grid, Pose(self.pose.x, self.pose.y), Pose(goal.x, goal.y), max_step=20)
         a_star = AStar(grid, Pose(self.pose.x, self.pose.y), Pose(goal.x, goal.y))
 
-        path = rrt.rrt()
-        path_star = rrt_star.rrt_star()
         path_a_star = a_star.a_star()
-
-        if not path:
-            self.get_logger().info('RRT failed...')
-        else:
-            #if path[0].pose == Pose(x=self.pose.x, y=self.pose.y) and path[-1].pose == Pose(x=goal.x, y=goal.y):
-            self.get_logger().info('RRT succeded...')
-
-        if not path_star:
-            self.get_logger().info('RRT* failed...')
-        else:
-            #if path_star[0].pose == Pose(x=self.pose.x, y=self.pose.y) and path_star[-1].pose == Pose(x=goal.x, y=goal.y):
-            self.get_logger().info('RRT* succeded...')
 
         if not path_a_star:
             self.get_logger().info('A* failed...')
@@ -128,14 +112,6 @@ class PathPlanningActionServer(Node):
             self.get_logger().info('A* succeded...')
 
         img = cv2.cvtColor(grid, cv2.COLOR_GRAY2BGR)
-        for node in path:
-            if node.parent is not None:
-                cv2.line(img, (int(node.pose.x), int(node.pose.y)), (int(node.parent.pose.x), int(node.parent.pose.y)), (255, 0, 0), 2)
-                
-
-        for node in path_star:
-            if node.parent is not None:
-                cv2.line(img, (int(node.pose.x), int(node.pose.y)), (int(node.parent.pose.x), int(node.parent.pose.y)), (0, 255, 0), 2)
 
         for node in path_a_star:
             if node.parent is not None:
@@ -145,7 +121,7 @@ class PathPlanningActionServer(Node):
 
 
         cv2.imshow("img", img)
-        cv2.waitKey(6)
+        cv2.waitKey(0)
         self.get_logger().info('Path planned...')
 
         self.get_logger().info('Navigating to goal...')
@@ -153,55 +129,22 @@ class PathPlanningActionServer(Node):
         self.publish_velocity(Velocity(linear_velocity=0, angular_velocity=0))
 
         goal_handle.succeed()
-             
-        '''
-        for point in path_a_star:
-            if point is None:
-                break
-            #point.print() 
-            self.motion_controller.set_goal(Odometry(x=point.pose.x, y=point.pose.y, theta=point.pose.theta))
 
-       
-            while not self.motion_controller.get_state():
-                # TODO after planner is done better goal setter
+        controller = PurePursuitMotionController(20)
 
-                self.motion_controller.set_speed(self.pose)
-
-                self.publish_speed(self.motion_controller.get_speed())
-         
-                time.sleep(0.01)
-                rclpy.spin_once(self, timeout_sec=0.1)
-        
-        '''
-        '''
-        self.motion_controller.set_goal(Odometry(x=goal.x, y=goal.y, theta=goal.theta))
-        while not self.motion_controller.get_state():
-            # TODO after planner is done better goal setter
-
-            self.motion_controller.set_speed(self.pose)
-
-            self.publish_speed(self.motion_controller.get_speed())
-         
-            rclpy.spin_once(self, timeout_sec=0.1)
-        
-        self.get_logger().info('Arrived at goal...')
-             
-        succeed = Planner.Result()
-
-        return succeed
-        '''
-        controller = PurePursuitMotionController(10)
         path = []
         for point in path_a_star:
             path.append([point.pose.x, point.pose.y, point.pose.theta])
-
+        
         controller.set_path(path)
         while not controller.get_state():
-            controller.set_speed([self.pose.x, self.pose.y, self.pose.theta])
+            controller.set_velocity([self.pose.x, self.pose.y, self.pose.theta])
 
-            self.publish_velocity(controller.get_velocity())
+            velocity = controller.get_velocity()
+            self.get_logger().info(f'{velocity.linear_velocity}, {velocity.angular_velocity}')
+            self.publish_velocity(velocity)
          
-            time.sleep(0.01)
+            time.sleep(0.03)
             rclpy.spin_once(self, timeout_sec=0.1)
 
         self.get_logger().info('Arrived at goal...')
@@ -209,7 +152,7 @@ class PathPlanningActionServer(Node):
         succeed = Planner.Result()
 
         return succeed
-        
+    
 
 def draw_line(mat, start, end, value):
     d_y = end.pose.y - start.pose.y
@@ -246,9 +189,9 @@ def draw_line(mat, start, end, value):
             while not self.motion_controller.get_state():
                 # TODO after planner is done better goal setter
 
-                self.motion_controller.set_speed(self.pose)
+                self.motion_controller.set_velocity(self.pose)
 
-                self.publish_speed(self.motion_controller.get_speed())
+                self.publish_velocity(self.motion_controller.get_velocity())
             
                 rclpy.spin_once(self, timeout_sec=0.1)
 

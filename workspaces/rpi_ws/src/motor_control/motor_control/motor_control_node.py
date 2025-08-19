@@ -113,17 +113,17 @@ class MotorControlNode(Node):
         else:
             right_forward_velocity = motor_velocity[1, 0]
 
-        if right_reverse_velocity < 20 and right_reverse_velocity != 0:
-            right_reverse_velocity = 20
+        if right_reverse_velocity < 40 and right_reverse_velocity != 0:
+            right_reverse_velocity = 40
 
-        if right_forward_velocity < 20 and right_forward_velocity != 0:
-            right_forward_velocity = 20
+        if right_forward_velocity < 40 and right_forward_velocity != 0:
+            right_forward_velocity = 40
 
-        if left_reverse_velocity < 20 and left_reverse_velocity != 0:
-            left_reverse_velocity = 20
+        if left_reverse_velocity < 40 and left_reverse_velocity != 0:
+            left_reverse_velocity = 40
 
-        if left_forward_velocity < 20 and left_forward_velocity != 0:
-            left_forward_velocity = 20
+        if left_forward_velocity < 40 and left_forward_velocity != 0:
+            left_forward_velocity = 40
 
         right_reverse_pwm.ChangeDutyCycle(right_reverse_velocity)
 

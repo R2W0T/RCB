@@ -60,11 +60,13 @@ class RobotControlNode(Node):
         self.robot_servo_angle_publisher
 ###################################################################################################
 
+        '''
+        '''
 
 ###################################################################################################
         video_qos_profile = QoSProfile(
             history=HistoryPolicy.KEEP_LAST, 
-            eliability=ReliabilityPolicy.BEST_EFFORT, 
+            reliability=ReliabilityPolicy.BEST_EFFORT, 
             durability=DurabilityPolicy.VOLATILE, 
             depth=1
         )
@@ -86,7 +88,7 @@ class RobotControlNode(Node):
 
 
         self.robot_command_subscription = self.create_subscription(
-            Commane,
+            Command,
             'robot_command',
             self.robot_command_callback,
             10
@@ -97,7 +99,7 @@ class RobotControlNode(Node):
 ###################################################################################################
     def run(self):
         while True:
-            rclpy.spin_once(self, timeout=0.1)
+            rclpy.spin_once(self, timeout_sec=0.1)
 ###################################################################################################
 
     def send_goal(self, pose: Odometry):

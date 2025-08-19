@@ -34,6 +34,7 @@
       <pose>0.5 -0.5 0.02 0 0 0</pose>
     </include>
 
+    <!--
     <include>
       <name>rubble1</name>
       <uri>src/robot_sim/urdf/world/rubble/rubble.sdf</uri>
@@ -45,7 +46,6 @@
       <uri>src/robot_sim/urdf/world/rubble/rubble.sdf</uri>
       <pose>0.5 0.5 0.2 0 0 0</pose>
     </include>
-    <!--
     <include>
       <name>box2</name>
       <uri>src/robot_sim/urdf/world/boxes/box.sdf</uri>

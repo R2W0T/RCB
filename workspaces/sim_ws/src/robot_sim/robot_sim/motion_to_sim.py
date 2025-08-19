@@ -20,6 +20,18 @@ class MotionToSimNode(Node):
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
+        if msg.linear_velocity < 20 and msg.linear_velocity != 0 and msg.linear_velocity > 0:
+            msg.linear_velocity = 20
+
+        if msg.linear_velocity > -20 and msg.linear_velocity != 0 and msg.linear_velocity < 0:
+            msg.linear_velocity = -20
+
+        if msg.angular_velocity < 20 and msg.angular_velocity != 0 and msg.angular_velocity > 0:
+            msg.angular_velocity = 20
+
+        if msg.angular_velocity > -20 and msg.angular_velocity != 0 and msg.angular_velocity < 0:
+            msg.angular_velocity = -20
+
         twist_msg = Twist()
         twist_msg.linear.x = float(msg.linear_velocity) / 25 
         twist_msg.angular.z = -float(msg.angular_velocity) / 25

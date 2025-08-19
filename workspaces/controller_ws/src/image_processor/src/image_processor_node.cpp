@@ -93,9 +93,13 @@ void ImageProcessorNode::process_bin_image_callback(const robot_interfaces::msg:
 
 
   // get markers positions
-  for(int i = 0; i < markerIds.size(); i++) 
-    if(markerIds[i] < 4)//9) // 4
-      src_pts[markerIds[i]]/* - 5]*/ = markerCorners[i][0]; // no -5
+  for(int i = 0; i < markerIds.size(); i++) {
+    for(int j = 0; j < 4 /*markers_cw_ids.size()*/; j++) {
+      if(markerIds[i] == markers_cw_ids[j]) {
+        src_pts[j] = markerCorners[i][0];
+      }
+    }
+  }
 
   // get transformation matrix     
   p_matrix = cv::getPerspectiveTransform(src_pts, dst_pts);
@@ -160,9 +164,13 @@ void ImageProcessorNode::process_image_callback(const sensor_msgs::msg::Compress
 
 
   // get markers positions
-  for(int i = 0; i < markerIds.size(); i++) 
-    if(markerIds[i] < 9) // 4
-      src_pts[markerIds[i] - 5] = markerCorners[i][0]; // no -5
+  for(int i = 0; i < markerIds.size(); i++) {
+    for(int j = 0; j < 4 /*markers_cw_ids.size()*/; j++) {
+      if(markerIds[i] == markers_cw_ids[j]) {
+        src_pts[j] = markerCorners[i][0];
+      }
+    }
+  }
 
   // get transformation matrix     
   p_matrix = cv::getPerspectiveTransform(src_pts, dst_pts);
