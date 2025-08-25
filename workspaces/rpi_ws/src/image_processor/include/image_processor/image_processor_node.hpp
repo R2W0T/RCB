@@ -20,20 +20,15 @@ class ImageProcessorNode : public rclcpp::Node
   public:
     ImageProcessorNode();
    
-    void publish_processed_image(cv::Mat &img) const;
-    void process_image_callback(const sensor_msgs::msg::CompressedImage::SharedPtr msg) const;
-    void process_bin_image_callback(const robot_interfaces::msg::BinImg::SharedPtr msg) const;
+    void publish_processed_image(cv::Mat &img) const; 
+    void process_image(cv::Mat &img, uint8_t &counter) const; 
     void publish_position(float x, float y, float theta) const;
-
-    void decode_img(const std::vector<uint8_t> &encoded_img, cv::Mat &binary_img) const;
 
   private:
     
     rclcpp::Publisher<robot_interfaces::msg::Odometry>::SharedPtr robot_position_publisher;
     //////////////////////////////////////////////////////////////////////////////////////
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_publisher;
-    rclcpp::Subscription<sensor_msgs::msg::CompressedImage>::SharedPtr image_subscriber;
-    rclcpp::Subscription<robot_interfaces::msg::BinImg>::SharedPtr bin_image_subscriber;
     
 };
 

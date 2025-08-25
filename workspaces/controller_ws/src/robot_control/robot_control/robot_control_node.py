@@ -155,18 +155,18 @@ class RobotControlNode(Node):
             dx = 0
             dy = 0
             if r[1][0] > (grid_cols / 2):
-                r[1][0] -= 55
-                dx = 55
+                r[1][0] -= 70
+                dx = 70
             else:
-                r[1][0] += 55
-                dx = -55
+                r[1][0] += 70
+                dx = -70
 
             if r[1][1] > (grid_rows / 2):
-                r[1][1] -= 55
-                dy = -55
+                r[1][1] -= 70
+                dy = -70
             else:
-                r[1][1] += 55
-                dy = 55
+                r[1][1] += 70
+                dy = 70
             r[1][2] = math.atan2(dy, dx) * 180 / math.pi
 
     def mission(self):
@@ -242,7 +242,7 @@ class RobotControlNode(Node):
 
     def image_callback(self, msg):
         try:
-            self.img = self.bridge.imgmsg_to_cv2(msg, desired_encoding='mono8')
+            _, self.img = cv2.threshold(self.bridge.imgmsg_to_cv2(msg, desired_encoding='mono8'), 70, 255, cv2.THRESH_BINARY)
 
         except Exception as e:
             self.get_logger().error(f"Error converting image: {e}")

@@ -10,7 +10,7 @@ class MapGenerator():
         self.img = None
 
     def set_img(self, img):
-        self.img = img
+        _, self.img = cv2.threshold(img, 70, 255, cv2.THRESH_BINARY)
 
     def get_grid_map(self):
         return self.grid_map

@@ -72,6 +72,8 @@ class PathPlanningActionServer(Node):
     def image_callback(self, msg):
         try:
             self.map_generator.set_img(self.br.imgmsg_to_cv2(msg, desired_encoding='mono8'))
+            cv2.imshow("a", self.map_generator.img)
+            cv2.waitKey(5)
 
             
         except Exception as e:
