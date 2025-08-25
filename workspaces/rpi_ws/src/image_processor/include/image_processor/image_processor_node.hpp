@@ -26,7 +26,7 @@ class ImageProcessorNode : public rclcpp::Node
     ImageProcessorNode();
    
     void publish_processed_image(cv::Mat &img) const; 
-    void process_image(cv::Mat &img, uint8_t &counter) const; 
+    void process_image(cv::Mat &img); 
     void publish_position(float x, float y, float theta) const;
 
      
@@ -34,7 +34,7 @@ class ImageProcessorNode : public rclcpp::Node
   private:
     uint8_t state;
 
-    void command_subscription_callback(const robot_interfaces::msg::Command::SharedPtr msg) const;
+    void command_subscription_callback(const robot_interfaces::msg::Command::SharedPtr msg);
     
     rclcpp::Publisher<robot_interfaces::msg::Odometry>::SharedPtr robot_position_publisher;
     //////////////////////////////////////////////////////////////////////////////////////
