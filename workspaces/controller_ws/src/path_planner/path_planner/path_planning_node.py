@@ -12,7 +12,7 @@ from rclpy.node import Node
 
 from cv_bridge import CvBridge
 
-from sensor_msgs.msg import Image 
+from sensor_msgs.msg import CompressedImage 
 
 
 from robot_interfaces.action import Planner
@@ -47,8 +47,8 @@ class PathPlanningActionServer(Node):
         )
 
         self.image_subscription = self.create_subscription(
-            Image,
-            'processed_image',
+            CompressedImage,
+            'compressed_processed_image',
             self.image_callback,
             video_qos_profile)
         self.image_subscription  # prevent unused variable warning
@@ -62,6 +62,12 @@ class PathPlanningActionServer(Node):
             10)
         self.velocity_publisher  # prevent unused variable warning
 
+        self.image_command_publisher = self.create_publisher(
+            Command,
+            'image_command',
+            10)
+        self.image_command_publisher  # prevent unused variable warning
+
         self.map_generator = MapGenerator()
         #self.path_planner = PathPlanner()
         #self.motion_controller = MotionController()
@@ -71,7 +77,7 @@ class PathPlanningActionServer(Node):
 
     def image_callback(self, msg):
         try:
-            self.map_generator.set_img(self.br.imgmsg_to_cv2(msg, desired_encoding='mono8'))
+            self.map_generator.set_img(self.br.compressed_imgmsg_to_cv2(msg, desired_encoding='mono8'))
             cv2.imshow("a", self.map_generator.img)
             cv2.waitKey(5)
 
@@ -79,10 +85,16 @@ class PathPlanningActionServer(Node):
         except Exception as e:
             self.get_logger().error(f"Error converting image: {e}")
 
+    def publish_image_command(self, msg):
+        self.image_command_publisher.publish(msg)
+
     def publish_velocity(self, msg):
         self.velocity_publisher.publish(msg) 
 
     def execute_callback(self, goal_handle):
+
+        self.publish_image_command(Command(command=1))
+        time.sleep(2)
 
         goal = goal_handle.request.goal
 

@@ -57,18 +57,23 @@ int main(int argc, char *argv[]) {
     rclcpp::init(argc, argv);
 
     auto node = std::make_shared<ImageProcessorNode>();
-
-    uint8_t counter = 0;
-    while(true) {        
-      std::this_thread::sleep_for(std::chrono::milliseconds(30));    
-      
-      cap.read(img);
-        
-      // check if all markers are detected
-      node->process_image(img, counter);
-      counter++;
-    }
     
+    rclcpp::executors::SingleThreadedExecutor executor;
+    executor.add_node(node);
+
+    // In a loop or integrated with another event loop:
+    while (rclcpp::ok()) {
+        executor.spin_some();
+        
+	cap.read(img);
+        
+        // check if all markers are detected
+        node->process_image(img);
+        
+	// Do other non-ROS related work or sleep
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+   
     rclcpp::shutdown();
 
     

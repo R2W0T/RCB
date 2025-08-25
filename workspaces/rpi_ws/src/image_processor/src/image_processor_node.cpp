@@ -17,6 +17,8 @@ extern cv::Ptr<cv::aruco::DetectorParameters> detectorParams;
 ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
 {
 
+  this->state = SLEEP;
+
   robot_position_publisher = this->create_publisher<robot_interfaces::msg::Odometry>("robot_position", 10);
   ////////////////////////////////////////////////////////////////////////////////////
   
@@ -25,8 +27,14 @@ ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
   video_qos_profile.durability(RMW_QOS_POLICY_DURABILITY_VOLATILE);
   video_qos_profile.history(RMW_QOS_POLICY_HISTORY_KEEP_LAST);
 
-  image_publisher = this->create_publisher<sensor_msgs::msg::Image>("processed_image", video_qos_profile);
+  image_publisher = this->create_publisher<sensor_msgs::msg::CompressedImage>("compressed_processed_image", video_qos_profile);
+  command_subscription = this->create_subscription<std_msgs::msg::Command>(
+      "image_command", 10, std::bind(&ImageProcessorNode::command_subscription_callback, this, _1));
+    }
+}
 
+void ImageProcessorNode::command_subscription_callback(const robot_interfaces::msg::Command::SharedPtr msg) const {
+  self.state = msg->command;
 }
 
 void ImageProcessorNode::publish_processed_image(cv::Mat &img) const {
@@ -38,7 +46,7 @@ void ImageProcessorNode::publish_processed_image(cv::Mat &img) const {
   cv_image.image = img;
   
   auto message = sensor_msgs::msg::Image();
-  cv_image.toImageMsg(message); 
+  cv_image.toCompressedImageMsg(message); 
     
   image_publisher->publish(message);
 }
@@ -54,7 +62,7 @@ void ImageProcessorNode::publish_position(float x, float y, float theta) const {
     robot_position_publisher->publish(message);
 }
 
-void ImageProcessorNode::process_image(cv::Mat& img, uint8_t &counter) const {
+void ImageProcessorNode::process_image(cv::Mat& img) const {
   cv::Mat gray_img, binary_img;
   cv::cvtColor(img, gray_img, cv::COLOR_BGR2GRAY);
   //cv::threshold(gray_img, gray_img, 70, 1, cv::THRESH_BINARY);
@@ -108,10 +116,10 @@ void ImageProcessorNode::process_image(cv::Mat& img, uint8_t &counter) const {
       break;
     }
 
-  if(counter == 10) {
+  if(self.state == PUBLISH) {
     this->publish_processed_image(dst);
     RCLCPP_INFO(this->get_logger(), "Publishing: 3");
-    counter = 0;
+    self.state = SLEEP;
   }
 
 }

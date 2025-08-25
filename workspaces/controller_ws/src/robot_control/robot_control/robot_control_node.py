@@ -12,7 +12,7 @@ import cv2
 
 from cv_bridge import CvBridge
 
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage
 
 from robot_interfaces.msg import Odometry, Velocity, Angle, Command
 
@@ -63,6 +63,12 @@ class RobotControlNode(Node):
             10
         )        
         self.robot_servo_angle_publisher
+
+        self.image_command_publisher = self.create_publisher(
+            Command,
+            'image_command',
+            10)
+        self.image_command_publisher  # prevent unused variable warning
 ###################################################################################################
 
 ###################################################################################################
@@ -74,8 +80,8 @@ class RobotControlNode(Node):
         )
 
         self.image_subscription = self.create_subscription(
-            Image,
-            'processed_image',
+            CompressedImage,
+            'compressed_processed_image',
             self.image_callback,
             video_qos_profile)
         self.image_subscription  # prevent unused variable warning
@@ -99,6 +105,9 @@ class RobotControlNode(Node):
 ###################################################################################################
 
 ###################################################################################################
+    def publish_image_command(self, msg):
+        self.image_command_publisher.publish(msg)
+
     def run(self):
         while True:
             rclpy.spin_once(self, timeout_sec=1)
@@ -106,6 +115,8 @@ class RobotControlNode(Node):
             self.get_logger().info(f'{self.state}')
             match self.state:
                 case CONTROLLER_STATES.MISSION_IN_PROGRESS:
+                    self.publish_image_command(Command(command=1))
+                    time.sleep(2)
                     self.mission()
                 case _:
                     continue
@@ -242,7 +253,7 @@ class RobotControlNode(Node):
 
     def image_callback(self, msg):
         try:
-            _, self.img = cv2.threshold(self.bridge.imgmsg_to_cv2(msg, desired_encoding='mono8'), 70, 255, cv2.THRESH_BINARY)
+            _, self.img = cv2.threshold(self.bridge.compressed_imgmsg_to_cv2(msg, desired_encoding='mono8'), 70, 255, cv2.THRESH_BINARY)
 
         except Exception as e:
             self.get_logger().error(f"Error converting image: {e}")
