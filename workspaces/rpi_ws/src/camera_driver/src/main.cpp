@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 
     while(true) { //cv::pollKey() == -1) {
         
-      std::this_thread::sleep_for(std::chrono::milliseconds(30));    
+      std::this_thread::sleep_for(std::chrono::milliseconds(500));    
       
       cap.read(img);
       //cv::imshow("img", img);

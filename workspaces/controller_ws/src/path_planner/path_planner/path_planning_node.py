@@ -93,15 +93,15 @@ class PathPlanningActionServer(Node):
         self.get_logger().info('Map generated...')
         grid = self.map_generator.get_grid_map()
         #cv2.imshow("grid", grid)
-        #cv2.waitKey(0)
+        #cv2.waitKey(6)
 
         #done in one step
         #self.get_logger().info('Inflating map...')
         #self.get_logger().info('Map inflated...')
-        
+
         self.get_logger().info('Path planning...')
 
-        a_star = AStar(grid, Pose(self.pose.x, self.pose.y), Pose(goal.x, goal.y))
+        a_star = AStar(grid, Pose(self.pose.x, self.pose.y), Pose(goal.x, goal.y, goal.theta))
 
         path_a_star = a_star.a_star()
 
@@ -121,21 +121,21 @@ class PathPlanningActionServer(Node):
 
 
         cv2.imshow("img", img)
-        cv2.waitKey(0)
+        cv2.waitKey(6)
         self.get_logger().info('Path planned...')
 
         self.get_logger().info('Navigating to goal...')
 
         self.publish_velocity(Velocity(linear_velocity=0, angular_velocity=0))
 
-        goal_handle.succeed()
 
-        controller = PurePursuitMotionController(20)
+        controller = PurePursuitMotionController(40)
 
         path = []
         for point in path_a_star:
             path.append([point.pose.x, point.pose.y, point.pose.theta])
         
+        path[-1][2] = goal.theta
         controller.set_path(path)
         while not controller.get_state():
             controller.set_velocity([self.pose.x, self.pose.y, self.pose.theta])
@@ -145,9 +145,11 @@ class PathPlanningActionServer(Node):
             self.publish_velocity(velocity)
          
             time.sleep(0.03)
-            rclpy.spin_once(self, timeout_sec=0.1)
+            rclpy.spin_until_future_complete(self, rclpy.Future(), timeout_sec=0.1)
 
         self.get_logger().info('Arrived at goal...')
+
+        goal_handle.succeed()
              
         succeed = Planner.Result()
 

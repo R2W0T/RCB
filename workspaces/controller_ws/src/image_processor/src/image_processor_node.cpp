@@ -7,9 +7,6 @@ extern const int robot_marker_id;
 extern const int markers_cw_ids[4];
 extern const uint32_t width;
 extern const uint32_t height;
-
-// initialize markers dictionary
-
     
 // initialize marker detector
 extern const cv::aruco::ArucoDetector detector;

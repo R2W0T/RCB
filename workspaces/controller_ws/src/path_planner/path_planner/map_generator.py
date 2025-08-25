@@ -30,7 +30,7 @@ class MapGenerator():
         inverted_binary_img = cv2.bitwise_not(binary_img)
         #cv2.imshow("inverted binary image", inverted_binary_img)
         
-        inverted_binary_img_no_robot = self.remove_rectangle_from_matrix(inverted_binary_img, (pose.x, pose.y), 150, 150, pose.theta)
+        inverted_binary_img_no_robot = self.remove_rectangle_from_matrix(inverted_binary_img, (pose.x, pose.y), 200, 200, pose.theta)
         #cv2.imshow("inverted binary image no robot", inverted_binary_img_no_robot)
 
         #find contours
@@ -45,15 +45,32 @@ class MapGenerator():
             # find coordinates
             x,y,w,h = cv2.boundingRect(cnt)
             # if object is rubble
-            #if w < 10 and h < 10:
-            #    cv2.rectangle(img_copy,(x,y),(x+w,y+h),0,-1)
-            #else:
-            x -= padding
-            y -= padding
-            w += 2 * padding
-            h += 2 * padding
-            # draw rectangle to original image
-            cv2.rectangle(img_copy,(x,y),(x+w,y+h),255,-1)
+            if w < 30 and h < 30:
+                continue
+            else:
+                #inflation
+                x -= padding
+                y -= padding
+                w += 2 * padding
+                h += 2 * padding
+                # draw rectangle to original image
+                cv2.rectangle(img_copy,(x,y),(x+w,y+h),255,-1)
+
+        for index in range(len(contours)):
+            # take contour
+            cnt=contours[index]
+            # find coordinates
+            x,y,w,h = cv2.boundingRect(cnt)
+            # if object is rubble
+            if w < 40 and h < 40:
+                #inflation
+                x -= 10
+                y -= 10
+                w += 2 * 10
+                h += 2 * 10
+                # draw rectangle to original image
+                cv2.rectangle(img_copy,(x,y),(x+w,y+h),0,-1)
+
         #cv2.imshow("image with contours", img_copy)
         # Define border type and color (e.g., BORDER_CONSTANT with black color)
         #cv2.rectangle(img_copy,(pose.x-50,pose.y-50),(pose.x+50,pose.y+50),0,-1)
@@ -62,7 +79,7 @@ class MapGenerator():
         border_color = [0, 0, 0] # Black in BGR
 
         # Apply the border
-        self.grid_map = img_copy.copy()#cv2.copyMakeBorder(img_copy, padding, padding, padding, padding, border_type, value=255)
+        self.grid_map = self.remove_rectangle_from_matrix(img_copy, (pose.x, pose.y), 200, 200, pose.theta)
 
         cv2.rectangle(self.grid_map,(0,0),(padding,grid_cols),255,-1)
         cv2.rectangle(self.grid_map,(grid_rows - padding,0),(grid_rows,grid_cols),255,-1)
