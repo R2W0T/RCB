@@ -77,7 +77,7 @@ class PathPlanningActionServer(Node):
 
     def image_callback(self, msg):
         try:
-            self.map_generator.set_img(self.br.compressed_imgmsg_to_cv2(msg), self.pose)
+            self.map_generator.set_img(self.br.compressed_imgmsg_to_cv2(msg, desired_encoding="mono8"), self.pose)
             cv2.imshow("a", self.map_generator.img)
             cv2.waitKey(5)
 

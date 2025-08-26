@@ -116,7 +116,7 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
     }
 
   if(this->state == PUBLISH) {
-    this->publish_compressed_processed_image(img);
+    this->publish_compressed_processed_image(dst);
     RCLCPP_INFO(this->get_logger(), "Publishing: 3");
   }
 
