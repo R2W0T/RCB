@@ -18,7 +18,7 @@
 #include <iostream>
 
 //////////////////////////////////////////////////////////////////////////////////
-volatile const int dict = cv::aruco::DICT_APRILTAG_25h9;
+//volatile const int dict = cv::aruco::DICT_APRILTAG_25h9;
 volatile const int robot_marker_id = 9;//4;
 volatile const int markers_cw_ids[4] = {5, 6, 7, 8};//{0, 1, 2, 3};//{5, 6, 7, 8};//
 volatile const uint32_t width = 500, height = 500;
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 
     //dictionary = cv::aruco::getPredefinedDictionary(dict);
     //detectorParams = cv::aruco::DetectorParameters();
-    cv::Mat img;
+    cv::Mat img;//(480, 640, CV_8UC1, cv::Scalar(255));
 
     // open video device 
     int api_id = cv::CAP_ANY; 
@@ -52,7 +52,6 @@ int main(int argc, char *argv[]) {
         std::cerr << "failed to open vid capture dvice\n";
         return -1;
     }
-    
     // ros init
     rclcpp::init(argc, argv);
 
@@ -66,12 +65,12 @@ int main(int argc, char *argv[]) {
         executor.spin_some();
         
 	cap.read(img);
-        
-        // check if all markers are detected
+	
+	// check if all markers are detected
         node->process_image(img);
         
 	// Do other non-ROS related work or sleep
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
    
     rclcpp::shutdown();

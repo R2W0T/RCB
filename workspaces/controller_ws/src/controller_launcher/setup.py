@@ -2,7 +2,7 @@ import os
 from glob import glob
 from setuptools import find_packages, setup
 
-package_name = 'launch_all'
+package_name = 'controller_launcher'
 
 setup(
     name=package_name,

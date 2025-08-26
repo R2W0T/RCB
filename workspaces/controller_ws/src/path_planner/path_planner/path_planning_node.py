@@ -16,7 +16,7 @@ from sensor_msgs.msg import CompressedImage
 
 
 from robot_interfaces.action import Planner
-from robot_interfaces.msg import Odometry, Velocity 
+from robot_interfaces.msg import Command, Odometry, Velocity 
 
 
 from path_planner import  AStar, Pose
@@ -77,7 +77,7 @@ class PathPlanningActionServer(Node):
 
     def image_callback(self, msg):
         try:
-            self.map_generator.set_img(self.br.compressed_imgmsg_to_cv2(msg, desired_encoding='mono8'))
+            self.map_generator.set_img(self.br.compressed_imgmsg_to_cv2(msg), self.pose)
             cv2.imshow("a", self.map_generator.img)
             cv2.waitKey(5)
 
@@ -93,8 +93,7 @@ class PathPlanningActionServer(Node):
 
     def execute_callback(self, goal_handle):
 
-        self.publish_image_command(Command(command=1))
-        time.sleep(2)
+        self.publish_image_command(Command(command=0))
 
         goal = goal_handle.request.goal
 

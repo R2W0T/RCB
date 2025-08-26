@@ -1,6 +1,6 @@
 #include "image_processor/image_processor_node.hpp"
 #include <cv_bridge/cv_bridge.hpp>
-#include <opencv2/aruco.hpp>
+//#include <opencv2/aruco.hpp>
 
 using std::placeholders::_1;
 
@@ -9,9 +9,9 @@ extern const int markers_cw_ids[4];
 extern const uint32_t width;
 extern const uint32_t height;
     
-extern cv::Ptr<cv::aruco::Dictionary> dictionary;
-extern cv::Ptr<cv::aruco::DetectorParameters> detectorParams;
-//extern const cv::aruco::ArucoDetector detector;
+//extern cv::Ptr<cv::aruco::Dictionary> dictionary;
+//extern cv::Ptr<cv::aruco::DetectorParameters> detectorParams;
+extern const cv::aruco::ArucoDetector detector;
 
 
 ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
@@ -28,8 +28,28 @@ ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
   video_qos_profile.history(RMW_QOS_POLICY_HISTORY_KEEP_LAST);
 
   compressed_image_publisher = this->create_publisher<sensor_msgs::msg::CompressedImage>("compressed_processed_image", video_qos_profile);
+    
+    image_subscription = this->create_subscription<sensor_msgs::msg::Image>(
+      "raw_image", video_qos_profile, std::bind(&ImageProcessorNode::image_subscription_callback, this, _1));
+
   command_subscription = this->create_subscription<robot_interfaces::msg::Command>(
       "image_command", 10, std::bind(&ImageProcessorNode::command_subscription_callback, this, _1));
+}
+
+void ImageProcessorNode::image_subscription_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
+
+  cv::Mat img;
+
+  cv_bridge::CvImagePtr cv_ptr;
+  try {
+    cv_ptr = cv_bridge::toCvCopy(msg, "bgr8");
+  } catch(cv_bridge::Exception& e) {
+    RCLCPP_ERROR(this->get_logger(), "cv_bridge exception %s", e.what());
+    return;
+  }
+
+  img = cv_ptr->image;
+  this->process_image(img); 
 }
 
 void ImageProcessorNode::command_subscription_callback(const robot_interfaces::msg::Command::SharedPtr msg) {
@@ -76,8 +96,8 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
   const cv::Point2f dst_pts[4] = {cv::Point2f(0, 0), cv::Point2f(width, 0), cv::Point2f(0, height), cv::Point2f(width, height)};
 
         
-  //detector.detectMarkers(gray_img, markerCorners, markerIds);
-  cv::aruco::detectMarkers(gray_img, dictionary, markerCorners, markerIds, detectorParams);
+  detector.detectMarkers(gray_img, markerCorners, markerIds);
+  //cv::aruco::detectMarkers(gray_img, dictionary, markerCorners, markerIds, detectorParams);
   //cv::aruco::drawDetectedMarkers(img, markerCorners, markerIds);
 
   RCLCPP_INFO(this->get_logger(), "Publishing: 1, %ld", markerIds.size());
@@ -101,8 +121,8 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
 
   cv::warpPerspective(gray_img, dst, p_matrix, cv::Size(width, height));
 
-  //detector.detectMarkers(dst, markerCorners, markerIds);
-  cv::aruco::detectMarkers(dst, dictionary, markerCorners, markerIds, detectorParams);
+  detector.detectMarkers(dst, markerCorners, markerIds);
+  //cv::aruco::detectMarkers(dst, dictionary, markerCorners, markerIds, detectorParams);
         
   for(int i = 0; i < markerIds.size(); i++)
     if(markerIds[i] == robot_marker_id) {
@@ -116,7 +136,7 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
     }
 
   if(this->state == PUBLISH) {
-    this->publish_compressed_processed_image(img);
+    this->publish_compressed_processed_image(dst);
     RCLCPP_INFO(this->get_logger(), "Publishing: 3");
   }
 

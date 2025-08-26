@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(image_processor)
+project(sim_image_processor)
 
 ####################################################################################################..
 
@@ -12,25 +12,25 @@ find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(robot_interfaces REQUIRED)                       
 
-add_executable(image_processor_node src/main.cpp 
+add_executable(sim_image_processor_node src/main.cpp 
                             src/image_processor_node.cpp)
 
-ament_target_dependencies(image_processor_node rclcpp sensor_msgs cv_bridge std_msgs robot_interfaces )      
+ament_target_dependencies(sim_image_processor_node rclcpp sensor_msgs cv_bridge std_msgs robot_interfaces )      
 
 
 install(TARGETS
-  image_processor_node
+  sim_image_processor_node
   DESTINATION lib/${PROJECT_NAME})
 
 ###############################################################################################################
 
 ###############################################################################################################
-find_package( OpenCV 4.6.0 REQUIRED )
+find_package( OpenCV REQUIRED )
 #4.6.0
 include_directories( ${OpenCV_INCLUDE_DIRS} ./include)
 
 
-target_link_libraries( image_processor_node ${OpenCV_LIBS} )
+target_link_libraries( sim_image_processor_node ${OpenCV_LIBS} )
 ###############################################################################################################
 
 

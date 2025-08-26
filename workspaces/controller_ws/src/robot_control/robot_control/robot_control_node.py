@@ -115,8 +115,7 @@ class RobotControlNode(Node):
             self.get_logger().info(f'{self.state}')
             match self.state:
                 case CONTROLLER_STATES.MISSION_IN_PROGRESS:
-                    self.publish_image_command(Command(command=1))
-                    time.sleep(2)
+                    self.publish_image_command(Command(command=0))
                     self.mission()
                 case _:
                     continue
@@ -132,7 +131,7 @@ class RobotControlNode(Node):
         #invert image
         inverted_binary_img = cv2.bitwise_not(binary_img)
         
-        inverted_binary_img_no_robot = self.remove_rectangle_from_matrix(inverted_binary_img, (self.robot_position.x, self.robot_position.y), 200, 200, self.robot_position.theta)
+        inverted_binary_img_no_robot = self.remove_rectangle_from_matrix(inverted_binary_img, (self.robot_position.x, self.robot_position.y), 200, 200, self.robot_position.theta, 0)
 
         '''
         padding = 40
@@ -253,8 +252,9 @@ class RobotControlNode(Node):
 
     def image_callback(self, msg):
         try:
-            _, self.img = cv2.threshold(self.bridge.compressed_imgmsg_to_cv2(msg, desired_encoding='mono8'), 70, 255, cv2.THRESH_BINARY)
+            _, binary_img = cv2.threshold(self.bridge.compressed_imgmsg_to_cv2(msg), 70, 255, cv2.THRESH_BINARY)
 
+            self.img = self.remove_rectangle_from_matrix(binary_img, (self.robot_position.x, self.robot_position.y), 200, 200, self.robot_position.theta, 255)
         except Exception as e:
             self.get_logger().error(f"Error converting image: {e}")
 
@@ -280,7 +280,7 @@ class RobotControlNode(Node):
 
         self.robot_servo_angle_publisher.publish(msg)
 
-    def remove_rectangle_from_matrix(self, matrix, center, width, height, angle_degrees):
+    def remove_rectangle_from_matrix(self, matrix, center, width, height, angle_degrees, value):
         if matrix.ndim == 2 and matrix.shape[1] == 2: # Assuming matrix is a point cloud
             points_to_check = matrix
         elif matrix.ndim == 2: # Assuming matrix is an image
@@ -313,6 +313,6 @@ class RobotControlNode(Node):
             rows, cols = matrix.shape
             # Convert flat mask back to 2D for image indexing
             mask_2d = points_in_rectangle_mask.reshape(rows, cols)
-            result_matrix[mask_2d] = 0 # Or any other desired fill value
+            result_matrix[mask_2d] = value # Or any other desired fill value
             return result_matrix
 

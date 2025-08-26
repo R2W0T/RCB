@@ -35,10 +35,12 @@ class ImageProcessorNode : public rclcpp::Node
     uint8_t state;
 
     void command_subscription_callback(const robot_interfaces::msg::Command::SharedPtr msg);
+    void image_subscription_callback(const sensor_msgs::msg::Image::SharedPtr msg);
     
     rclcpp::Publisher<robot_interfaces::msg::Odometry>::SharedPtr robot_position_publisher;
     //////////////////////////////////////////////////////////////////////////////////////
     rclcpp::Publisher<sensor_msgs::msg::CompressedImage>::SharedPtr compressed_image_publisher;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscription;
     
     rclcpp::Subscription<robot_interfaces::msg::Command>::SharedPtr command_subscription;
     
