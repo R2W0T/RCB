@@ -43,7 +43,7 @@ class AStar:
             self.open_list.remove(current)
             current.pose.print()
 
-            if current.pose.x == self.goal.x and current.pose.y == self.goal.y :
+            if current.pose.x == self.goal.x and current.pose.y == self.goal.y:
                 break
             
             neighbors = self.get_neighbors(current)
@@ -126,11 +126,11 @@ class AStar:
     def get_neighbors(self, node):
         neighbors = []
         for i in range(int(node.pose.x) - 1, int(node.pose.x) + 2):
-            if i >= self.grid.shape[0] or i < 0:
+            if i >= self.grid.shape[1] or i < 0:
                 continue
             for j in range(int(node.pose.y) - 1, int(node.pose.y) + 2):
                 # check if node not occupied
-                if j >= self.grid.shape[1] or j < 0:
+                if j >= self.grid.shape[0] or j < 0:
                     continue
 
                 if self.grid[j, i] != 255:
@@ -140,7 +140,7 @@ class AStar:
         return neighbors
 
     def calc_cost(self, pose1, pose2):
-        return int(math.floor(math.sqrt((pose2.x - pose1.x)**2 + (pose2.y - pose1.y)**2) * 10))
+        return int(math.sqrt((pose2.x - pose1.x)**2 + (pose2.y - pose1.y)**2) * 10)
 
 '''
 class PathPlanner():

@@ -1,6 +1,7 @@
 #include "image_processor/image_processor_node.hpp"
 #include <cv_bridge/cv_bridge.hpp>
-//#include <opencv2/aruco.hpp>
+
+#include <opencv2/aruco.hpp>
 
 using std::placeholders::_1;
 
@@ -9,9 +10,9 @@ extern const int markers_cw_ids[4];
 extern const uint32_t width;
 extern const uint32_t height;
     
-//extern cv::Ptr<cv::aruco::Dictionary> dictionary;
-//extern cv::Ptr<cv::aruco::DetectorParameters> detectorParams;
-extern const cv::aruco::ArucoDetector detector;
+extern cv::Ptr<cv::aruco::Dictionary> dictionary;
+extern cv::Ptr<cv::aruco::DetectorParameters> detectorParams;
+// extern const cv::aruco::ArucoDetector detector;
 
 
 ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
@@ -49,6 +50,8 @@ void ImageProcessorNode::image_subscription_callback(const sensor_msgs::msg::Ima
   }
 
   img = cv_ptr->image;
+  // cv::imshow("i", img);
+  // cv::waitKey(2);
   this->process_image(img); 
 }
 
@@ -82,12 +85,13 @@ void ImageProcessorNode::publish_position(float x, float y, float theta) const {
 }
 
 void ImageProcessorNode::process_image(cv::Mat& img) {
+
   cv::Mat gray_img, binary_img;
   cv::cvtColor(img, gray_img, cv::COLOR_BGR2GRAY);
-  //cv::threshold(gray_img, gray_img, 70, 1, cv::THRESH_BINARY);
+  // cv::threshold(gray_img, gray_img, 70, 1, cv::THRESH_BINARY);
     
   std::vector<int> markerIds;
-  std::vector<std::vector<cv::Point2f>> markerCorners;
+  std::vector<std::vector<cv::Point2f>> markerCorners, rejectedCandidates;
 
   cv::Mat dst, p_matrix;
 
@@ -95,10 +99,31 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
   cv::Point2f src_pts[4];
   const cv::Point2f dst_pts[4] = {cv::Point2f(0, 0), cv::Point2f(width, 0), cv::Point2f(0, height), cv::Point2f(width, height)};
 
-        
-  detector.detectMarkers(gray_img, markerCorners, markerIds);
-  //cv::aruco::detectMarkers(gray_img, dictionary, markerCorners, markerIds, detectorParams);
-  //cv::aruco::drawDetectedMarkers(img, markerCorners, markerIds);
+  ///////////////////////////////////////////////////////
+  // cv::aruco::detectMarkers(
+  //   inputImage, 
+  //   dictionary, 
+  //   markerCorners, 
+  //   markerIds, 
+  //   parameters, 
+  //   rejectedCandidates
+  // );     
+  // detector.detectMarkers(gray_img, markerCorners, markerIds);
+
+  // cv::imshow("i", gray_img);
+  // cv::waitKey(2);
+
+  // cv::aruco::detectMarkers(gray_img, dictionary, markerCorners, markerIds, detectorParams, rejectedCandidates);
+  // cv::aruco::drawDetectedMarkers(gray_img, markerCorners, markerIds);
+
+  // cv::imshow("i", gray_img);
+  // cv::waitKey(2);
+
+  cv::aruco::detectMarkers(img, dictionary, markerCorners, markerIds, detectorParams, rejectedCandidates);
+  cv::aruco::drawDetectedMarkers(img, markerCorners, markerIds);
+
+  cv::imshow("i", img);
+  cv::waitKey(2);
 
   RCLCPP_INFO(this->get_logger(), "Publishing: 1, %ld", markerIds.size());
   // check if all markers are detected
@@ -121,8 +146,8 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
 
   cv::warpPerspective(gray_img, dst, p_matrix, cv::Size(width, height));
 
-  detector.detectMarkers(dst, markerCorners, markerIds);
-  //cv::aruco::detectMarkers(dst, dictionary, markerCorners, markerIds, detectorParams);
+  // detector.detectMarkers(dst, markerCorners, markerIds);
+  cv::aruco::detectMarkers(dst, dictionary, markerCorners, markerIds, detectorParams);
         
   for(int i = 0; i < markerIds.size(); i++)
     if(markerIds[i] == robot_marker_id) {

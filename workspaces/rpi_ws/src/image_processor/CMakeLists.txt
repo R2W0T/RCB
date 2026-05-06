@@ -25,14 +25,28 @@ install(TARGETS
 ###############################################################################################################
 
 ###############################################################################################################
-find_package( OpenCV 4.6.0 REQUIRED )
-#4.6.0
+find_package( OpenCV REQUIRED )
 include_directories( ${OpenCV_INCLUDE_DIRS} ./include)
 
 
-target_link_libraries( image_processor_node ${OpenCV_LIBS} )
+# target_link_libraries( image_processor_node ${OpenCV_LIBS})
 ###############################################################################################################
 
+find_package( PkgConfig REQUIRED )
+pkg_check_modules( GST REQUIRED gstreamer-1.0 gstreamer-video-1.0 gstreamer-app-1.0 )
+
+target_include_directories( image_processor_node PRIVATE ${OpenCV_INCLUDE_DIRS} ${GST_INCLUDE_DIRS})
+
+# target_link_libraries( image_processor_node ${OpenCV_LIBS} ${GST_LIBRARIES})
+
+find_package( PkgConfig REQUIRED )
+pkg_check_modules( LIBCAMERA REQUIRED libcamera )
+
+target_include_directories( image_processor_node PRIVATE ${LIBCAMERA_INCLUDE_DIRS})
+
+# target_link_libraries( image_processor_node PRIVATE  ${LIBCAMERA_LIBRARIES})
+
+target_link_libraries( image_processor_node ${OpenCV_LIBS} ${LIBCAMERA_LIBRARIES} ${GST_LIBRARIES})
 
 ###############################################################################################################
 ament_package()

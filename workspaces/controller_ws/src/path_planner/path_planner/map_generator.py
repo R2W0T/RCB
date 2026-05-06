@@ -10,8 +10,8 @@ class MapGenerator():
         self.img = None
 
     def set_img(self, img, pose: Odometry):
-        _, binary_img = cv2.threshold(img, 70, 255, cv2.THRESH_BINARY)
-        self.img = self.remove_rectangle_from_matrix(binary_img, (pose.x, pose.y), 200, 200, pose.theta, 255)
+        _, binary_img = cv2.threshold(img, 80, 255, cv2.THRESH_BINARY)
+        self.img = self.remove_rectangle_from_matrix(binary_img, (pose.x, pose.y), 220, 230, -pose.theta, 255)
 
     def get_grid_map(self):
         return self.grid_map
@@ -31,7 +31,7 @@ class MapGenerator():
         inverted_binary_img = cv2.bitwise_not(binary_img)
         #cv2.imshow("inverted binary image", inverted_binary_img)
         
-        inverted_binary_img_no_robot = self.remove_rectangle_from_matrix(inverted_binary_img, (pose.x, pose.y), 200, 200, pose.theta, 0)
+        inverted_binary_img_no_robot = self.remove_rectangle_from_matrix(inverted_binary_img, (pose.x, pose.y), 220, 230, -pose.theta, 0)
         #cv2.imshow("inverted binary image no robot", inverted_binary_img_no_robot)
 
         #find contours
@@ -80,12 +80,12 @@ class MapGenerator():
         border_color = [0, 0, 0] # Black in BGR
 
         # Apply the border
-        self.grid_map = self.remove_rectangle_from_matrix(img_copy, (pose.x, pose.y), 200, 200, pose.theta, 0)
+        self.grid_map = self.remove_rectangle_from_matrix(img_copy, (pose.x, pose.y), 220, 230, -pose.theta, 0)
 
-        cv2.rectangle(self.grid_map,(0,0),(padding,grid_cols),255,-1)
-        cv2.rectangle(self.grid_map,(grid_rows - padding,0),(grid_rows,grid_cols),255,-1)
-        cv2.rectangle(self.grid_map,(0,0),(grid_rows, padding),255,-1)
-        cv2.rectangle(self.grid_map,(0,grid_cols - padding),(grid_rows, grid_cols),255,-1)
+        #cv2.rectangle(self.grid_map,(0,0),(padding,grid_cols),255,-1)
+        #cv2.rectangle(self.grid_map,(grid_rows - padding,0),(grid_rows,grid_cols),255,-1)
+        #cv2.rectangle(self.grid_map,(0,0),(grid_rows, padding),255,-1)
+        #cv2.rectangle(self.grid_map,(0,grid_cols - padding),(grid_rows, grid_cols),255,-1)
 
         cv2.imshow("grid", self.grid_map)
     

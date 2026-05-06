@@ -77,7 +77,7 @@ class PathPlanningActionServer(Node):
 
     def image_callback(self, msg):
         try:
-            self.map_generator.set_img(self.br.compressed_imgmsg_to_cv2(msg, desired_encoding="mono8"), self.pose)
+            self.map_generator.set_img(self.br.compressed_imgmsg_to_cv2(msg), self.pose)
             cv2.imshow("a", self.map_generator.img)
             cv2.waitKey(5)
 
@@ -93,6 +93,8 @@ class PathPlanningActionServer(Node):
 
     def execute_callback(self, goal_handle):
 
+        #self.publish_image_command(Command(command=1))
+        #time.sleep(5)
         self.publish_image_command(Command(command=0))
 
         goal = goal_handle.request.goal
@@ -105,8 +107,11 @@ class PathPlanningActionServer(Node):
         self.map_generator.generate_map(Odometry(x=self.pose.x, y=self.pose.y, theta=self.pose.theta))
         self.get_logger().info('Map generated...')
         grid = self.map_generator.get_grid_map()
-        #cv2.imshow("grid", grid)
-        #cv2.waitKey(6)
+        cv2.imshow("grid", grid)
+        emg = cv2.cvtColor(grid, cv2.COLOR_GRAY2BGR)
+        cv2.line(emg, (int(goal.x), int(goal.y)), (int(goal.x+2), int(goal.y+2)), (0, 0, 255), 2)
+        cv2.imshow("emg", emg)
+        cv2.waitKey(6)
 
         #done in one step
         #self.get_logger().info('Inflating map...')
@@ -155,6 +160,7 @@ class PathPlanningActionServer(Node):
 
             velocity = controller.get_velocity()
             self.get_logger().info(f'{velocity.linear_velocity}, {velocity.angular_velocity}')
+            self.get_logger().info(f'{controller.state}')
             self.publish_velocity(velocity)
          
             time.sleep(0.03)
