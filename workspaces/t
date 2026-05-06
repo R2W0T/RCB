@@ -1,6 +1,0 @@
-usr/share/libcamera/ipa/rpi/vc4/imx219.json
-
-usr/lib/aarch64-linux-gnu/libcamera
-
-sudo export LIBCAMERA_IPA_MODULE_PATH=/usr/lib/aarch64-linux-gnu/libcamera
-

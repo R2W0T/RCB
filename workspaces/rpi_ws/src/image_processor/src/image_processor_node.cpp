@@ -11,7 +11,6 @@ extern const uint32_t height;
     
 extern cv::Ptr<cv::aruco::Dictionary> dictionary;
 extern cv::Ptr<cv::aruco::DetectorParameters> detectorParams;
-//extern const cv::aruco::ArucoDetector detector;
 
 
 ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
@@ -81,9 +80,7 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
   const cv::Point2f dst_pts[4] = {cv::Point2f(0, 0), cv::Point2f(width, 0), cv::Point2f(0, height), cv::Point2f(width, height)};
 
         
-  //detector.detectMarkers(gray_img, markerCorners, markerIds);
   cv::aruco::detectMarkers(gray_img, dictionary, markerCorners, markerIds, detectorParams);
-  //cv::aruco::drawDetectedMarkers(img, markerCorners, markerIds);
 
   RCLCPP_INFO(this->get_logger(), "Publishing: 1, %ld", markerIds.size());
   // check if all markers are detected
@@ -106,7 +103,6 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
 
   cv::warpPerspective(gray_img, dst, p_matrix, cv::Size(width, height));
 
-  //detector.detectMarkers(dst, markerCorners, markerIds);
   cv::aruco::detectMarkers(dst, dictionary, markerCorners, markerIds, detectorParams);
         
   for(int i = 0; i < markerIds.size(); i++)

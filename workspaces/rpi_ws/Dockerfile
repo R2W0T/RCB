@@ -25,17 +25,6 @@ RUN apt-get install -y \
     libcamera-dev \
     libudev-dev libyaml-dev libgnutls28-dev python3-yaml python3-ply python3-jinja2
 
-
-# RUN git clone https://github.com/raspberrypi/libcamera.git
-# WORKDIR /libcamera
-# RUN meson setup build -Dpipelines=rpi/vc4 -Dipas=rpi/vc4
-# RUN ninja -C build
-# RUN ninja -C build install
-
-
-# ENV LIBCAMERA_IPA_MODULE_PATH=/usr/share/libcamera
-# ENV LIBCAMERA_IPA_MODULE_PATH=/usr/lib/aarch64-linux-gnu/libcamera
-
 RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /ros2_ws
