@@ -1,1 +1,2 @@
-float32 angle
+float32 fangle
+float32 sangle

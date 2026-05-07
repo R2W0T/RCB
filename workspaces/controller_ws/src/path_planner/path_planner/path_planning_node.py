@@ -75,7 +75,6 @@ class PathPlanningActionServer(Node):
             Velocity,
             'robot_velocity',
             10,
-            # callback_group=self.reentrant_group
         )
         self.velocity_publisher  # prevent unused variable warning
 
@@ -83,13 +82,10 @@ class PathPlanningActionServer(Node):
             Command,
             'image_command',
             10,
-            # callback_group=self.reentrant_group
         )
         self.image_command_publisher  # prevent unused variable warning
 
         self.map_generator = MapGenerator()
-        #self.path_planner = PathPlanner()
-        #self.motion_controller = MotionController()
 
     def pose_callback(self, msg):
         self.pose = msg
@@ -97,8 +93,6 @@ class PathPlanningActionServer(Node):
     def image_callback(self, msg):
         try:
             self.map_generator.set_img(self.br.compressed_imgmsg_to_cv2(msg), self.pose)
-            # cv2.imshow("a", self.map_generator.img)
-            # cv2.waitKey(5)
 
             
         except Exception as e:
@@ -113,8 +107,8 @@ class PathPlanningActionServer(Node):
     # async def execute_callback(self, goal_handle):
     def execute_callback(self, goal_handle):
 
-        #self.publish_image_command(Command(command=1))
-        #time.sleep(5)
+        self.publish_image_command(Command(command=1))
+        time.sleep(5)
         self.publish_image_command(Command(command=0))
 
         goal = goal_handle.request.goal
@@ -127,15 +121,8 @@ class PathPlanningActionServer(Node):
         self.map_generator.generate_map(Odometry(x=self.pose.x, y=self.pose.y, theta=self.pose.theta))
         self.get_logger().info('Map generated...')
         grid = self.map_generator.get_grid_map()
-        # cv2.imshow("grid", grid)
         emg = cv2.cvtColor(grid, cv2.COLOR_GRAY2BGR)
         cv2.line(emg, (int(goal.x), int(goal.y)), (int(goal.x+2), int(goal.y+2)), (0, 0, 255), 2)
-        # cv2.imshow("emg", emg)
-        # cv2.waitKey(6)
-
-        #done in one step
-        #self.get_logger().info('Inflating map...')
-        #self.get_logger().info('Map inflated...')
 
         self.get_logger().info('Path planning...')
 
@@ -146,7 +133,6 @@ class PathPlanningActionServer(Node):
         if not path_a_star:
             self.get_logger().info('A* failed...')
         else:
-            #if path[0].pose == Pose(x=self.pose.x, y=self.pose.y) and path[-1].pose == Pose(x=goal.x, y=goal.y):
             self.get_logger().info('A* succeded...')
 
         img = cv2.cvtColor(grid, cv2.COLOR_GRAY2BGR)
@@ -158,8 +144,6 @@ class PathPlanningActionServer(Node):
         img[int(goal.y), int(goal.x)] = (0, 0, 255)
 
 
-        # cv2.imshow("img", img)
-        # cv2.waitKey(6)
         self.get_logger().info('Path planned...')
 
         self.get_logger().info('Navigating to goal...')
@@ -187,10 +171,6 @@ class PathPlanningActionServer(Node):
             self.publish_velocity(velocity)
          
             time.sleep(1)
-            # rclpy.spin_until_future_complete(self, rclpy.Future(), timeout_sec=0.1)
-            # loop_rate.sleep()
-            # await asyncio.sleep(0.03)
-
 
         self.get_logger().info('Arrived at goal...')
 
@@ -223,23 +203,3 @@ def draw_line(mat, start, end, value):
         x = (y - c) / m
         
         mat[int(y), int(x)] = value
-
-
-"""                
-        for point in path:
-            if point is None:
-                break
-            point.print() 
-            self.motion_controller.set_goal(Odometry(x=point.pose.x, y=point.pose.y, theta=point.pose.theta))
-
-        
-            while not self.motion_controller.get_state():
-                # TODO after planner is done better goal setter
-
-                self.motion_controller.set_velocity(self.pose)
-
-                self.publish_velocity(self.motion_controller.get_velocity())
-            
-                rclpy.spin_once(self, timeout_sec=0.1)
-
-"""     

@@ -69,7 +69,7 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
   if(this->state == PUBLISH_MAIN) {
     this->publish_compressed_processed_image(gray_img);
     RCLCPP_INFO(this->get_logger(), "Publishing: 4");
-    // return;
+    return;
   }
   std::vector<int> markerIds;
   std::vector<std::vector<cv::Point2f>> markerCorners;

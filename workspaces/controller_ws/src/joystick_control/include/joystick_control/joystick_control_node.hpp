@@ -15,7 +15,7 @@ class JoystickControlNode : public rclcpp::Node
     JoystickControlNode();
    
     void publish(int32_t linear_velocity, int32_t angular_velocity);
-    void publish_angle(int32_t angle);
+    void publish_angle(int32_t fangle, int32_t sangle);
 
   private:
     

@@ -36,9 +36,11 @@ int main(int argc, char* argv[]) {
 
                     int32_t z = axes[1].x;
 
+                    int32_t a = axes[5].x;
+
 
                     node->publish(y, x);   
-                    node->publish_angle(z);   
+                    node->publish_angle(z, a);   
                 }
 
                 break;
@@ -49,7 +51,7 @@ int main(int argc, char* argv[]) {
         
         fflush(stdout);
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	    std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
     close(js);

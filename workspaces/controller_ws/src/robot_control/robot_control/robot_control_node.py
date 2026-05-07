@@ -112,12 +112,11 @@ class RobotControlNode(Node):
     def run(self):
         while True:
             rclpy.spin_once(self, timeout_sec=1)
-            #self.get_logger().info(f'{self.state}')
             self.get_logger().info(f'{self.state}')
             match self.state:
                 case CONTROLLER_STATES.MISSION_IN_PROGRESS:
-                    #self.publish_image_command(Command(command=1))
-                    #time.sleep(2)
+                    self.publish_image_command(Command(command=1))
+                    time.sleep(2)
                     self.publish_image_command(Command(command=0))
                     self.mission()
                 case _:
@@ -199,8 +198,8 @@ class RobotControlNode(Node):
         rclpy.spin_once(self, timeout_sec=0.1)
 
         # init
-        self.robot_servo_angle = Angle(angle=-30.0)
-        self.publish_robot_servo_angle()
+        # self.robot_servo_angle = Angle(angle=-30.0)
+        # self.publish_robot_servo_angle()
         
         self.detect_rubble()
 
@@ -210,8 +209,8 @@ class RobotControlNode(Node):
             while not self.path_planning_action_client_state == CLIENT_STATES.SUCCESS:
                 rclpy.spin_once(self, timeout_sec=0.1)
             
-            self.robot_servo_angle = Angle(angle=60.0)
-            self.publish_robot_servo_angle()
+            # self.robot_servo_angle = Angle(angle=60.0)
+            # self.publish_robot_servo_angle()
             
             self.send_goal(Odometry(x=float(r[0][0]), y=float(r[0][1]), theta=float(r[0][2])))
             
@@ -222,69 +221,18 @@ class RobotControlNode(Node):
             time.sleep(1)
             self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
 
-            self.robot_servo_angle = Angle(angle=-30.0)
-            self.publish_robot_servo_angle()
+            # self.robot_servo_angle = Angle(angle=-30.0)
+            # self.publish_robot_servo_angle()
     
 
-        self.robot_servo_angle = Angle(angle=-30.0)
-        self.publish_robot_servo_angle()
+        # self.robot_servo_angle = Angle(angle=-30.0)
+        # self.publish_robot_servo_angle()
         
         # self.send_goal(Odometry(x=140.0, y=380.0, theta=75.0))
         while not self.path_planning_action_client_state == CLIENT_STATES.SUCCESS:
             rclpy.spin_once(self, timeout_sec=0.1)
 
-        # self.publish_robot_velocity(Velocity(linear_velocity=-40, angular_velocity=0))
-        # time.sl199(7)
-        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
-        
-        # time.sleep(1)
-
-        # self.publish_robot_velocity(Velocity(linear_velocity=40, angular_velocity=0))
-        # time.sleep(0.6)
-        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
-        
-        # time.sleep(1)
-
-        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=40))
-        # time.sleep(2.25)
-        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
-
-        # time.sleep(1)
-
-        # self.publish_robot_velocity(Velocity(linear_velocity=-40, angular_velocity=0))
-        # time.sleep(3)
-        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
-
-        # time.sleep(1)
-
-        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=40))
-        # time.sleep(0.4)
-        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
-
-        # time.sleep(1)
-
-        # self.publish_robot_velocity(Velocity(linear_velocity=60, angular_velocity=0))
-        # time.sleep(4)
-        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
-
-        #time.sleep(1)
-
-        '''
-        self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=-40))
-        time.sleep(0.1)
         self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
-        '''
-
-        #time.sleep(1)
-
-        # self.publish_robot_velocity(Velocity(linear_velocity=60, angular_velocity=0))
-        # time.sleep(5)
-        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
-        '''
-        self.send_goal(Odometry(x=350.0, y=350.0, theta=0.0))
-        while not self.path_planning_action_client_state == CLIENT_STATES.SUCCESS:
-            rclpy.spin_once(self, timeout_sec=0.1)
-        '''
         
         time.sleep(1)
 
@@ -306,8 +254,6 @@ class RobotControlNode(Node):
 
         self.send_goal_future.add_done_callback(self.goal_response_callback)
 
-        #return self.path_planning_action_client.send_goal_async(goal_msg)
-
     def goal_response_callback(self, future):
         goal_handle = future.result()
         if not goal_handle.accepted:
@@ -322,23 +268,19 @@ class RobotControlNode(Node):
 
     def get_result_callback(self, future):
         self.path_planning_action_client_state = CLIENT_STATES.SUCCESS
-        #result = future.result().result
-        #self.get_logger().info('Result: {0}'.format(result.sequence))
-        #rclpy.shutdown()
 
     def image_callback(self, msg):
         try:
             _, binary_img = cv2.threshold(self.bridge.compressed_imgmsg_to_cv2(msg), 80, 255, cv2.THRESH_BINARY)
 
             self.img = self.remove_rectangle_from_matrix(binary_img, (self.robot_position.x, self.robot_position.y), 150, 100, -self.robot_position.theta, 255)
+
         except Exception as e:
             self.get_logger().error(f"Error converting image: {e}")
 
     def robot_position_callback(self, msg):
         self.robot_position = msg
-        for r in self.rubble:
-            dx = 0
-            dy = 0
+
     def robot_command_callback(self, msg):
         self.state = CONTROLLER_STATES(msg.command)
 

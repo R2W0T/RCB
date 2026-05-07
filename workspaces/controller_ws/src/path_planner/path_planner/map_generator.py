@@ -18,21 +18,16 @@ class MapGenerator():
 
     def generate_map(self, pose):
         
-        #gray_img = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)  
-
-        binary_img = self.img #cv2.threshold(gray_img, 127, 255, cv2.THRESH_BINARY)
+        binary_img = self.img 
         grid_rows = binary_img.shape[0]
         grid_cols = binary_img.shape[1]
         
         # Initialize occupancy grid
-        #cv2.imshow("binary image", binary_img)
 
         #invert image
         inverted_binary_img = cv2.bitwise_not(binary_img)
-        #cv2.imshow("inverted binary image", inverted_binary_img)
         
         inverted_binary_img_no_robot = self.remove_rectangle_from_matrix(inverted_binary_img, (pose.x, pose.y), 220, 230, -pose.theta, 0)
-        #cv2.imshow("inverted binary image no robot", inverted_binary_img_no_robot)
 
         #find contours
         contours, _ = cv2.findContours(inverted_binary_img_no_robot, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -72,24 +67,12 @@ class MapGenerator():
                 # draw rectangle to original image
                 cv2.rectangle(img_copy,(x,y),(x+w,y+h),0,-1)
 
-        #cv2.imshow("image with contours", img_copy)
-        # Define border type and color (e.g., BORDER_CONSTANT with black color)
-        #cv2.rectangle(img_copy,(pose.x-50,pose.y-50),(pose.x+50,pose.y+50),0,-1)
-        
         border_type = cv2.BORDER_CONSTANT
         border_color = [0, 0, 0] # Black in BGR
 
         # Apply the border
         self.grid_map = self.remove_rectangle_from_matrix(img_copy, (pose.x, pose.y), 220, 230, -pose.theta, 0)
 
-        #cv2.rectangle(self.grid_map,(0,0),(padding,grid_cols),255,-1)
-        #cv2.rectangle(self.grid_map,(grid_rows - padding,0),(grid_rows,grid_cols),255,-1)
-        #cv2.rectangle(self.grid_map,(0,0),(grid_rows, padding),255,-1)
-        #cv2.rectangle(self.grid_map,(0,grid_cols - padding),(grid_rows, grid_cols),255,-1)
-
-        # cv2.imshow("grid", self.grid_map)
-    
-        # cv2.waitKey(2)
 
     
     def remove_rectangle_from_matrix(self, matrix, center, width, height, angle_degrees, value):
@@ -127,16 +110,3 @@ class MapGenerator():
             mask_2d = points_in_rectangle_mask.reshape(rows, cols)
             result_matrix[mask_2d] = value # Or any other desired fill value
             return result_matrix
-
-""" # Populate the occupancy grid
-        for r in range(grid_rows):
-            for c in range(grid_cols):
-                # Check if the cell region contains occupied pixels (e.g., any dark pixel)
-                if binary_image[r, c] == 255:
-                    self.grid_map[r, c] = 255
-                else:
-                    self.grid_map[r, c] = 0
-
-        # remove robot from map_grid  
-        #self.grid_map = self.remove_rectangle_from_matrix(self.grid_map, [400, 400], 200, 200, pose.theta)   
-"""

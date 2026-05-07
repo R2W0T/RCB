@@ -27,13 +27,15 @@ void JoystickControlNode::publish(int32_t linear_velocity, int32_t angular_veloc
     joystick_publisher->publish(message);
 }
 
-void JoystickControlNode::publish_angle(int32_t angle) {
+void JoystickControlNode::publish_angle(int32_t fangle, int32_t sangle) {
     auto message = robot_interfaces::msg::Angle();
-    message.angle = -((32767 + angle) * 100 / 32767) + 50;
+    message.fangle = -((32767 + fangle) * 100 / 32767) + 50;
+    message.sangle = -((32767 + sangle) * 100 / 32767) + 50;
 
     RCLCPP_INFO(  this->get_logger(), 
-	  	  "Publishing:\n Angle: '%f'", 
-		  message.angle
+      "Publishing:\n First Angle: '%f', Secong Angle: '%f'", 
+      message.fangle,
+      message.sangle
 		);
 
     servo_publisher->publish(message);
