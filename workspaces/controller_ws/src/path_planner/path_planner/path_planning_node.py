@@ -23,18 +23,31 @@ from path_planner import  AStar, Pose
 from map_generator import MapGenerator
 from motion_controller import PurePursuitMotionController
 
+from rclpy.callback_groups import ReentrantCallbackGroup
+
+# import asyncio
 
 class PathPlanningActionServer(Node):
     def __init__(self):
         super().__init__('path_planning_action_server')
 
-        self.action_server = ActionServer(self, Planner, 'path_planning_action', self.execute_callback)
+        self.reentrant_group = ReentrantCallbackGroup()
+
+        self.action_server = ActionServer(
+            self, 
+            Planner, 
+            'path_planning_action', 
+            self.execute_callback,
+            callback_group=self.reentrant_group
+        )
 
         self.pose_subscription = self.create_subscription(
             Odometry,
             'robot_position',
             self.pose_callback,
-            10)
+            10,
+            callback_group=self.reentrant_group
+        )
         self.pose_subscription  # prevent unused variable warning
 
         self.pose = Odometry()
@@ -50,7 +63,9 @@ class PathPlanningActionServer(Node):
             CompressedImage,
             'compressed_processed_image',
             self.image_callback,
-            video_qos_profile)
+            video_qos_profile,
+            callback_group=self.reentrant_group
+        )
         self.image_subscription  # prevent unused variable warning
 
         self.br = CvBridge()
@@ -59,13 +74,17 @@ class PathPlanningActionServer(Node):
         self.velocity_publisher = self.create_publisher(
             Velocity,
             'robot_velocity',
-            10)
+            10,
+            # callback_group=self.reentrant_group
+        )
         self.velocity_publisher  # prevent unused variable warning
 
         self.image_command_publisher = self.create_publisher(
             Command,
             'image_command',
-            10)
+            10,
+            # callback_group=self.reentrant_group
+        )
         self.image_command_publisher  # prevent unused variable warning
 
         self.map_generator = MapGenerator()
@@ -78,8 +97,8 @@ class PathPlanningActionServer(Node):
     def image_callback(self, msg):
         try:
             self.map_generator.set_img(self.br.compressed_imgmsg_to_cv2(msg), self.pose)
-            cv2.imshow("a", self.map_generator.img)
-            cv2.waitKey(5)
+            # cv2.imshow("a", self.map_generator.img)
+            # cv2.waitKey(5)
 
             
         except Exception as e:
@@ -91,6 +110,7 @@ class PathPlanningActionServer(Node):
     def publish_velocity(self, msg):
         self.velocity_publisher.publish(msg) 
 
+    # async def execute_callback(self, goal_handle):
     def execute_callback(self, goal_handle):
 
         #self.publish_image_command(Command(command=1))
@@ -107,11 +127,11 @@ class PathPlanningActionServer(Node):
         self.map_generator.generate_map(Odometry(x=self.pose.x, y=self.pose.y, theta=self.pose.theta))
         self.get_logger().info('Map generated...')
         grid = self.map_generator.get_grid_map()
-        cv2.imshow("grid", grid)
+        # cv2.imshow("grid", grid)
         emg = cv2.cvtColor(grid, cv2.COLOR_GRAY2BGR)
         cv2.line(emg, (int(goal.x), int(goal.y)), (int(goal.x+2), int(goal.y+2)), (0, 0, 255), 2)
-        cv2.imshow("emg", emg)
-        cv2.waitKey(6)
+        # cv2.imshow("emg", emg)
+        # cv2.waitKey(6)
 
         #done in one step
         #self.get_logger().info('Inflating map...')
@@ -138,8 +158,8 @@ class PathPlanningActionServer(Node):
         img[int(goal.y), int(goal.x)] = (0, 0, 255)
 
 
-        cv2.imshow("img", img)
-        cv2.waitKey(6)
+        # cv2.imshow("img", img)
+        # cv2.waitKey(6)
         self.get_logger().info('Path planned...')
 
         self.get_logger().info('Navigating to goal...')
@@ -155,6 +175,9 @@ class PathPlanningActionServer(Node):
         
         path[-1][2] = goal.theta
         controller.set_path(path)
+
+        # loop_rate = self.create_rate(33)
+
         while not controller.get_state():
             controller.set_velocity([self.pose.x, self.pose.y, self.pose.theta])
 
@@ -163,8 +186,11 @@ class PathPlanningActionServer(Node):
             self.get_logger().info(f'{controller.state}')
             self.publish_velocity(velocity)
          
-            time.sleep(0.03)
-            rclpy.spin_until_future_complete(self, rclpy.Future(), timeout_sec=0.1)
+            time.sleep(1)
+            # rclpy.spin_until_future_complete(self, rclpy.Future(), timeout_sec=0.1)
+            # loop_rate.sleep()
+            # await asyncio.sleep(0.03)
+
 
         self.get_logger().info('Arrived at goal...')
 

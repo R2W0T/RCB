@@ -16,8 +16,8 @@ endian = 'big'
 
 
 # mm
-wheel_radius = 40 # mm
-robot_width = 300 # mm
+wheel_radius = 55 # mm
+robot_width = 190 # mm
 
 A = np.array([[wheel_radius/robot_width, wheel_radius/robot_width],[-wheel_radius/robot_width, wheel_radius/robot_width]])
 A = np.linalg.inv(A)

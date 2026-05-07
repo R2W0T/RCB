@@ -87,9 +87,9 @@ class MapGenerator():
         #cv2.rectangle(self.grid_map,(0,0),(grid_rows, padding),255,-1)
         #cv2.rectangle(self.grid_map,(0,grid_cols - padding),(grid_rows, grid_cols),255,-1)
 
-        cv2.imshow("grid", self.grid_map)
+        # cv2.imshow("grid", self.grid_map)
     
-        cv2.waitKey(2)
+        # cv2.waitKey(2)
 
     
     def remove_rectangle_from_matrix(self, matrix, center, width, height, angle_degrees, value):

@@ -7,14 +7,19 @@
         <geometry>
           <plane>
             <normal>0 0 1</normal>
-            <size>0.2 0.2</size>
+            <size>0.16 0.16</size>
           </plane>
+          <mesh>
+            <uri>model://apriltag.dae</uri>
+          </mesh>
         </geometry>
         <material>
           <diffuse>1 1 1 1</diffuse>
-          <specular>0.4 0.4 0.4 1</specular>
+          <specular>0 0 0 1</specular>
           <pbr>
             <metal>
+              <metalness>0.0</metalness>
+              <roughness>0.0</roughness>
               <albedo_map>materials/textures/tag25h9-1.png</albedo_map>
             </metal>
           </pbr>

@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     // open video device 
 
     int api_id = cv::CAP_ANY; 
-    int device_id = 0;
+    int device_id = 2;
     cv::VideoCapture cap;
     cap.open(device_id, api_id);
 

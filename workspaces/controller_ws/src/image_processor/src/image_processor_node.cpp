@@ -1,6 +1,5 @@
 #include "image_processor/image_processor_node.hpp"
 #include <cv_bridge/cv_bridge.hpp>
-
 #include <opencv2/aruco.hpp>
 
 using std::placeholders::_1;
@@ -12,7 +11,6 @@ extern const uint32_t height;
     
 extern cv::Ptr<cv::aruco::Dictionary> dictionary;
 extern cv::Ptr<cv::aruco::DetectorParameters> detectorParams;
-// extern const cv::aruco::ArucoDetector detector;
 
 
 ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
@@ -29,30 +27,8 @@ ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
   video_qos_profile.history(RMW_QOS_POLICY_HISTORY_KEEP_LAST);
 
   compressed_image_publisher = this->create_publisher<sensor_msgs::msg::CompressedImage>("compressed_processed_image", video_qos_profile);
-    
-    image_subscription = this->create_subscription<sensor_msgs::msg::Image>(
-      "raw_image", video_qos_profile, std::bind(&ImageProcessorNode::image_subscription_callback, this, _1));
-
   command_subscription = this->create_subscription<robot_interfaces::msg::Command>(
       "image_command", 10, std::bind(&ImageProcessorNode::command_subscription_callback, this, _1));
-}
-
-void ImageProcessorNode::image_subscription_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
-
-  cv::Mat img;
-
-  cv_bridge::CvImagePtr cv_ptr;
-  try {
-    cv_ptr = cv_bridge::toCvCopy(msg, "bgr8");
-  } catch(cv_bridge::Exception& e) {
-    RCLCPP_ERROR(this->get_logger(), "cv_bridge exception %s", e.what());
-    return;
-  }
-
-  img = cv_ptr->image;
-  // cv::imshow("i", img);
-  // cv::waitKey(2);
-  this->process_image(img); 
 }
 
 void ImageProcessorNode::command_subscription_callback(const robot_interfaces::msg::Command::SharedPtr msg) {
@@ -85,15 +61,20 @@ void ImageProcessorNode::publish_position(float x, float y, float theta) const {
 }
 
 void ImageProcessorNode::process_image(cv::Mat& img) {
-
-  // cv::imshow("hell", img);
-
+  cv::imshow("hell", img);
+  cv::waitKey(2);
   cv::Mat gray_img, binary_img;
   cv::cvtColor(img, gray_img, cv::COLOR_BGR2GRAY);
-  // cv::threshold(gray_img, gray_img, 70, 1, cv::THRESH_BINARY);
+  //cv::threshold(gray_img, gray_img, 70, 1, cv::THRESH_BINARY);
     
+
+  if(this->state == PUBLISH_MAIN) {
+    this->publish_compressed_processed_image(gray_img);
+    RCLCPP_INFO(this->get_logger(), "Publishing: 4");
+    // return;
+  }
   std::vector<int> markerIds;
-  std::vector<std::vector<cv::Point2f>> markerCorners, rejectedCandidates;
+  std::vector<std::vector<cv::Point2f>> markerCorners;
 
   cv::Mat dst, p_matrix;
 
@@ -101,11 +82,8 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
   cv::Point2f src_pts[4];
   const cv::Point2f dst_pts[4] = {cv::Point2f(0, 0), cv::Point2f(width, 0), cv::Point2f(0, height), cv::Point2f(width, height)};
 
-  cv::aruco::detectMarkers(img, dictionary, markerCorners, markerIds, detectorParams, rejectedCandidates);
-  // cv::aruco::drawDetectedMarkers(img, markerCorners, markerIds);
-
-  // cv::imshow("i", img);
-  // cv::waitKey(2);
+        
+  cv::aruco::detectMarkers(gray_img, dictionary, markerCorners, markerIds, detectorParams);
 
   RCLCPP_INFO(this->get_logger(), "Publishing: 1, %ld", markerIds.size());
   // check if all markers are detected
@@ -141,9 +119,9 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
       break;
     }
 
+  cv::imshow("he", dst);
   if(this->state == PUBLISH) {
     this->publish_compressed_processed_image(dst);
     RCLCPP_INFO(this->get_logger(), "Publishing: 3");
   }
-
 }

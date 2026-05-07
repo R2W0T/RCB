@@ -147,7 +147,8 @@ class RobotControlNode(Node):
         #invert image
         inverted_binary_img = cv2.bitwise_not(binary_img)
         
-        inverted_binary_img_no_robot = self.remove_rectangle_from_matrix(inverted_binary_img, (self.robot_position.x, self.robot_position.y), 220, 230, -self.robot_position.theta, 0)
+        # inverted_binary_img_no_robot = self.remove_rectangle_from_matrix(inverted_binary_img, (self.robot_position.x, self.robot_position.y), 220, 230, -self.robot_position.theta, 0)
+        inverted_binary_img_no_robot = inverted_binary_img
 
         '''
         padding = 40
@@ -177,60 +178,16 @@ class RobotControlNode(Node):
         cv2.waitKey(0)
         '''
 
-        for r in self.rubble:
+        for i, r in enumerate(self.rubble):
             dx = 0
             dy = 0
-            '''
-            if r[1][0] in range(int(grid_cols / 2 - 30), int(grid_cols / 2 + 30)) and r[1][1] in range(int(grid_rows / 2 - 30), int(grid_rows / 2 + 30)):
 
-                if r[1][0] > (grid_cols / 2):
-                    r[1][0] -= 100
-                    dx = 100
-                else:
-                    r[1][0] += 100
-                    dx = -100
-
-                if r[1][1] > (grid_rows / 2):
-                    r[1][1] -= 100
-                    dy = -100
-                else:
-                    r[1][1] += 100
-                    dy = 100
-
-            elif r[1][0] in range(int(grid_cols / 2 - 30), int(grid_cols / 2 + 30)):
-                dx = 0
-            elif r[1][1] in range(int(grid_rows / 2 - 30), int(grid_rows / 2 + 30)):
-                dy = 0
-            if dx == 0:
-                if r[1][1] > (grid_rows / 2):
-                    r[1][1] -= 100
-                    dy = -100
-                else:
-                    r[1][1] += 100
-                    dy = 100
-            elif dy == 0:
-                if r[1][0] > (grid_cols / 2):
-                    r[1][0] -= 100
-                    dx = 100
-                else:
-                    r[1][0] += 100
-                    dx = -100
-
-
-
-            '''
-            if r[1][1] > (grid_rows / 2):
-                r[1][1] -= 100
-                dy = -100
+            if i == 0:
+                dx = r[1][0] - self.robot_position.x
+                dy = r[1][1] - self.robot_position.y
             else:
-                r[1][1] += 100
-                dy = 100
-            if r[1][0] > (grid_cols / 2):
-                r[1][0] -= 100
-                dx = 100
-            else:
-                r[1][0] += 100
-                dx = -100
+                dx = r[1][0] - self.rubble[i-1][1][0]
+                dy = r[1][1] - self.rubble[i-1][1][1]
 
             r[1][2] = math.atan2(dy, dx) * 180 / math.pi
             r[0][2] = r[1][2]
@@ -246,8 +203,6 @@ class RobotControlNode(Node):
         self.publish_robot_servo_angle()
         
         self.detect_rubble()
-#        self.sort_rubble()
-        #self.rubble.sort()
 
         for r in self.rubble:
             self.send_goal(Odometry(x=float(r[1][0]), y=float(r[1][1]), theta=float(r[1][2])))
@@ -274,43 +229,43 @@ class RobotControlNode(Node):
         self.robot_servo_angle = Angle(angle=-30.0)
         self.publish_robot_servo_angle()
         
-        self.send_goal(Odometry(x=140.0, y=380.0, theta=75.0))
+        # self.send_goal(Odometry(x=140.0, y=380.0, theta=75.0))
         while not self.path_planning_action_client_state == CLIENT_STATES.SUCCESS:
             rclpy.spin_once(self, timeout_sec=0.1)
 
-        self.publish_robot_velocity(Velocity(linear_velocity=-40, angular_velocity=0))
-        time.sleep(7)
-        self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
+        # self.publish_robot_velocity(Velocity(linear_velocity=-40, angular_velocity=0))
+        # time.sl199(7)
+        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
         
-        time.sleep(1)
+        # time.sleep(1)
 
-        self.publish_robot_velocity(Velocity(linear_velocity=40, angular_velocity=0))
-        time.sleep(0.6)
-        self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
+        # self.publish_robot_velocity(Velocity(linear_velocity=40, angular_velocity=0))
+        # time.sleep(0.6)
+        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
         
-        time.sleep(1)
+        # time.sleep(1)
 
-        self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=40))
-        time.sleep(2.25)
-        self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
+        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=40))
+        # time.sleep(2.25)
+        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
 
-        time.sleep(1)
+        # time.sleep(1)
 
-        self.publish_robot_velocity(Velocity(linear_velocity=-40, angular_velocity=0))
-        time.sleep(3)
-        self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
+        # self.publish_robot_velocity(Velocity(linear_velocity=-40, angular_velocity=0))
+        # time.sleep(3)
+        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
 
-        time.sleep(1)
+        # time.sleep(1)
 
-        self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=40))
-        time.sleep(0.4)
-        self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
+        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=40))
+        # time.sleep(0.4)
+        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
 
-        time.sleep(1)
+        # time.sleep(1)
 
-        self.publish_robot_velocity(Velocity(linear_velocity=60, angular_velocity=0))
-        time.sleep(4)
-        self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
+        # self.publish_robot_velocity(Velocity(linear_velocity=60, angular_velocity=0))
+        # time.sleep(4)
+        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
 
         #time.sleep(1)
 
@@ -322,9 +277,9 @@ class RobotControlNode(Node):
 
         #time.sleep(1)
 
-        self.publish_robot_velocity(Velocity(linear_velocity=60, angular_velocity=0))
-        time.sleep(5)
-        self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
+        # self.publish_robot_velocity(Velocity(linear_velocity=60, angular_velocity=0))
+        # time.sleep(5)
+        # self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
         '''
         self.send_goal(Odometry(x=350.0, y=350.0, theta=0.0))
         while not self.path_planning_action_client_state == CLIENT_STATES.SUCCESS:
@@ -375,13 +330,15 @@ class RobotControlNode(Node):
         try:
             _, binary_img = cv2.threshold(self.bridge.compressed_imgmsg_to_cv2(msg), 80, 255, cv2.THRESH_BINARY)
 
-            self.img = self.remove_rectangle_from_matrix(binary_img, (self.robot_position.x, self.robot_position.y), 220, 230, -self.robot_position.theta, 255)
+            self.img = self.remove_rectangle_from_matrix(binary_img, (self.robot_position.x, self.robot_position.y), 150, 100, -self.robot_position.theta, 255)
         except Exception as e:
             self.get_logger().error(f"Error converting image: {e}")
 
     def robot_position_callback(self, msg):
         self.robot_position = msg
-
+        for r in self.rubble:
+            dx = 0
+            dy = 0
     def robot_command_callback(self, msg):
         self.state = CONTROLLER_STATES(msg.command)
 

@@ -1,7 +1,6 @@
 FROM ros:jazzy-ros-core
-RUN apt-get update
 
-RUN apt-get install -y \
+RUN apt-get update && apt-get install -y \
     python3-colcon-common-extensions \
     git \
     libopencv-* \
@@ -9,23 +8,13 @@ RUN apt-get install -y \
     python3-serial \
     libopencv-dev gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-libcamera \
     build-essential \
-    ros-jazzy-cv-bridge
-
-RUN apt-get install -y \
-    ros-jazzy-camera-ros
-
-RUN apt-get install -y \
-    libcamera-ipa libcamera-dev
-
-RUN apt-get install -y \
-    libcamera-*
-
-RUN apt-get install -y \
+    ros-jazzy-cv-bridge \
+    ros-jazzy-camera-ros \
+    libcamera-ipa libcamera-dev libcamera-*\
     git bc bison flex libssl-dev make meson \
     libcamera-dev \
-    libudev-dev libyaml-dev libgnutls28-dev python3-yaml python3-ply python3-jinja2
-
-RUN rm -rf /var/lib/apt/lists/*
+    libudev-dev libyaml-dev libgnutls28-dev python3-yaml python3-ply python3-jinja2 \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /ros2_ws
 COPY ./src ./src
