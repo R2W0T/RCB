@@ -8,20 +8,17 @@ from robot_interfaces.msg import Velocity, Angle
 import serial
 
 import time
+import math 
 
 import numpy as np
 
-ser = serial.Serial('/dev/ttyUSB0', 9600)
-# ser = serial.Serial('/dev/ttyACM0', 9600)
+# ser = serial.Serial('/dev/ttyUSB0', 9600)
+ser = serial.Serial('/dev/ttyACM0', 115200)
 endian = 'big'
-
 
 # mm
 wheel_radius = 55 # mm
 robot_width = 190 # mm
-
-A = np.array([[wheel_radius/robot_width, wheel_radius/robot_width],[-wheel_radius/robot_width, wheel_radius/robot_width]])
-A = np.linalg.inv(A)
 
 class MotorControlNode(Node):
 
@@ -42,54 +39,59 @@ class MotorControlNode(Node):
         self.servo_subscription  # prevent unused variable warning
 
     def servo_angle_callback(self, msg):
-        fangle = msg.fangle
-        sangle = msg.sangle
-        vel = bytearray()
-        vel.extend(int(1).to_bytes(1, endian, signed=False))
-        vel.extend(int(fangle).to_bytes(1, endian, signed=False))
-        vel.extend(int(sangle).to_bytes(1, endian, signed=False))
-        ser.write(vel)
+        pass
+        # fangle = msg.fangle
+        # sangle = msg.sangle
+        # vel = bytearray()
+        # vel.extend(int(1).to_bytes(1, endian, signed=False))
+        # vel.extend(int(fangle).to_bytes(1, endian, signed=False))
+        # vel.extend(int(sangle).to_bytes(1, endian, signed=False))
+        # ser.write(vel)
 
-        self.get_logger().info(f'Publishing: \n first angle: {int(fangle)}, second angle: {int(sangle)}')
+        # self.get_logger().info(f'Publishing: \n first angle: {int(fangle)}, second angle: {int(sangle)}')
 
 
     def robot_velocity_callback(self, msg):
         
-        velocity = np.array([[msg.linear_velocity], [-msg.angular_velocity]])
+        motor_velocity = np.array([
+            msg.linear_velocity - ((msg.angular_velocity * (math.pi / 180) * (100 / 165)) * robot_width / 2), 
+            msg.linear_velocity + ((msg.angular_velocity * (math.pi / 180) * (100 / 165)) * robot_width / 2)
+        ])
+
+        self.get_logger().info(f'Publishing 0: \n right_motor_velocity: {int(motor_velocity[1])}, left_motor_velocity: {int(motor_velocity[0])}')
+
+        motor_velocity *= 4 * 100 / 375
+
+        if motor_velocity[0] > 100:
+            motor_velocity[0] = 100
+        elif motor_velocity[0] < -100:
+            motor_velocity[0] = -100
         
-        # round to percentage
-        motor_velocity = np.dot(A, velocity) 
-        motor_velocity *= 100 / 375
+        if motor_velocity[1] > 100:
+            motor_velocity[1] = 100
+        elif motor_velocity[1] < -100:
+            motor_velocity[1] = -100
 
-        if motor_velocity[0, 0] > 100:
-            motor_velocity[0,0] = 100
-        elif motor_velocity[0, 0] < -100:
-            motor_velocity[0, 0] = -100
-        
-        if motor_velocity[1, 0] > 100:
-            motor_velocity[1,0] = 100
-        elif motor_velocity[1,0] < -100:
-            motor_velocity[1,0] = -100
 
-        # if motor_velocity[1, 0] < 10 and motor_velocity[1, 0] > 0 and motor_velocity[1, 0] != 0:
-        #     motor_velocity[1, 0] = 10
+        if motor_velocity[1] < 40 and motor_velocity[1] > 0 and motor_velocity[1] != 0:
+            motor_velocity[1] = 40
 
-        # elif motor_velocity[1, 0] > -10 and motor_velocity[1, 0] < 0 and motor_velocity[1, 0] != 0:
-        #     motor_velocity[1, 0] = 10
+        elif motor_velocity[1] > -40 and motor_velocity[1] < 0 and motor_velocity[1] != 0:
+            motor_velocity[1] = -40
 
-        # if motor_velocity[0, 0] < 10 and motor_velocity[0, 0] > 0 and motor_velocity[0, 0] != 0:
-        #     motor_velocity[0, 0] = 10
+        if motor_velocity[0] < 40 and motor_velocity[0] > 0 and motor_velocity[0] != 0:
+            motor_velocity[0] = 40
 
-        # elif motor_velocity[0, 0] > -10 and motor_velocity[0, 0] < 0 and motor_velocity[0, 0] != 0:
-        #     motor_velocity[0, 0] = 10
+        elif motor_velocity[0] > -40 and motor_velocity[0] < 0 and motor_velocity[0] != 0:
+            motor_velocity[0] = -40
 
         vel = bytearray()
         vel.extend(int(0).to_bytes(1, endian, signed=False))
-        vel.extend(int(motor_velocity[1, 0]).to_bytes(1, endian, signed=True))
-        vel.extend(int(motor_velocity[0, 0]).to_bytes(1, endian, signed=True))
+        vel.extend(int(motor_velocity[0]).to_bytes(1, endian, signed=True))
+        vel.extend(int(motor_velocity[1]).to_bytes(1, endian, signed=True))
         ser.write(vel)
 
-        self.get_logger().info(f'Publishing: \n right_motor_velocity: {int(motor_velocity[1, 0])}, left_motor_velocity: {int(motor_velocity[0, 0])}')
+        self.get_logger().info(f'Publishing: \n right_motor_velocity: {int(motor_velocity[1])}, left_motor_velocity: {int(motor_velocity[0])}')
         
 def main(args=None):
     rclpy.init(args=args)

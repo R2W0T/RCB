@@ -70,7 +70,7 @@ void servos_init() {
 }
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   motors_init();
   motors_enable();
   servos_init();  

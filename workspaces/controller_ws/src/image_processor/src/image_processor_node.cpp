@@ -67,6 +67,7 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
   cv::cvtColor(img, gray_img, cv::COLOR_BGR2GRAY);
   //cv::threshold(gray_img, gray_img, 70, 1, cv::THRESH_BINARY);
     
+  cv::imshow("hel", gray_img);
 
   if(this->state == PUBLISH_MAIN) {
     this->publish_compressed_processed_image(gray_img);
@@ -94,12 +95,15 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
   RCLCPP_INFO(this->get_logger(), "Publishing: 2");
   // get markers positions
   for(int i = 0; i < markerIds.size(); i++) {
+    RCLCPP_INFO(this->get_logger(), "Publishing: 2");
     for(int j = 0; j < 4 ; j++) {
       if(markerIds[i] == markers_cw_ids[j]) {
         src_pts[j] = markerCorners[i][0];
       }
     }
   }
+
+  RCLCPP_INFO(this->get_logger(), "Publishing: 0, (%f, %f), (%f, %f), (%f, %f), (%f, %f)", src_pts[0].x, src_pts[0].y, src_pts[1].x, src_pts[1].y, src_pts[2].x, src_pts[2].y, src_pts[3].x, src_pts[3].y);
 
   // get transformation matrix     
   p_matrix = cv::getPerspectiveTransform(src_pts, dst_pts);
@@ -108,6 +112,11 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
 
   cv::aruco::detectMarkers(dst, dictionary, markerCorners, markerIds, detectorParams);
         
+  cv::imshow("hl", dst);
+  cv::aruco::detectMarkers(dst, dictionary, markerCorners, markerIds);
+  cv::imshow("h", dst);
+
+
   for(int i = 0; i < markerIds.size(); i++)
     if(markerIds[i] == robot_marker_id) {
       float theta = std::atan2((markerCorners[i][0].y - markerCorners[i][1].y), (markerCorners[i][1].x - markerCorners[i][0].x));

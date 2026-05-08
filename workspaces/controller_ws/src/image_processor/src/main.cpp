@@ -16,9 +16,10 @@
 #include <iostream>
 
 //////////////////////////////////////////////////////////////////////////////////
-volatile const int dict = cv::aruco::DICT_APRILTAG_25h9;
-volatile const int robot_marker_id = 5;//9;
-volatile const int markers_cw_ids[4] = {0, 1, 2, 3};//{5, 6, 7, 8};//
+// volatile const int dict = cv::aruco::DICT_APRILTAG_25h9;
+volatile const int dict = cv::aruco::DICT_APRILTAG_36h11;
+volatile const int robot_marker_id = 10;//5;//9;
+volatile const int markers_cw_ids[4] = {0, 1, 8, 7};//{0, 1, 2, 3};//{5, 6, 7, 8};//
 volatile const uint32_t width = 640, height = 480;
 
 // initialize markers dictionary
