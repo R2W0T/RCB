@@ -160,8 +160,6 @@ class PathPlanningActionServer(Node):
         path[-1][2] = goal.theta
         controller.set_path(path)
 
-        # loop_rate = self.create_rate(33)
-
         while not controller.get_state():
             controller.set_velocity([self.pose.x, self.pose.y, self.pose.theta])
 
@@ -170,7 +168,7 @@ class PathPlanningActionServer(Node):
             self.get_logger().info(f'{controller.state}')
             self.publish_velocity(velocity)
          
-            time.sleep(1)
+            time.sleep(0.05)
 
         self.get_logger().info('Arrived at goal...')
 

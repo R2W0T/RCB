@@ -17,7 +17,7 @@ class PurePursuitMotionController:
         self.velocity = Velocity(linear_velocity = 0, angular_velocity = 0)
         self.last_goal_point = None
 
-        self.kl = 0.6
+        self.kl = 0.7
         self.ka = 0.3
         self.state = MotionControllerState.SLEEP
 
@@ -61,7 +61,7 @@ class PurePursuitMotionController:
         else:
             self.last_goal_point = goal_point
 
-        if self.state == MotionControllerState.GO_TO_GOAL and abs(current_pose[0] - self.path[-1][0]) <= 10 and abs(current_pose[1] - self.path[-1][1]) <= 10:
+        if self.state == MotionControllerState.GO_TO_GOAL and abs(current_pose[0] - self.path[-1][0]) <= 20 and abs(current_pose[1] - self.path[-1][1]) <= 20:
             self.state = MotionControllerState.AT_GOAL
 
         d_theta = self.path[-1][2] - current_pose[2]
@@ -71,13 +71,13 @@ class PurePursuitMotionController:
                    else d_theta + 360 if d_theta <= -180 
                    else d_theta)
         
-        if self.state == MotionControllerState.AT_GOAL and abs(d_theta) < 10:
+        if self.state == MotionControllerState.AT_GOAL and abs(d_theta) < 20:
             self.state = MotionControllerState.ARRIVED
 
         match self.state:
             case MotionControllerState.GO_TO_GOAL:
                 if self.calc_dist(current_pose, goal_point) <= 30:
-                    self.ka = 0.2
+                    self.ka = 0.3
 
                 self.velocity.linear_velocity = self.kl * self.calc_dist(current_pose, goal_point)
                 self.velocity.linear_velocity = int(min(max(self.velocity.linear_velocity, -300), 300) * 100 / 300)
