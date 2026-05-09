@@ -91,6 +91,9 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
   if(markerIds.size() < 5)
     return; 
 
+  for(int i = 0; i < markerIds.size(); i++) {
+    RCLCPP_INFO(this->get_logger(), "Publishing: 31, %d", markerIds[i]);
+  }
 
   RCLCPP_INFO(this->get_logger(), "Publishing: 2");
   // get markers positions
@@ -103,8 +106,6 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
     }
   }
 
-  RCLCPP_INFO(this->get_logger(), "Publishing: 0, (%f, %f), (%f, %f), (%f, %f), (%f, %f)", src_pts[0].x, src_pts[0].y, src_pts[1].x, src_pts[1].y, src_pts[2].x, src_pts[2].y, src_pts[3].x, src_pts[3].y);
-
   // get transformation matrix     
   p_matrix = cv::getPerspectiveTransform(src_pts, dst_pts);
 
@@ -113,11 +114,12 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
   cv::aruco::detectMarkers(dst, dictionary, markerCorners, markerIds, detectorParams);
         
   cv::imshow("hl", dst);
-  cv::aruco::detectMarkers(dst, dictionary, markerCorners, markerIds);
-  cv::imshow("h", dst);
 
+  for(int i = 0; i < markerIds.size(); i++) {
+    RCLCPP_INFO(this->get_logger(), "Publishing: 13, %d", markerIds[i]);
+  }
 
-  for(int i = 0; i < markerIds.size(); i++)
+  for(int i = 0; i < markerIds.size(); i++) {
     if(markerIds[i] == robot_marker_id) {
       float theta = std::atan2((markerCorners[i][0].y - markerCorners[i][1].y), (markerCorners[i][1].x - markerCorners[i][0].x));
       theta *=  180 / M_PI;
@@ -127,6 +129,7 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
                       theta);
       break;
     }
+  }
 
   cv::imshow("he", dst);
   if(this->state == PUBLISH) {

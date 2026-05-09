@@ -122,20 +122,6 @@ class RobotControlNode(Node):
                 case _:
                     continue
 
-
-    def sort_rubble(self):
-        lo = self.rubble.copy()
-        l = [10000000000,0] # length, index
-
-        for i in range(len(self.rubble)):
-            for index in range(len(self.rubble)):
-                if self.dist([self.robot_position.x, self.robot_position.y], self.rubble[index][0]) <= l[0]:
-                    l = [self.dist([self.robot_position.x, self.robot_position.y], self.rubble[index][0]), index]
-            lo.insert(i,self.rubble[l[1]])
-            self.rubble.remove(self.rubble[l[1]])
-        self.rubble = lo.copy
-
-
     def detect_rubble(self):
 
         binary_img = self.img         
@@ -149,18 +135,10 @@ class RobotControlNode(Node):
         # inverted_binary_img_no_robot = self.remove_rectangle_from_matrix(inverted_binary_img, (self.robot_position.x, self.robot_position.y), 220, 230, -self.robot_position.theta, 0)
         inverted_binary_img_no_robot = inverted_binary_img
 
-        '''
-        padding = 40
-        cv2.rectangle(inverted_binary_img_no_robot,(0,0),(padding,grid_cols),255,-1)
-        cv2.rectangle(inverted_binary_img_no_robot,(grid_rows - padding,0),(grid_rows,grid_cols),255,-1)
-        cv2.rectangle(inverted_binary_img_no_robot,(0,0),(grid_rows, padding),255,-1)
-        cv2.rectangle(inverted_binary_img_no_robot,(0,grid_cols - padding),(grid_rows, grid_cols),255,-1)
-        '''
-
         #find contours
         contours, _ = cv2.findContours(inverted_binary_img_no_robot, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         img_copy = cv2.cvtColor(inverted_binary_img_no_robot, cv2.COLOR_GRAY2BGR)
-        cv2.drawContours(img_copy, contours, -1, (0, 255, 0), 2)       
+        cv2.drawContours(img_copy, contours, -1, (0, 255, 0), 2)
         # loop through contours
         for index in range(len(contours)):
             self.get_logger().info(f'{index}')
@@ -169,27 +147,25 @@ class RobotControlNode(Node):
             # find coordinates
             x,y,w,h = cv2.boundingRect(cnt)
             # if object is rubble
-            if w in range(5, 30) and h in range(5, 30):
+            self.get_logger().info(f'h: {h}, w: {w}')
+            self.get_logger().info(f'x1: {x}, y1: {y}')
+            if w in range(2, 30) and h in range(2, 30):
                 self.get_logger().info(f'{x}, {y}')
                 self.rubble.append([[int(x), int(y), 0], [int(x), int(y), 0]])
-        '''
-        cv2.imshow('i', img_copy)
-        cv2.waitKey(0)
-        '''
 
-        for i, r in enumerate(self.rubble):
-            dx = 0
-            dy = 0
+        # for i, r in enumerate(self.rubble):
+        #     dx = 0
+        #     dy = 0
 
-            if i == 0:
-                dx = r[1][0] - self.robot_position.x
-                dy = r[1][1] - self.robot_position.y
-            else:
-                dx = r[1][0] - self.rubble[i-1][1][0]
-                dy = r[1][1] - self.rubble[i-1][1][1]
+        #     if i == 0:
+        #         dx = r[1][0] - self.robot_position.x
+        #         dy = r[1][1] - self.robot_position.y
+        #     else:
+        #         dx = r[1][0] - self.rubble[i-1][1][0]
+        #         dy = r[1][1] - self.rubble[i-1][1][1]
 
-            r[1][2] = math.atan2(dy, dx) * 180 / math.pi
-            r[0][2] = r[1][2]
+        #     r[1][2] = math.atan2(dy, dx) * 180 / math.pi
+        #     r[0][2] = r[1][2]
 
     def dist(slef, p1: list, p2: list):
         return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
@@ -197,37 +173,16 @@ class RobotControlNode(Node):
     def mission(self):
         rclpy.spin_once(self, timeout_sec=0.1)
 
-        # init
-        # self.robot_servo_angle = Angle(angle=-30.0)
-        # self.publish_robot_servo_angle()
-        
         self.detect_rubble()
 
         for r in self.rubble:
-            self.send_goal(Odometry(x=float(r[1][0]), y=float(r[1][1]), theta=float(r[1][2])))
-            
-            while not self.path_planning_action_client_state == CLIENT_STATES.SUCCESS:
-                rclpy.spin_once(self, timeout_sec=0.1)
-            
-            # self.robot_servo_angle = Angle(angle=60.0)
-            # self.publish_robot_servo_angle()
-            
             self.send_goal(Odometry(x=float(r[0][0]), y=float(r[0][1]), theta=float(r[0][2])))
             
             while not self.path_planning_action_client_state == CLIENT_STATES.SUCCESS:
                 rclpy.spin_once(self, timeout_sec=0.1)
 
-            self.publish_robot_velocity(Velocity(linear_velocity=40, angular_velocity=0))
-            time.sleep(1)
             self.publish_robot_velocity(Velocity(linear_velocity=0, angular_velocity=0))
 
-            # self.robot_servo_angle = Angle(angle=-30.0)
-            # self.publish_robot_servo_angle()
-    
-
-        # self.robot_servo_angle = Angle(angle=-30.0)
-        # self.publish_robot_servo_angle()
-        
         # self.send_goal(Odometry(x=140.0, y=380.0, theta=75.0))
         while not self.path_planning_action_client_state == CLIENT_STATES.SUCCESS:
             rclpy.spin_once(self, timeout_sec=0.1)
@@ -237,8 +192,6 @@ class RobotControlNode(Node):
         time.sleep(1)
 
         self.state = CONTROLLER_STATES.SLEEP
-        self.robot_servo_angle = Angle(angle=140.0)
-        self.publish_robot_servo_angle()
 
 ###################################################################################################
 
@@ -273,7 +226,7 @@ class RobotControlNode(Node):
         try:
             _, binary_img = cv2.threshold(self.bridge.compressed_imgmsg_to_cv2(msg), 80, 255, cv2.THRESH_BINARY)
 
-            self.img = self.remove_rectangle_from_matrix(binary_img, (self.robot_position.x, self.robot_position.y), 150, 100, -self.robot_position.theta, 255)
+            self.img = self.remove_rectangle_from_matrix(binary_img, (self.robot_position.x, self.robot_position.y), 200, 200, -self.robot_position.theta, 255)
 
         except Exception as e:
             self.get_logger().error(f"Error converting image: {e}")

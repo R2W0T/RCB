@@ -12,7 +12,6 @@ import math
 
 import numpy as np
 
-# ser = serial.Serial('/dev/ttyUSB0', 9600)
 ser = serial.Serial('/dev/ttyACM0', 115200)
 endian = 'big'
 
@@ -40,15 +39,6 @@ class MotorControlNode(Node):
 
     def servo_angle_callback(self, msg):
         pass
-        # fangle = msg.fangle
-        # sangle = msg.sangle
-        # vel = bytearray()
-        # vel.extend(int(1).to_bytes(1, endian, signed=False))
-        # vel.extend(int(fangle).to_bytes(1, endian, signed=False))
-        # vel.extend(int(sangle).to_bytes(1, endian, signed=False))
-        # ser.write(vel)
-
-        # self.get_logger().info(f'Publishing: \n first angle: {int(fangle)}, second angle: {int(sangle)}')
 
 
     def robot_velocity_callback(self, msg):
@@ -73,17 +63,17 @@ class MotorControlNode(Node):
             motor_velocity[1] = -100
 
 
-        if motor_velocity[1] < 40 and motor_velocity[1] > 0 and motor_velocity[1] != 0:
-            motor_velocity[1] = 40
+        if motor_velocity[1] < 20 and motor_velocity[1] > 0 and motor_velocity[1] != 0:
+            motor_velocity[1] = 20
 
-        elif motor_velocity[1] > -40 and motor_velocity[1] < 0 and motor_velocity[1] != 0:
-            motor_velocity[1] = -40
+        elif motor_velocity[1] > -20 and motor_velocity[1] < 0 and motor_velocity[1] != 0:
+            motor_velocity[1] = -20
 
-        if motor_velocity[0] < 40 and motor_velocity[0] > 0 and motor_velocity[0] != 0:
-            motor_velocity[0] = 40
+        if motor_velocity[0] < 20 and motor_velocity[0] > 0 and motor_velocity[0] != 0:
+            motor_velocity[0] = 20
 
-        elif motor_velocity[0] > -40 and motor_velocity[0] < 0 and motor_velocity[0] != 0:
-            motor_velocity[0] = -40
+        elif motor_velocity[0] > -20 and motor_velocity[0] < 0 and motor_velocity[0] != 0:
+            motor_velocity[0] = -20
 
         vel = bytearray()
         vel.extend(int(0).to_bytes(1, endian, signed=False))
