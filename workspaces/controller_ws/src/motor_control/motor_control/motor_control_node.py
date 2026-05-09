@@ -13,7 +13,7 @@ import math
 import numpy as np
 
 ser = serial.Serial('/dev/ttyUSB0', 115200)
-ser = serial.Serial('/dev/ttyACM0', 115200)
+# ser = serial.Serial('/dev/ttyACM0', 115200)
 endian = 'big'
 
 # mm
