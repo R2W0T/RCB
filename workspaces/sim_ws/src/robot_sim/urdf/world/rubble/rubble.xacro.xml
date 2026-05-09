@@ -3,9 +3,9 @@
 
   <xacro:property name="pi_const" value="3.14159265" />
 
-  <xacro:property name="length" value="0.03" />
-  <xacro:property name="width" value="0.03" />
-  <xacro:property name="height" value="0.03" />
+  <xacro:property name="length" value="0.5" />
+  <xacro:property name="width" value="0.5" />
+  <xacro:property name="height" value="0.01" />
   
   <xacro:property name="center_to_ground_z" value="${height / 2}" />
 

@@ -12,7 +12,6 @@ extern const uint32_t height;
     
 extern cv::Ptr<cv::aruco::Dictionary> dictionary;
 extern cv::Ptr<cv::aruco::DetectorParameters> detectorParams;
-// extern const cv::aruco::ArucoDetector detector;
 
 
 ImageProcessorNode::ImageProcessorNode() : Node("image_processor_node")
@@ -86,11 +85,8 @@ void ImageProcessorNode::publish_position(float x, float y, float theta) const {
 
 void ImageProcessorNode::process_image(cv::Mat& img) {
 
-  // cv::imshow("hell", img);
-
   cv::Mat gray_img, binary_img;
   cv::cvtColor(img, gray_img, cv::COLOR_BGR2GRAY);
-  // cv::threshold(gray_img, gray_img, 70, 1, cv::THRESH_BINARY);
     
   std::vector<int> markerIds;
   std::vector<std::vector<cv::Point2f>> markerCorners, rejectedCandidates;
@@ -102,10 +98,6 @@ void ImageProcessorNode::process_image(cv::Mat& img) {
   const cv::Point2f dst_pts[4] = {cv::Point2f(0, 0), cv::Point2f(width, 0), cv::Point2f(0, height), cv::Point2f(width, height)};
 
   cv::aruco::detectMarkers(img, dictionary, markerCorners, markerIds, detectorParams, rejectedCandidates);
-  // cv::aruco::drawDetectedMarkers(img, markerCorners, markerIds);
-
-  // cv::imshow("i", img);
-  // cv::waitKey(2);
 
   RCLCPP_INFO(this->get_logger(), "Publishing: 1, %ld", markerIds.size());
   // check if all markers are detected

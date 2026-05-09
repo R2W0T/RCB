@@ -33,7 +33,7 @@ class MapGenerator():
         contours, _ = cv2.findContours(inverted_binary_img_no_robot, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         
         img_copy = inverted_binary_img_no_robot.copy()
-        padding = 50
+        padding = 30
         # loop through contours
         for index in range(len(contours)):
             # take contour

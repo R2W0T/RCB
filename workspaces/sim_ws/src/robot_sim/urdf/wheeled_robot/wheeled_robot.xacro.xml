@@ -85,7 +85,7 @@
 
     <visual>
       <geometry>
-        <mesh filename="$(find robot_sim)/urdf/wheeled_robot/apriltag.dae" scale="0.16 0.16 1"/>
+        <mesh filename="$(find robot_sim)/urdf/wheeled_robot/apriltag.dae" scale="0.4 0.4 1"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0" />
     </visual>

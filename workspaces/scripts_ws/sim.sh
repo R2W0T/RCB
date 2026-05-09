@@ -1,8 +1,9 @@
 #!/bin/bash
+source /opt/ros/jazzy/local_setup.bash
+cd sim_ws
 colcon build --packages-select robot_interfaces
 source install/local_setup.bash
-
-colcon build --packages-select image_processor
+colcon build
 source install/local_setup.bash
-
-ros2 run image_processor image_processor_node
+ros2 launch robot_sim robot_sim.launch.py & wait
+cd ..

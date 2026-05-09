@@ -59,7 +59,7 @@
 
   <gazebo reference="${camera_name}/camera_link">
     <always_on>1</always_on>
-    <pose>0 0 2 0 1.5708 0</pose>
+    <pose>0 0 4 0 1.5708 0</pose>
     <sensor type="camera" name="camera">
       <update_rate>60.0</update_rate>
       <topic>camera</topic>

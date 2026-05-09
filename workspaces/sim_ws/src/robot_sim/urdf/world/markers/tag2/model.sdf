@@ -7,7 +7,7 @@
         <geometry>
           <plane>
             <normal>0 0 1</normal>
-            <size>0.16 0.16</size>
+            <size>0.4 0.4</size>
           </plane>
           <mesh>
             <uri>model://apriltag.dae</uri>
