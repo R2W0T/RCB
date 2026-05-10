@@ -25,11 +25,14 @@ from motion_controller import PurePursuitMotionController
 
 from rclpy.callback_groups import ReentrantCallbackGroup
 
-# import asyncio
+import threading
 
 class PathPlanningActionServer(Node):
     def __init__(self):
         super().__init__('path_planning_action_server')
+
+        self.frames = {}
+        self.frame_lock = threading.Lock()
 
         self.reentrant_group = ReentrantCallbackGroup()
 
@@ -92,8 +95,11 @@ class PathPlanningActionServer(Node):
 
     def image_callback(self, msg):
         try:
-            self.map_generator.set_img(self.br.compressed_imgmsg_to_cv2(msg), self.pose)
-
+            img = self.br.compressed_imgmsg_to_cv2(msg)
+            map = self.map_generator.set_img(img, self.pose)
+            with self.frame_lock:
+                self.frames['Image'] = img
+                self.frames['Generated Map'] = map
             
         except Exception as e:
             self.get_logger().error(f"Error converting image: {e}")
@@ -104,7 +110,6 @@ class PathPlanningActionServer(Node):
     def publish_velocity(self, msg):
         self.velocity_publisher.publish(msg) 
 
-    # async def execute_callback(self, goal_handle):
     def execute_callback(self, goal_handle):
 
         self.publish_image_command(Command(command=1))
@@ -112,7 +117,6 @@ class PathPlanningActionServer(Node):
         self.publish_image_command(Command(command=0))
 
         goal = goal_handle.request.goal
-
 
         self.get_logger().info(f'Executing goal {goal} ...')
         self.get_logger().info(f'Pose: {self.pose.x}, {self.pose.y} ...')
@@ -143,6 +147,10 @@ class PathPlanningActionServer(Node):
         img[int(self.pose.y), int(self.pose.x)] = (0, 0, 255)
         img[int(goal.y), int(goal.x)] = (0, 0, 255)
 
+        with self.frame_lock:
+            self.frames['Generatted Grid'] = grid 
+            self.frames['Pose and Goal Points'] = emg 
+            self.frames['Generatted Path'] = img 
 
         self.get_logger().info('Path planned...')
 
