@@ -88,7 +88,7 @@ class PathPlanningActionServer(Node):
         )
         self.image_command_publisher  # prevent unused variable warning
 
-        self.map_generator = MapGenerator()
+        self.map_generator = MapGenerator(padding=30, rubble_size=20, robot_width = 60, robot_height = 60)
 
     def pose_callback(self, msg):
         self.pose = msg
@@ -130,6 +130,10 @@ class PathPlanningActionServer(Node):
 
         self.get_logger().info('Path planning...')
 
+        with self.frame_lock:
+            self.frames['Generatted Grid'] = grid 
+            self.frames['Pose and Goal Points'] = emg 
+
         a_star = AStar(grid, Pose(self.pose.x, self.pose.y), Pose(goal.x, goal.y, goal.theta))
 
         path_a_star = a_star.a_star()
@@ -148,8 +152,6 @@ class PathPlanningActionServer(Node):
         img[int(goal.y), int(goal.x)] = (0, 0, 255)
 
         with self.frame_lock:
-            self.frames['Generatted Grid'] = grid 
-            self.frames['Pose and Goal Points'] = emg 
             self.frames['Generatted Path'] = img 
 
         self.get_logger().info('Path planned...')
@@ -179,6 +181,8 @@ class PathPlanningActionServer(Node):
             time.sleep(0.05)
 
         self.get_logger().info('Arrived at goal...')
+
+        cv2.destroyAllWindows()
 
         goal_handle.succeed()
              

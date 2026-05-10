@@ -5,14 +5,17 @@ from robot_interfaces.msg import Odometry
 
 class MapGenerator():
 
-    def __init__(self, padding = 20):
+    def __init__(self, padding = 20, rubble_size = 10, robot_width = 60, robot_height = 60):
         self.grid_map = None
         self.img = None
         self.padding = padding 
+        self.rubble_size = rubble_size 
+        self.robot_width = robot_width 
+        self.robot_height = robot_height 
 
     def set_img(self, img, pose: Odometry):
         _, binary_img = cv2.threshold(img, 80, 255, cv2.THRESH_BINARY)
-        self.img = self.remove_rectangle_from_matrix(binary_img, (pose.x, pose.y), 60, 60, -pose.theta, 255)
+        self.img = self.remove_rectangle_from_matrix(binary_img, (pose.x, pose.y), self.robot_width, self.robot_height, -pose.theta, 255)
         return self.img
 
     def get_grid_map(self):
@@ -38,15 +41,24 @@ class MapGenerator():
             # find coordinates
             x,y,w,h = cv2.boundingRect(cnt)
             # if object is rubble
-            if w < 20 and h < 20:
+            if w < self.rubble_size and h < self.rubble_size:
+                #inflation
+                x -= self.rubble_size
+                y -= self.rubble_size
+                w += 2 * self.rubble_size
+                h += 2 * self.rubble_size
+                # draw rectangle to original image
+                cv2.rectangle(img_copy,(x,y),(x+w,y+h),0,-1)
+
+            # if object is box
+            else:
                 #inflation
                 x -= self.padding
                 y -= self.padding
                 w += 2 * self.padding
                 h += 2 * self.padding
                 # draw rectangle to original image
-                cv2.rectangle(img_copy,(x,y),(x+w,y+h),0,-1)
-
+                cv2.rectangle(img_copy,(x,y),(x+w,y+h),255,-1)
         self.grid_map = img_copy
     
     def remove_rectangle_from_matrix(self, matrix, center, width, height, angle_degrees, value):
