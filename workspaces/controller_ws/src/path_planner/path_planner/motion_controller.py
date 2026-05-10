@@ -17,8 +17,8 @@ class PurePursuitMotionController:
         self.velocity = Velocity(linear_velocity = 0, angular_velocity = 0)
         self.last_goal_point = None
 
-        self.kl = 0.7
-        self.ka = 0.3
+        self.kl = 0.9
+        self.ka = 0.5
         self.state = MotionControllerState.SLEEP
 
 

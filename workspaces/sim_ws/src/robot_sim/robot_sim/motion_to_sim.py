@@ -33,8 +33,8 @@ class MotionToSimNode(Node):
             msg.angular_velocity = -20
 
         twist_msg = Twist()
-        twist_msg.linear.x = float(msg.linear_velocity) / 15
-        twist_msg.angular.z = -float(msg.angular_velocity) / 15
+        twist_msg.linear.x = float(msg.linear_velocity) / 5
+        twist_msg.angular.z = -float(msg.angular_velocity) / 5
         
         self.publisher_.publish(twist_msg)
 
