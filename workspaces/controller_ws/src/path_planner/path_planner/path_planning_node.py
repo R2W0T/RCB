@@ -88,7 +88,7 @@ class PathPlanningActionServer(Node):
         )
         self.image_command_publisher  # prevent unused variable warning
 
-        self.map_generator = MapGenerator(padding=30, rubble_size=20, robot_width = 60, robot_height = 60)
+        self.map_generator = MapGenerator(padding=35, rubble_size=20, robot_width = 60, robot_height = 60)
 
     def pose_callback(self, msg):
         self.pose = msg
